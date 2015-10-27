@@ -179,11 +179,6 @@
         });
 
     });
-                $("#@(clientId + "value")").bind("change",Deductions);
-               
-                function Deductions() {
-                    alert("Hello");
-                }
 
     function ImageEditor(container, options) {
         $('<input class="k-input k-textbox" name="'+options.field+'" data-bind="value:' + options.field + '" ' +'id="@(clientId + "value")" /><span id="@(clientId + "add")" class="k-button"  onclick="StandAloneBrowser@(random)(\'@(clientId + "value")\',\'Select Image\', \'image\', 800, 600);">@T("Admin.Picture.SelectPicture")</span>')
