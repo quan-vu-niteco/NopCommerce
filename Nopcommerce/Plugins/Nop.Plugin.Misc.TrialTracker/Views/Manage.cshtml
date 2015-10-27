@@ -1,0 +1,150 @@
+﻿@{
+    Layout = "_AdminLayout.cshtml";
+}
+
+@using Nop.Core.Infrastructure;
+@using Nop.Services.Configuration;
+
+@{
+    bool autoAdd = EngineContext.Current.Resolve<ISettingService>().GetSettingByKey<bool>("AutoAddTrialEmail");
+}
+
+<h1>Welcome to Trial Tracker</h1>
+<hr />
+
+@if (autoAdd)
+{
+    <p><input type="checkbox" value="false" id="autoAdd" name="autoAdd" checked="checked" /><label for="autoAdd"> Auto Add New Entries</label></p>
+}
+else
+{
+    <p><input type="checkbox" value="false" id="autoAdd" name="autoAdd" /><label for="autoAdd">  Auto Add New Entries</label> </p>
+}
+
+<p id="autoStatus"></p>
+
+<script>
+    $(function () {
+
+        $('#autoAdd').change(function () {
+            var status = "false";
+
+            if ($('#autoAdd').prop('checked')) {
+                status = "true";
+            }
+
+            statusData = {
+                add: status
+            }
+
+            $.post("/trialtracker/autoadd", statusData, function (data) {
+                if (data == "success") {
+                    $("#autoStatus").html("Changes saved.").show().css("color", "green").fadeOut('slow')
+                } else {
+                    $("#autoStatus").html("Changes could not be saved.").show().css("color", "red").fadeOut('slow')
+                }
+
+            })
+        })
+    })
+</script>
+
+
+
+<div id="trials-grid"></div>
+
+<script>
+    $(document).ready(function () {
+        $("#trials-grid").kendoGrid({
+            dataSource: {
+                type: "json",
+                transport: {
+                    read: {
+                        url: "@Html.Raw(Url.Action("GetTrials", "TrialTracker"))",
+                        type: "POST",
+                        dataType: "json"
+                    },
+                    update: {
+                        url: "@Html.Raw(Url.Action("UpdateTrial", "TrialTracker"))",
+                        type: "POST",
+                        dataType: "json"
+                    },
+                    destroy: {
+                        url: "@Html.Raw(Url.Action("DeleteTrial", "TrialTracker"))",
+                        type: "POST",
+                        dataType: "json"
+                    }
+                },
+                schema: {
+                    data: "Data",
+                    total: "Total",
+                    errors: "Errors",
+                    model: {
+                        id: "TrialTrackerId",
+                        fields: {
+                            CustomerName: { editable: true, type: "string" },
+                            CustomerEmail: { editable: true, type: "string" },
+                            ProductName: { editable: true, type: "string" },
+                            DownloadDate: { editable: true, type: "string" },
+                            OnMailingList: { editable: true, type: "boolean" }
+                        }
+                    }
+                },
+                requestEnd: function (e) {
+                    if (e.type == "update") {
+                        this.read();
+                    }
+                },
+                error: function (e) {
+                    display_kendoui_grid_error(e);
+                    // Cancel the changes
+                    this.cancelChanges();
+                },
+                serverPaging: true,
+                serverFiltering: true,
+                serverSorting: true
+            },
+            pageable: {
+                refresh: true,
+                numeric: false,
+                previousNext: false,
+                info: false
+            },
+            editable: {
+                confirmation: true,
+                mode: "inline"
+            },
+            scrollable: false,
+            columns: [{
+                field: "CustomerName",
+                title: "Customer Name",
+                width: 200
+            }, {
+                field: "CustomerEmail",
+                title: "Customer Email",
+                width: 150
+            }, {
+                field: "ProductName",
+                title: "Product Name",
+                width: 150
+            }, {
+                field: "DownloadDate",
+                title: "Download Date",
+                width: 150
+            }, {
+                field: "OnMailingList",
+                title: "On Mailing List",
+                width: 150
+            }, {
+                command: [{
+                    name: "edit",
+                    text: "@T("Admin.Common.Edit")"
+                }, {
+                    name: "destroy",
+                    text: "@T("Admin.Common.Delete")"
+                }],
+                width: 200
+            }]
+        });
+    });
+</script>

@@ -1,0 +1,8 @@
+﻿Group: Support
+FriendlyName: Support
+SystemName: Nop.Plugin.Widgets.Support
+Version: 1.11
+SupportedVersions: 3.50
+Author: Quan Vu
+DisplayOrder: 1
+FileName: Nop.Plugin.Widgets.Support.dll

@@ -1,0 +1,8 @@
+﻿Group: Misc
+FriendlyName: Trial Tracker
+SystemName: Misc.TrialTracker
+Version: 1.0
+SupportedVersions: 3.40
+Author: Alex Wolf
+DisplayOrder: 1
+FileName: Nop.Plugin.Misc.TrialTracker.dll

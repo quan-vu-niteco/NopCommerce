@@ -1,0 +1,2 @@
+DataProvider: sqlserver
+DataConnectionString: Data Source=(LocalDb)\v11.0;AttachDbFilename=|DataDirectory|Nopcommerce_db.mdf;Initial Catalog=Nopcommerce_db;Connection Timeout=60;Integrated Security=True;MultipleActiveResultSets=True

@@ -1,0 +1,7 @@
+Widgets.NivoSlider
+Widgets.GoogleAnalytics
+Misc.FacebookShop
+Nop.Plugin.Support
+Nop.Plugin.Widgets.Support
+Shipping.FixedRate
+Shipping.ByWeight

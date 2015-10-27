@@ -1,0 +1,167 @@
+﻿@using Nop.Services.Catalog
+@model NewsItemModel
+
+
+@if (Model.Id > 0)
+{
+    if (Model.AvailableCatalogues.Count > 0)
+    {
+        <div id="newscategories-grid"></div>
+
+        <script>
+            $(document).ready(function () {
+                $("#newscategories-grid").kendoGrid({
+                    dataSource: {
+                        type: "json",
+                        transport: {
+                            read: {
+                                url: "@Html.Raw(Url.Action("NewsCatalogueList", "News", new { newsId = Model.Id }))",
+                                type: "POST",
+                                dataType: "json"
+                            },
+                            create: {
+                                url: "@Html.Raw(Url.Action("NewsCatalogueInsert", "News", new { newsId = Model.Id }))",
+                                type: "POST",
+                                dataType: "json"
+                            },
+                            update: {
+                                url:"@Html.Raw(Url.Action("NewsCatalogueUpdate", "News"))",
+                                type: "POST",
+                                dataType: "json"
+                            },
+                            destroy: {
+                                url: "@Html.Raw(Url.Action("NewsCatalogueDelete", "News"))",
+                                type: "POST",
+                                dataType: "json"
+                            }
+                        },
+                        schema: {
+                            data: "Data",
+                            total: "Total",
+                            errors: "Errors",
+                            model: {
+                                id: "Id",
+                                fields: {
+                                    Catalogue: { editable: true, type: "string" },
+                                    //NewsId: { editable: false, type: "number" },
+                                    CatalogueId: { editable: true, type: "number" },
+                                    IsFeaturedNews: { editable: true, type: "boolean" },
+                                    DisplayOrder: { editable: true, type: "number" },
+                                    Id: { editable: false, type: "number" }
+                                }
+                            }
+                        },
+                        requestEnd: function (e) {
+                            if (e.type == "create" || e.type == "update") {
+                                this.read();
+                            }
+                        },
+                        error: function (e) {
+                            display_kendoui_grid_error(e);
+                            // Cancel the changes
+                            this.cancelChanges();
+                        },
+                        serverPaging: true,
+                        serverFiltering: true,
+                        serverSorting: true
+                    },
+                    pageable: {
+                        refresh: true,
+                        numeric: false,
+                        previousNext: false,
+                        info: false
+                    },
+                    toolbar: ["create"],
+                    edit: function(e) {
+                        if (e.model.isNew()) {
+                            //little hack here
+                            //pre-select the first value of kendoui dropdownlist datasource
+                            //for some reasons (maybe, bug) it always sends 0
+                            //if no value has been selected (changed) in the dropdownlist
+                            if (allCatalogues.length > 0) {
+                                e.model.CatalogueId = allCatalogues[0].Id;
+                            }
+                        }
+                    },
+                    editable: {
+                        confirmation: false,
+                        mode: "inline"
+                    },
+                    scrollable: false,
+                    columns: [{
+                            field: "catalogueId",
+                            title: "@T("Admin.Catalog.news.Catalogues.Fields.Catalogue")",
+                            width: 200,
+                            editor: categoryDropDownEditor, 
+                            template: "#:Catalogue#"
+                        },
+                        @if (!Model.IsLoggedInAsVendor)
+                        {
+                            //vendor cannot edit this field
+                            <text>{
+                            field: "IsFeaturedNews",
+                            title: "@T("Admin.Catalog.news.Catalogues.Fields.IsFeaturedNews")",
+                            width: 200,
+                            headerAttributes: { style: "text-align:center" },
+                            attributes: { style: "text-align:center" },
+                            template: '<img src="@Url.Content("~/Administration/Content/images/")active-#=IsFeaturedNews#.gif" />'
+                    },</text>
+                        }
+                        
+                    {
+                        field: "DisplayOrder",
+                        title: "@T("Admin.Catalog.news.Catalogues.Fields.DisplayOrder")",
+                        width: 200,
+                        //integer format
+                        format: "{0:0}"
+                    }, {
+                        command: [{
+                            name: "edit",
+                            text: "@T("Admin.Common.Edit")"
+                        }, {
+                            name: "destroy",
+                            text: "@T("Admin.Common.Delete")"
+                        }],
+                        width: 200
+                    }]
+                });
+            });
+                
+            //local datasource
+            var allCatalogues = [
+                @for (int i = 0; i < Model.AvailableCatalogues.Count; i++)
+                {
+                    var categoryItem = Model.AvailableCatalogues[i];
+                    <text>
+                        {
+                            Id: @(categoryItem.Value),
+                            Name: "@(Html.Raw(HttpUtility.JavaScriptStringEncode(categoryItem.Text)))"
+                        }
+                        </text>
+                    if (i != Model.AvailableCatalogues.Count - 1)
+                    {
+                        <text>,</text>
+                    }
+                }
+            ];
+
+            function categoryDropDownEditor(container, options) {
+                $('<input required data-text-field="Name" data-value-field="Id" data-bind="value:catalogueId"/>')
+                    .appendTo(container)
+                    .kendoDropDownList({
+                        autoBind: false,
+                        dataSource: allCatalogues
+                    });
+            }
+        </script>
+    }
+    else
+    {
+    @T("Admin.Catalog.news.Catalogues.NoCataloguesAvailable")
+    }
+}
+else
+{
+    @T("Admin.Catalog.news.Catalogues.SaveBeforeEdit")
+}
+

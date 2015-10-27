@@ -1,0 +1,67 @@
+﻿<table class="adminContent">
+    <tr>
+        <td>
+
+            <div id="average-order-report-grid"><table role="grid"><colgroup><col><col><col><col><col><col></colgroup><thead role="rowgroup" class="k-grid-header"><tr role="row"><th class="k-header" role="columnheader" data-field="OrderStatus" data-title="Tình trạng đơn hàng">Tình trạng đơn hàng</th><th class="k-header" role="columnheader" data-field="SumTodayOrders" data-title="Hôm nay">Hôm nay</th><th class="k-header" role="columnheader" data-field="SumThisWeekOrders" data-title="Tuần này">Tuần này</th><th class="k-header" role="columnheader" data-field="SumThisMonthOrders" data-title="Tháng này">Tháng này</th><th class="k-header" role="columnheader" data-field="SumThisYearOrders" data-title="Năm nay">Năm nay</th><th class="k-header" role="columnheader" data-field="SumAllTimeOrders" data-title="Tất cả thời gian">Tất cả thời gian</th></tr></thead><tbody role="rowgroup"><tr data-uid="aea6b744-cf23-49d5-bcfc-93c8d1280c63" role="row"><td role="gridcell">Đang chờ</td><td role="gridcell">$0.00</td><td role="gridcell">$0.00</td><td role="gridcell">$0.00</td><td role="gridcell">$0.00</td><td role="gridcell">$0.00</td></tr><tr class="k-alt" data-uid="51befc30-3c25-4e2f-8780-d7b4f4396677" role="row"><td role="gridcell">Đang xử lý</td><td role="gridcell">$0.00</td><td role="gridcell">$0.00</td><td role="gridcell">$0.00</td><td role="gridcell">$0.00</td><td role="gridcell">$0.00</td></tr><tr data-uid="fcb34d5f-b63b-45a0-8a5c-269806a3eab8" role="row"><td role="gridcell">Hoàn thành</td><td role="gridcell">$0.00</td><td role="gridcell">$0.00</td><td role="gridcell">$0.00</td><td role="gridcell">$0.00</td><td role="gridcell">$0.00</td></tr><tr class="k-alt" data-uid="044812b7-bc97-40c9-b32f-cc5d0e389acf" role="row"><td role="gridcell">Đã dừng lại</td><td role="gridcell">$0.00</td><td role="gridcell">$0.00</td><td role="gridcell">$0.00</td><td role="gridcell">$0.00</td><td role="gridcell">$0.00</td></tr></tbody></table><div data-role="pager" class="k-pager-wrap k-grid-pager k-widget"><a href="#" class="k-pager-refresh k-link" title="Refresh"><span class="k-icon k-i-refresh">Refresh</span></a></div></div>
+            <script>
+                $(document).ready(function () {
+                    $("#average-order-report-grid").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("OrderAverageReportList", "Order"))",
+                                    type: "POST",
+                                    dataType: "json"
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors"
+                            },
+                            error: function(e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            numeric: false,
+                            previousNext: false,
+                            info: false
+                        },
+                        editable: {
+                            confirmation: false,
+                            mode: "inline"
+                        },
+                        scrollable: false,
+                        columns: [{
+                            field: "OrderStatus",
+                            title: "@T("Admin.SalesReport.Average.OrderStatus")"
+                        }, {
+                            field: "SumTodayOrders",
+                            title: "@T("Admin.SalesReport.Average.SumTodayOrders")"
+                        }, {
+                            field: "SumThisWeekOrders",
+                            title: "@T("Admin.SalesReport.Average.SumThisWeekOrders")"
+                        }, {
+                            field: "SumThisMonthOrders",
+                            title: "@T("Admin.SalesReport.Average.SumThisMonthOrders")"
+                        }, {
+                            field: "SumThisYearOrders",
+                            title: "@T("Admin.SalesReport.Average.SumThisYearOrders")"
+                        }, {
+                            field: "SumAllTimeOrders",
+                            title: "@T("Admin.SalesReport.Average.SumAllTimeOrders")"
+                        }]
+                    });
+                });
+            </script>
+        </td>
+    </tr>
+</table>

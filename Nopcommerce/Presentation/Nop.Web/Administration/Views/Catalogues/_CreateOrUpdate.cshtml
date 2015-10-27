@@ -1,0 +1,494 @@
+﻿@model CataloguesModel
+
+@Html.ValidationSummary(false)
+@Html.HiddenFor(model => model.Id)
+
+<div id="catalogues-edit">
+    <ul>
+        <li @Html.RenderSelectedTabIndex(0, GetSelectedTabIndex())>
+            @T("Admin.ContentManagement.News.Info")
+        </li>
+        <li @Html.RenderSelectedTabIndex(1, GetSelectedTabIndex())>
+            @T("Admin.Common.SEO")
+        </li>
+        <li @Html.RenderSelectedTabIndex(2, GetSelectedTabIndex())>
+            @T("Admin.ContentManagement.News.News")
+        </li>      
+        <li @Html.RenderSelectedTabIndex(4, GetSelectedTabIndex())>
+            @T("Admin.ContentManagement.News.Acl")
+        </li>       
+    </ul>
+    <div>
+        @TabInfo()
+    </div>
+    <div>
+        @TabSeo()
+    </div>
+    <div>
+        @TabNews()
+    </div>  
+    <div>
+        @TabAcl()
+    </div>   
+</div>
+<script>
+    $(document).ready(function() {
+        $("#catalogues-edit").kendoTabStrip({
+            animation:  {
+                open: {
+                    effects: "fadeIn"
+                }
+            },
+            select: tabstrip_on_tab_select
+        });
+    });
+</script>
+
+@{
+    //custom tabs
+    var eventMessage = new AdminTabStripCreated(this.Html, "catalogues-edit");
+    EngineContext.Current.Resolve<IEventPublisher>().Publish(eventMessage);
+    foreach (var eventBlock in eventMessage.BlocksToRender)
+    {
+        @eventBlock
+    }
+}
+
+
+@*save selected tab index*@
+<input type="hidden" id="selected-tab-index" name="selected-tab-index" value="@(GetSelectedTabIndex())">
+
+@helper TabInfo()
+    {
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#@Html.FieldIdFor(model => model.AllowCustomersToSelectPageSize)").click(togglePageSize);
+            togglePageSize();
+        });
+
+        function togglePageSize() {
+            if ($('#@Html.FieldIdFor(model => model.AllowCustomersToSelectPageSize)').is(':checked')) {
+                $('#pnlPageSize').hide();
+                $('#pnlPageSizeOptions').show();
+            } else {
+                $('#pnlPageSize').show();
+                $('#pnlPageSizeOptions').hide();
+            }
+        }
+    </script>
+        
+    @(Html.LocalizedEditor<CataloguesModel, CataloguesLocalizedModel>("catalogues-info-localized",
+                @<table class="adminContent">
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.Locales[item].Name):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(model => model.Locales[item].Name)
+                            @Html.ValidationMessageFor(model => model.Locales[item].Name)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.Locales[item].Description):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(model => model.Locales[item].Description, "RichEditor")
+                            @Html.ValidationMessageFor(model => model.Locales[item].Description)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            @Html.HiddenFor(model => model.Locales[item].LanguageId)
+                        </td>
+                    </tr>
+                </table>
+                ,
+                @<table class="adminContent">
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.Name):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(model => model.Name)
+                            @Html.ValidationMessageFor(model => model.Name)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="adminTitle">
+                            @Html.NopLabelFor(model => model.Description):
+                        </td>
+                        <td class="adminData">
+                            @Html.EditorFor(x => x.Description, "RichEditor")
+                            @Html.ValidationMessageFor(model => model.Description)
+                        </td>
+                    </tr>
+                </table>
+            ))
+    <table class="adminContent">       
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.PictureId)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.PictureId)
+                @Html.ValidationMessageFor(model => model.PictureId)
+            </td>
+        </tr>
+
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Image)
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Image)
+                @Html.ValidationMessageFor(model => model.Image)
+            </td>
+        </tr>
+
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.ParentCatalogueId):
+            </td>
+            <td class="adminData">
+                @Html.DropDownListFor(model => model.ParentCatalogueId, Model.AvailableCatalogues)
+                @Html.ValidationMessageFor(model => model.ParentCatalogueId)
+            </td>
+        </tr>        
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.ShowOnHomePage):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(x => x.ShowOnHomePage)
+                @Html.ValidationMessageFor(model => model.ShowOnHomePage)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.IncludeInTopMenu):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(x => x.IncludeInTopMenu)
+                @Html.ValidationMessageFor(model => model.IncludeInTopMenu)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AllowCustomersToSelectPageSize):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(x => x.AllowCustomersToSelectPageSize)
+                @Html.ValidationMessageFor(model => model.AllowCustomersToSelectPageSize)
+            </td>
+        </tr>
+        <tr id="pnlPageSize">
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.PageSize):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(x => x.PageSize)
+                @Html.ValidationMessageFor(model => model.PageSize)
+            </td>
+        </tr>
+        <tr id="pnlPageSizeOptions">
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.PageSizeOptions):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(x => x.PageSizeOptions)
+                @Html.ValidationMessageFor(model => model.PageSizeOptions)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Published):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(x => x.Published)
+                @Html.ValidationMessageFor(model => model.Published)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.DisplayOrder):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.DisplayOrder)
+                @Html.ValidationMessageFor(model => model.DisplayOrder)
+            </td>
+        </tr>
+    </table>
+}
+@helper TabSeo()
+    {
+    @(Html.LocalizedEditor<CataloguesModel, CataloguesLocalizedModel>("catalogues-seo-localized",
+               @<table class="adminContent">
+                   <tr>
+                       <td class="adminTitle">
+                           @Html.NopLabelFor(model => model.Locales[item].MetaKeywords):
+                       </td>
+                       <td class="adminData">
+                           @Html.EditorFor(model => model.Locales[item].MetaKeywords)
+                           @Html.ValidationMessageFor(model => model.Locales[item].MetaKeywords)
+                       </td>
+                   </tr>
+                   <tr>
+                       <td class="adminTitle">
+                           @Html.NopLabelFor(model => model.Locales[item].MetaDescription):
+                       </td>
+                       <td class="adminData">
+                           @Html.TextAreaFor(model => model.Locales[item].MetaDescription)
+                           @Html.ValidationMessageFor(model => model.Locales[item].MetaDescription)
+                       </td>
+                   </tr>
+                   <tr>
+                       <td class="adminTitle">
+                           @Html.NopLabelFor(model => model.Locales[item].MetaTitle):
+                       </td>
+                       <td class="adminData">
+                           @Html.EditorFor(model => model.Locales[item].MetaTitle)
+                           @Html.ValidationMessageFor(model => model.Locales[item].MetaTitle)
+                       </td>
+                   </tr>
+                   <tr>
+                       <td class="adminTitle">
+                           @Html.NopLabelFor(model => model.Locales[item].SeName):
+                       </td>
+                       <td class="adminData">
+                           @Html.EditorFor(model => model.Locales[item].SeName)
+                           @Html.ValidationMessageFor(model => model.Locales[item].SeName)
+                       </td>
+                   </tr>
+                   <tr>
+                       <td colspan="2">
+                           @Html.HiddenFor(model => model.Locales[item].LanguageId)
+                       </td>
+                   </tr>
+               </table>
+               ,
+               @<table class="adminContent">
+                   <tr>
+                       <td class="adminTitle">
+                           @Html.NopLabelFor(model => model.MetaKeywords):
+                       </td>
+                       <td class="adminData">
+                           @Html.EditorFor(x => x.MetaKeywords)
+                           @Html.ValidationMessageFor(model => model.MetaKeywords)
+                       </td>
+                   </tr>
+                   <tr>
+                       <td class="adminTitle">
+                           @Html.NopLabelFor(model => model.MetaDescription):
+                       </td>
+                       <td class="adminData">
+                           @Html.TextAreaFor(x => x.MetaDescription)
+                           @Html.ValidationMessageFor(model => model.MetaDescription)
+                       </td>
+                   </tr>
+                   <tr>
+                       <td class="adminTitle">
+                           @Html.NopLabelFor(model => model.MetaTitle):
+                       </td>
+                       <td class="adminData">
+                           @Html.EditorFor(x => x.MetaTitle)
+                           @Html.ValidationMessageFor(model => model.MetaTitle)
+                       </td>
+                   </tr>
+                   <tr>
+                       <td class="adminTitle">
+                           @Html.NopLabelFor(model => model.SeName):
+                       </td>
+                       <td class="adminData">
+                           @Html.EditorFor(x => x.SeName)
+                           @Html.ValidationMessageFor(model => model.SeName)
+                       </td>
+                   </tr>
+               </table>))
+}
+@helper TabNews()
+    {
+    if (Model.Id > 0)
+    {
+        var defaultGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
+        var gridPageSizes = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
+
+            <table class="adminContent">
+                <tr>
+                    <td>
+                        <div id="news-grid"></div>
+                        <script>
+                            $(document).ready(function () {
+                                $("#news-grid").kendoGrid({
+                                    dataSource: {
+                                        type: "json",
+                                        transport: {
+                                            read: {
+                                                url: "@Html.Raw(Url.Action("NewsList", "Catalogues", new { catalogueId = Model.Id }))",
+                                                type: "POST",
+                                                dataType: "json"
+                                            },
+                                            update: {
+                                                url:"@Html.Raw(Url.Action("NewsUpdate", "Catalogues"))",
+                                                type: "POST",
+                                                dataType: "json"
+                                            },
+                                            destroy: {
+                                                url: "@Html.Raw(Url.Action("NewsDelete", "Catalogues"))",
+                                                type: "POST",
+                                                dataType: "json"
+                                            }
+                                        },
+                                        schema: {
+                                            data: "Data",
+                                            total: "Total",
+                                            errors: "Errors",
+                                            model: {
+                                                id: "Id",
+                                                fields: {
+                                                    NewsTitle: {editable: false, type: "string" },
+                                                    IsFeaturedNews: {editable: true, type: "boolean" },
+                                                    DisplayOrder: {editable: true, type: "number" },
+                                                    NewsId: {editable: false, type: "number" }
+                                                }
+                                            }
+                                        },
+                                        requestEnd: function(e) {
+                                            if(e.type=="update") {
+                                                this.read();
+                                            }
+                                        },
+                                        error: function(e) {
+                                            display_kendoui_grid_error(e);
+                                            // Cancel the changes
+                                            this.cancelChanges();
+                                        },
+                                        pageSize: @(defaultGridPageSize),
+                                        serverPaging: true,
+                                        serverFiltering: true,
+                                        serverSorting: true
+                                    },
+                                    pageable: {
+                                        refresh: true,
+                                        pageSizes: [@(gridPageSizes)]
+                                    },
+                                    editable: {
+                                        confirmation: false,
+                                        mode: "inline"
+                                    },
+                                    scrollable: false,
+                                    columns: [{
+                                        field: "NewsTitle",
+                                        title: "@T("Admin.ContentManagement.News.News.Fields.News")"
+                                    }, {
+                                        field: "IsFeaturedNews",
+                                        title: "@T("Admin.ContentManagement.News.News.Fields.IsFeaturedNews")",
+                                        width: 150,
+                                        headerAttributes: { style: "text-align:center" },
+                                        attributes: { style: "text-align:center" },
+                                        template: '<img src="@Url.Content("~/Administration/Content/images/")active-#=IsFeaturedNews#.gif" />'
+                                    }, {
+                                        field: "DisplayOrder",
+                                        title: "@T("Admin.ContentManagement.News.News.Fields.DisplayOrder")",
+                                        //integer format
+                                        format: "{0:0}",
+                                        width: 150
+                                    }, {
+                                        field: "NewsId",
+                                        title: "@T("Admin.Common.View")",
+                                        width: 100,
+                                        template: '<a href="@Url.Content("~/Admin/News/Edit/")#=NewsId#">@T("Admin.Common.View")</a>'
+                                    }, {
+                                        command: [{
+                                            name: "edit", 
+                                            text: "@T("Admin.Common.Edit")"
+                                        }, {
+                                            name: "destroy", 
+                                            text: "@T("Admin.Common.Delete")"
+                                        }],
+                                        width: 200
+                                    }]
+                                });
+                            });
+                        </script>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="100%">
+                        <input type="submit" id="btnAddNewNews" value="@T("Admin.ContentManagement.News.News.AddNew")" onclick="javascript:OpenWindow('@(Url.Action("NewsAddPopup", "Catalogues", new { catalogueId = Model.Id, btnId = "btnRefreshNews", formId = "catalogues-form" }))', 800, 800, true); return false;" class="k-button" />
+                        <input type="submit" id="btnRefreshNews" style="display: none" />
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                $('#btnRefreshNews').click(function () {
+                                    //refresh grid
+                                    var grid = $("#news-grid").data('kendoGrid');
+                                    grid.dataSource.read();
+
+                                    //return false to don't reload a page
+                                    return false;
+                                });
+                            });
+                        </script>
+                    </td>
+                </tr>
+            </table>
+    }
+    else
+    {
+            @T("Admin.ContentManagement.News.News.SaveBeforeEdit")
+    }
+}
+@helper TabAcl()
+{
+    
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#@Html.FieldIdFor(model => model.SubjectToAcl)").click(toggleAcl);
+        
+            toggleAcl();
+        });
+
+
+        function toggleAcl() {
+            if ($('#@Html.FieldIdFor(model => model.SubjectToAcl)').is(':checked')) {
+                $('#pnl-acl').show();
+            }
+            else {
+                $('#pnl-acl').hide();
+            }
+        }
+
+    </script>
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.SubjectToAcl):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.SubjectToAcl)
+                @Html.ValidationMessageFor(model => model.SubjectToAcl)
+            </td>
+        </tr>
+        <tr id="pnl-acl">
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AvailableCustomerRoles):
+            </td>
+            <td class="adminData">
+                @if (Model.AvailableCustomerRoles != null && Model.AvailableCustomerRoles.Count > 0)
+                {
+                    foreach (var customerRole in Model.AvailableCustomerRoles)
+                    {
+                    <div>
+                        <input type="checkbox" name="SelectedCustomerRoleIds" value="@customerRole.Id" checked="@(Model.SelectedCustomerRoleIds != null && Model.SelectedCustomerRoleIds.Contains(customerRole.Id))" />@customerRole.Name
+                    </div>
+                    }
+                }
+                else
+                {
+                    <div>No customer roles defined</div>
+                }</td>
+        </tr>
+    </table>
+}

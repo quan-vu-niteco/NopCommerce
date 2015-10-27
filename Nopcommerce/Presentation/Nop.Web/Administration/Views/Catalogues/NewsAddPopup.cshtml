@@ -1,0 +1,153 @@
+﻿@{
+    Layout = "~/Administration/Views/Shared/_AdminPopupLayout.cshtml";
+}
+
+@model CataloguesModel.AddCataloguesNewsModel
+
+@{
+    var defaultGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
+    var gridPageSizes = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
+
+    //page title
+    ViewBag.Title = T("Admin.ContentManagement.News.News.AddNew").Text;
+}
+@using (Html.BeginForm())
+{
+    <div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-catalog.png")" alt="" />
+            @T("Admin.ContentManagement.News.News.AddNew")
+        </div>
+    </div>    
+    
+       if (ViewBag.RefreshPage == true)
+       {
+        <script type="text/javascript">
+            try {window.opener.document.forms['@(ViewBag.formId)'].@(ViewBag.btnId).click();}
+            catch (e){} 
+            window.close();
+        </script>
+       }
+
+    
+    <table width="100%">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.SearchNewsTitle):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.SearchNewsTitle)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.SearchCatalogueId):
+            </td>
+            <td class="adminData">
+                @Html.DropDownList("SearchCatalogueId", Model.AvailableCatalogues)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" id="search-news" class="k-button" value="@T("Admin.Common.Search")" />
+            </td>
+        </tr>
+    </table>
+    <table class="adminContent">
+        <tr>
+            <td>
+                <div id="news-grid"></div>
+
+                <script>
+                $(document).ready(function () {
+                    $("#news-grid").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("NewsAddPopupList", "Catalogues"))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: additionalData
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors"
+                            },
+                            error: function(e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            pageSize: @(defaultGridPageSize),
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            pageSizes: [@(gridPageSizes)]
+                        },
+                        editable: {
+                            confirmation: false,
+                            mode: "inline"
+                        },
+                        scrollable: false,
+                        columns: [{
+                            field: "Id",
+                            title: "@T("Admin.Common.Check")",
+                            template: "<input type='checkbox' name='SelectedNewsIds' value='#=Id#' />",
+                            attributes: {
+                                style: "text-align:center"
+                            },
+                            width: 50
+                        }, {
+                            field: "Title",
+                            title: "@T("Admin.ContentManagement.News.Fields.Title")"
+                        }, {
+                            field: "Published",
+                            title: "@T("Admin.ContentManagement.News.Fields.Published")",
+                            width: 100,
+                            headerAttributes: { style: "text-align:center" },
+                            attributes: { style: "text-align:center" },
+                            template: '<img src="@Url.Content("~/Administration/Content/images/")active-#=Published#.gif" />'
+                        }]
+                    });
+                });
+                </script>
+
+                <script type="text/javascript">
+                    $(document).ready(function () {
+                        $('#search-news').click(function () {
+                            var grid = $('#news-grid').data('kendoGrid');
+                            grid.dataSource.page(1); //new search. Set page size to 1
+                            //grid.dataSource.read(); we already loaded the grid above using "page" function
+                            return false;
+                        });
+                    });
+
+                    $("#@Html.FieldIdFor(model => model.SearchNewsTitle)").keydown(function (event) {
+                        if (event.keyCode == 13) {
+                            $("#search-news").click();
+                            return false;
+                        }
+                    });
+
+                    function additionalData() {
+                        return {
+                            SearchNewsTitle: $('#@Html.FieldIdFor(model => model.SearchNewsTitle)').val(),
+                            SearchCatalogueId: $('#SearchCatalogueId').val(),                         
+                        };
+                    }
+                </script>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="submit" name="save" class="k-button" value="@T("Admin.Common.Save")" />
+            </td>
+        </tr>
+    </table>
+}

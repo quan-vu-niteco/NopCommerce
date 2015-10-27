@@ -1,0 +1,52 @@
+﻿@{
+    //page title
+    ViewBag.Title = T("Admin.ContentManagement.News.Manage").Text;
+}
+<div class="section-header">
+    <div class="title">
+        <img src="@Url.Content("~/Administration/Content/images/ico-catalog.png")" alt="" />
+        @T("Admin.ContentManagement.News.Manage") @Html.ActionLink("(" + T("Admin.ContentManagement.News.SwitchToListView") + ")", "List")
+    </div>
+    <div class="options">
+        <a href="@Url.Action("Create")" class="k-button">@T("Admin.Common.AddNew")</a>
+    </div>
+</div>
+<table class="adminContent">
+    <tr>
+        <td>
+            <div id="category-treeview"></div>
+
+            <script>
+                categories = new kendo.data.HierarchicalDataSource({
+                    transport: {
+                        read: {
+                            url: "@Html.Raw(Url.Action("TreeLoadChildren", "Catalogues"))",
+                            type: "POST",
+                            dataType: "json"
+                        }
+                    },
+                    schema: {
+                        model: {
+                            id: "id",
+                            hasChildren: "hasChildren"
+                        }
+                    }
+                });
+
+                $(document).ready(function() {
+                    $("#category-treeview").kendoTreeView({
+                        dataSource: categories,
+                        dataTextField: "Name",
+                        select: function (e) {
+                            var dataItem = this.dataItem(e.node);
+                            var url = "@(Url.Action("Edit"))" + "/" + dataItem.id;
+                            window.location = url;
+                        }
+                    });
+                });
+
+                
+            </script>
+        </td>
+    </tr>
+</table>

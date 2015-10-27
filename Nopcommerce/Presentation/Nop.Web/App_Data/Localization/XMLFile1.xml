@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LocaleResource Name="Admin.Contentmanagement.News.Pictures">
+  <Value>Ảnh</Value>
+</LocaleResource>
+<LocaleResource Name="Admin.Contentmanagement.News.Pictures.AddButton">
+  <Value>Thêm ảnh sản phẩm</Value>
+</LocaleResource>
+<LocaleResource Name="Admin.Contentmanagement.News.Pictures.AddNew">
+  <Value>Thêm ảnh sản phẩm</Value>
+</LocaleResource>
+<LocaleResource Name="Admin.Contentmanagement.News.Pictures.Fields.DisplayOrder">
+  <Value>Thứ tự hiển thị</Value>
+</LocaleResource>
+<LocaleResource Name="Admin.Contentmanagement.News.Pictures.Fields.DisplayOrder.Hint">
+  <Value>Thứ tự hiển thị của ảnh. 1 biểu diễn trên cùng của trang.</Value>
+</LocaleResource>
+<LocaleResource Name="Admin.Contentmanagement.News.Pictures.Fields.Picture">
+  <Value>Ảnh</Value>
+</LocaleResource>
+<LocaleResource Name="Admin.Contentmanagement.News.Pictures.Fields.Picture.Hint">
+  <Value>Chọn ảnh để tải lên. Nếu kích cỡ ảnh vượt quá tùy chỉnh kích cỡ tập tin tối đa của thiết lập, nó sẽ được tự động thu nhỏ.</Value>
+</LocaleResource>
+<LocaleResource Name="Admin.Contentmanagement.News.Pictures.SaveBeforeEdit">
+  <Value>Bạn cần phải lưu sản phẩm trước khi tải lên ảnh cho sản phẩm này.</Value>
+</LocaleResource>

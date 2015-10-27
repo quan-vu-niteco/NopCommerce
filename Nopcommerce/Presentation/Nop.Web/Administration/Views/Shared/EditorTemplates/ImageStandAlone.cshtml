@@ -1,0 +1,50 @@
+﻿@model String
+@using Nop.Core
+@{
+   
+    //TinyMCE picture browser does not work in a virtual category
+    //so if you're running in a virtual directory, then uncomment the code below:
+    //allowJbimages = true;
+    //allowRoxyFileman =false; 
+
+    var random = CommonHelper.GenerateRandomInteger();
+    var clientId = "picture" + random;
+}
+@Html.TextBoxFor(model => model, new { id = clientId + "value", @class = "text-box single-line" })
+@*<input id="@(clientId + "value")" type="text" width="600" value="@Model" class="text-box single-line" />*@
+<span id="@(clientId + "add")" class="k-button">@T("Admin.Picture.SelectPicture")</span>
+
+<script>
+    $(document).ready(function () {
+        function StandAloneBrowser@(random)(fieldName, title, type, w, h) {
+            var roxyFileman = '@Url.Content("~/Content/Roxy_Fileman/index.html")';       
+            if (roxyFileman.indexOf("?") < 0) {
+                roxyFileman += '?integration=custom';
+            }
+            else {
+                roxyFileman += '&integration=custom';
+            }
+            roxyFileman += "&type=" + type;
+            roxyFileman += '&input=' + fieldName + '&value=' + document.getElementById(fieldName).value;
+
+            // Fixes dual-screen position   Most browsers   Firefox
+            var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+            var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+            var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+            var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+            var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+            var top = ((height / 2) - (h / 2)) + dualScreenTop;
+            var newWindow = window.open(roxyFileman, title, 'scrollbars=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+
+            // Puts focus on the newWindow
+            if (window.focus) {
+                newWindow.focus();
+            }
+        }
+
+        $("#@(clientId + "add")").click(function(e) {
+            StandAloneBrowser@(random)('@(clientId + "value")', 'Select Image', 'image', 800, 600);
+        });
+    });
+</script>

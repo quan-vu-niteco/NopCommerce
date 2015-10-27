@@ -1,0 +1,12 @@
+﻿@model Nop.Plugin.Misc.TrialTracker.Domain.TrialTrackerRecord
+@using System
+@using Nop.Web.Framework.UI
+
+<p>Thanks for downloading the trial! Here is a link to the file:</p>
+<a href="@Url.RouteUrl("GetSampleDownload", new { productid = Model.Productid })">@T("Products.DownloadSample")</a>
+
+<style>
+    #new-entry {
+        display: none;
+    }
+</style>

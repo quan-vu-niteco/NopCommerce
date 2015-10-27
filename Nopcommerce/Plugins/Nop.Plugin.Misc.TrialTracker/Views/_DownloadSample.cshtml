@@ -1,0 +1,59 @@
+﻿@model ProductDetailsModel
+@using Nop.Web.Models.Catalog;
+@using System;
+@using Nop.Web.Framework.UI;
+
+@{
+    Html.AddScriptParts(Url.Content("~/Plugins/Misc.TrialTracker/scripts/bootstrap.js"));
+    Html.AppendCssFileParts(Url.Content("~/Plugins/Misc.TrialTracker/styles/bootstrap.css"));
+}
+
+
+@if (Model.HasSampleDownload)
+{
+    <div class="download-sample">
+        <span class="download-sample-button">
+            <a href="#" data-toggle="modal" data-target="#myModal">
+                Download Sample
+            </a>
+        </span>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindemodel="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Please provide a name and email.</h4>
+                </div>
+                <div class="modal-body">
+                    @Html.Action("NewEntry", "TrialTracker")
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" id="new-entry" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $('#new-entry').click(function (e) {
+                var nameTemp = $('#CustomerName').val();
+                var emailTemp = $('#CustomerEmail').val();
+                var productidTemp = $('.add-to-cart-button').data('productid')
+
+                var data = {
+                    CustomerName: nameTemp,
+                    CustomerEmail: emailTemp,
+                    Productid: productidTemp
+                }
+
+                $.post("/TrialTracker/NewEntry", data, function (data) {
+                    $('.modal-body').html(data);
+                })
+            })
+        })
+    </script>
+}

@@ -1,0 +1,197 @@
+﻿@using Nop.Web.Framework;
+@using Nop.Core.Infrastructure;
+@using Nop.Core
+@{
+    var random = CommonHelper.GenerateRandomInteger();
+    var clientId = "picture" + random;
+
+    //page title
+    ViewBag.Title = T("Admin.Configuration.Support.SupportOnline").Text;
+    var defaultGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
+    var gridPageSizes = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
+}
+<div class="section-header">
+    <div class="title">
+        <img src="@Url.Content("~/Administration/Content/images/ico-configuration.png")" alt="" />
+        @T("Admin.Configuration.Support.SupportOnline")
+    </div>
+</div>
+<table class="adminContent">
+    <tr>
+        <td>
+            <strong>@T("Admin.Configuration.Support.Description")</strong>
+        </td>
+    </tr>
+    <tr>
+        <td>
+
+            <script>
+                function StandAloneBrowser@(random)(fieldName, title, type, w, h) {
+
+                    var roxyFileman = '@Url.Content("~/Content/Roxy_Fileman/index.html")';
+                    if (roxyFileman.indexOf("?") < 0) {
+                        roxyFileman += '?integration=custom';
+                    } else {
+                        roxyFileman += '&integration=custom';
+                    }
+                    roxyFileman += "&type=" + type;
+                    roxyFileman += '&input=' + fieldName + '&value=' + document.getElementById(fieldName).value;
+
+                    // Fixes dual-screen position   Most browsers   Firefox
+                    var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+                    var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+                    var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+                    var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+                    var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+                    var top = ((height / 2) - (h / 2)) + dualScreenTop;
+                    var newWindow = window.open(roxyFileman, title, 'scrollbars=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+
+                    // Puts focus on the newWindow
+                    if (window.focus) {
+                        newWindow.focus();
+                    }
+                }
+            </script>
+
+            <div id="support-grid"></div>
+            <script>
+    $(document).ready(function() {
+        $("#support-grid").kendoGrid({
+            dataSource: {
+                type: "json",
+                transport: {
+                    read: {
+                        url: "@Html.Raw(Url.Action("List", "WidgetsSupport"))",
+                        type: "POST",
+                        dataType: "json"
+                    },
+                    create: {
+                        url: "@Html.Raw(Url.Action("Add", "WidgetsSupport"))",
+                        type: "POST",
+                        dataType: "json"
+                    },
+                    update: {
+                        url: "@Html.Raw(Url.Action("Update", "WidgetsSupport"))",
+                        type: "POST",
+                        dataType: "json"
+                    },
+                    destroy: {
+                        url: "@Html.Raw(Url.Action("Delete", "WidgetsSupport"))",
+                        type: "POST",
+                        dataType: "json"
+                    }
+                },
+                schema: {
+                    data: "Data",
+                    total: "Total",
+                    errors: "Errors",
+                    model: {
+                        id: "Id",
+                        fields: {
+                            Image: { editable: true, type: "string" },
+                            YahooId: { editable: true, type: "string" },
+                            SkypeId: { editable: true, type: "string" },
+                            Name: { editable: true, type: "string" },
+                            Phone: { editable: true, type: "string" },
+                            HotLine: { editable: true, type: "string" },
+                            DisplayOrder: { editable: true, type: "number" },
+                            Id: { editable: false, type: "number" }
+                        }
+                    }
+                },
+                requestEnd: function(e) {
+                    if (e.type == "create" || e.type == "update") {
+                        this.read();
+                    }
+                },
+                error: function(e) {
+                    display_kendoui_grid_error(e);
+                    // Cancel the changes
+                    this.cancelChanges();
+                },
+                pageSize: @(defaultGridPageSize),
+                serverPaging: true,
+                serverFiltering: true,
+                serverSorting: true
+            },
+            pageable: {
+                pageSizes: [@(gridPageSizes)],
+                refresh: true,
+                numeric: false,
+                previousNext: false,
+                info: false
+            },
+            toolbar: ["create"],
+            editable: {
+                confirmation: false,
+                mode: "inline"
+            },
+            scrollable: false,
+            columns: [
+                {
+                    field: "Image",
+                    title: "@T("Admin.Configuration.Support.Fields.Image")",
+                    template: "<img src=\"http://demos.kendoui.com/content/web/Employees/#:data.Image#.jpg\" alt=\"#: Image #\" />",
+                    editor: ImageEditor,
+                    width: 300
+                },
+                {
+                    field: "YahooId",
+                    title: "@T("Admin.Configuration.Support.Fields.YahooId")",
+
+                    width: 300
+                }, {
+                    field: "SkypeId",
+                    title: "@T("Admin.Configuration.Support.Fields.SkypeId")",
+                    width: 200
+                }, {
+                    field: "Name",
+                    title: "@T("Admin.Configuration.Support.Fields.Name")",
+                    width: 200
+                }, {
+                    field: "Phone",
+                    title: "@T("Admin.Configuration.Support.Fields.Phone")",
+                    width: 200
+                }, {
+                    field: "HotLine",
+                    title: "@T("Admin.Configuration.Support.Fields.HotLine")",
+                    width: 200
+                }, {
+                    field: "DisplayOrder",
+                    title: "@T("Admin.Configuration.Support.Fields.DisplayOrder")",
+                    //integer format
+                    format: "{0:0}",
+                    width: 100
+                }, {
+                    command: [
+                        {
+                            name: "edit",
+                            text: "@T("Admin.Common.Edit")"
+                        }, {
+                            name: "destroy",
+                            text: "@T("Admin.Common.Delete")"
+                        }
+                    ],
+                    width: 200
+                }
+            ]
+        });
+
+    });
+                $("#@(clientId + "value")").bind("change",Deductions);
+               
+                function Deductions() {
+                    alert("Hello");
+                }
+
+    function ImageEditor(container, options) {
+        $('<input class="k-input k-textbox" name="'+options.field+'" data-bind="value:' + options.field + '" ' +'id="@(clientId + "value")" /><span id="@(clientId + "add")" class="k-button"  onclick="StandAloneBrowser@(random)(\'@(clientId + "value")\',\'Select Image\', \'image\', 800, 600);">@T("Admin.Picture.SelectPicture")</span>')
+                        .appendTo(container);
+      
+
+                }
+            </script>
+        </td>
+    </tr>
+</table>

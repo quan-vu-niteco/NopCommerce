@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+
+    <link href="/Administration/Content/styles.css" rel="stylesheet" type="text/css" />
+    <link href="/Content/jquery-ui-themes/smoothness/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css" />
+    <link href="/Content/kendo/2014.1.318/kendo.common.min.css" rel="stylesheet" type="text/css" />
+    <link href="/Content/kendo/2014.1.318/kendo.default.min.css" rel="stylesheet" type="text/css" />
+    <link href="/Content/kendo/2014.1.318/kendo.rtl.min.css" rel="stylesheet" type="text/css" />
+    <link href="/Content/tagit/jquery.tagit.css" rel="stylesheet" type="text/css" />
+    <link href="/Scripts/fineuploader/fineuploader-4.2.2.min.css" rel="stylesheet" type="text/css" />
+
+    <script src="/Scripts/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="/Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="/Scripts/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+    <script src="/Scripts/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+    <script src="/Scripts/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+    <script src="/Scripts/admin.common.js" type="text/javascript"></script>
+    <script src="/Scripts/kendo/2014.1.318/kendo.web.min.js" type="text/javascript"></script>
+    <script src="/Scripts/tag-it.min.js" type="text/javascript"></script>
+    <script src="/Content/tinymce/tinymce.min.js" type="text/javascript"></script>
+    <script src="/Scripts/fineuploader/jquery.fineuploader-4.2.2.min.js" type="text/javascript"></script>
+</head>
+<body>
+
+    <input id="Text1" type="text"  width="600" value=""/><input id="Button1" type="button" value="button"  />
+    <script>
+        $(document).ready(function ()
+        {
+
+            function RoxyFileBrowser(field_name, url, title, type, w, h) {
+
+                var roxyFileman = url;
+                if (roxyFileman.indexOf("?") < 0) {
+                    roxyFileman += '?integration=custom'
+                }
+                else {
+                    roxyFileman += '&integration=custom'
+                }
+                roxyFileman += "&type=" + type;
+                roxyFileman += '&input=' + field_name + '&value=' + document.getElementById(field_name).value
+
+                // Fixes dual-screen position   Most browsers   Firefox
+                var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+                var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+                width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+                height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+                var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+                var top = ((height / 2) - (h / 2)) + dualScreenTop;
+                var newWindow = window.open(url, title, 'scrollbars=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+
+                // Puts focus on the newWindow
+                if (window.focus) {
+                    newWindow.focus();
+                }
+            }
+
+            //function RoxyFileBrowser(field_name, url, type) {
+            //    var roxyFileman = url;
+            //    if (roxyFileman.indexOf("?") < 0) {
+            //        roxyFileman += '?integration=custom'
+            //    }
+            //    else {
+            //        roxyFileman += '&integration=custom'
+            //    }                
+            //    roxyFileman += "&type=" + type;
+            //    roxyFileman += '&input=' + field_name + '&value=' + document.getElementById(field_name).value;
+            //    window.open(roxyFileman, "myWindow", "width=800, height=600");              
+            //    return false;
+            //}
+
+            $("#Button1").click(function () {
+                RoxyFileBrowser('Text1', 'index.html','Select Image', 'image', 800,600);
+            });
+
+    });
+    </script>
+
+        </body>
+        </html>

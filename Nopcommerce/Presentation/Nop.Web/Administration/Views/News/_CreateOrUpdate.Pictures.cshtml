@@ -1,0 +1,155 @@
+﻿@model NewsItemModel
+
+@if (Model.Id > 0)
+{
+    <div>
+        <div id="newspictures-grid"></div>
+
+        <script>
+            $(document).ready(function () {
+                $("#newspictures-grid").kendoGrid({
+                    dataSource: {
+                        type: "json",
+                        transport: {
+                            read: {
+                                url: "@Html.Raw(Url.Action("NewsPictureList", "News", new { newsId = Model.Id }))",
+                                type: "POST",
+                                dataType: "json"
+                            },
+                            update: {
+                                url:"@Html.Raw(Url.Action("NewsPictureUpdate", "News"))",
+                                type: "POST",
+                                dataType: "json"
+                            },
+                            destroy: {
+                                url: "@Html.Raw(Url.Action("NewsPictureDelete", "News"))",
+                                type: "POST",
+                                dataType: "json"
+                            }
+                        },
+                        schema: {
+                            data: "Data",
+                            total: "Total",
+                            errors: "Errors",
+                            model: {
+                                id: "Id",
+                                fields: {
+                                    PictureUrl: {editable: false, type: "string" },
+                                    DisplayOrder: {editable: true, type: "number" }
+                                }
+                            }
+                        },
+                        requestEnd: function(e) {
+                            if(e.type=="update") {
+                                this.read();
+                            }
+                        },
+                        error: function(e) {
+                            display_kendoui_grid_error(e);
+                            // Cancel the changes
+                            this.cancelChanges();
+                        },
+                        serverPaging: true,
+                        serverFiltering: true,
+                        serverSorting: true
+                    },
+                    pageable: {
+                        refresh: true,
+                        numeric: false,
+                        previousNext: false,
+                        info: false
+                    },
+                    editable: {
+                        confirmation: false,
+                        mode: "inline"
+                    },
+                    scrollable: false,
+                    columns: [{
+                        field: "PictureUrl",
+                        title: "@T("Admin.ContentManagement.News.Pictures.Fields.Picture")",
+                        template: '<a href="#=PictureUrl#" target="_blank"><img alt="#=PictureId#" src="#=PictureUrl#" width="150" /><a/>',
+                        width: 200
+                    }, {
+                        field: "DisplayOrder",
+                        title: "@T("Admin.ContentManagement.News.Pictures.Fields.DisplayOrder")",
+                        //integer format
+                        format: "{0:0}",
+                        width: 150
+                    }, {
+                        command: [{
+                            name: "edit",
+                            text: "@T("Admin.Common.Edit")"
+                        }, {
+                            name: "destroy",
+                            text: "@T("Admin.Common.Delete")"
+                        }],
+                        width: 200
+                    }]
+                });
+            });
+        </script>
+    </div>
+    <p>
+        <strong>@T("Admin.ContentManagement.News.Pictures.AddNew")</strong>
+    </p>
+    <script type="text/javascript">
+     
+        $(document).ready(function () {
+            $('#addNewsPicture').click(function () {
+                var pictureId = $("#@Html.FieldIdFor(model => model.AddPictureModel.PictureId)").val();
+                var displayOrder = $("#@Html.FieldIdFor(model => model.AddPictureModel.DisplayOrder)").val();
+                
+                if (pictureId == 0) {
+                    alert('Upload picture first');
+                    return;
+                }
+
+                $('#addNewsPicture').attr('disabled', true);
+                $.ajax({
+                    cache:false,
+                    type: "POST",
+                    url: "@(Url.Action("NewsPictureAdd", "News"))",
+                    data: { "pictureId": pictureId, "displayOrder": displayOrder, "newsId": @Model.Id },
+                    success: function (data) {
+                        var grid = $("#newspictures-grid");
+                        grid.data('kendoGrid').dataSource.read();
+                        $('#addNewsPicture').attr('disabled', false);
+                    },
+                    error:function (xhr, ajaxOptions, thrownError){
+                        alert('Failed to add news picture.');
+                        $('#addNewsPicture').attr('disabled', false);
+                    }  
+                });
+            });
+        });
+    </script>        
+    <table class="adminContent">
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AddPictureModel.PictureId):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.AddPictureModel.PictureId)
+                @Html.ValidationMessageFor(model => model.AddPictureModel.PictureId)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AddPictureModel.DisplayOrder):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.AddPictureModel.DisplayOrder)
+                @Html.ValidationMessageFor(model => model.AddPictureModel.DisplayOrder)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" align="left">
+                <input type="button" id="addNewsPicture" class="k-button" value="@T("Admin.ContentManagement.News.Pictures.AddButton")" />
+            </td>
+        </tr>
+    </table>
+}
+else
+{
+    @T("Admin.ContentManagement.News.Pictures.SaveBeforeEdit")
+}
