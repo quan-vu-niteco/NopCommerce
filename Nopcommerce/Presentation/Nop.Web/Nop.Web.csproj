@@ -373,6 +373,7 @@
     <Compile Include="Validators\Common\ContactUsValidator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\InstalledPlugins.txt" />
     <Content Include="App_Data\Install\create_required_data.sql" />
     <Content Include="App_Data\Install\create_sample_data.sql" />
     <Content Include="App_Data\Localization\defaultResources.nopres - Copy.xml">
@@ -419,7 +420,7 @@
     <Content Include="App_Data\Install\SqlServer.Indexes.sql" />
     <Content Include="App_Data\Localization\XMLFile1.xml" />
     <Content Include="App_Data\nopcommerce_db.mdf" />
-    <Content Include="App_Data\nopcommerce_db_log.ldf">
+    <Content Include="App_Data\Nopcommerce_db_log.ldf">
       <DependentUpon>nopcommerce_db.mdf</DependentUpon>
     </Content>
     <Content Include="App_Data\Settings.txt" />
