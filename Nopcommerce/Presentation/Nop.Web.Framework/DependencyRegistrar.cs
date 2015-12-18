@@ -52,6 +52,8 @@ using Nop.Services.Vendors;
 using Nop.Web.Framework.Mvc.Routes;
 using Nop.Web.Framework.Themes;
 using Nop.Web.Framework.UI;
+using WebGrease;
+using ICacheManager = Nop.Core.Caching.ICacheManager;
 
 namespace Nop.Web.Framework
 {
@@ -180,7 +182,7 @@ namespace Nop.Web.Framework
                 .WithParameter(ResolvedParameter.ForNamed<ICacheManager>("nop_cache_static"))
                 .InstancePerLifetimeScope();
 
-            builder.RegisterType<GeoLookupService>().As<IGeoLookupService>().InstancePerLifetimeScope();
+            //builder.RegisterType<GeoLookupService>().As<IGeoLookupService>().InstancePerLifetimeScope();
             builder.RegisterType<CountryService>().As<ICountryService>().InstancePerLifetimeScope();
             builder.RegisterType<CurrencyService>().As<ICurrencyService>().InstancePerLifetimeScope();
             builder.RegisterType<MeasureService>().As<IMeasureService>().InstancePerLifetimeScope();
