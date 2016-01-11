@@ -22,7 +22,6 @@ namespace Nop.Admin.Models.Customers
             this.AssociatedExternalAuthRecords = new List<AssociatedExternalAuthModel>();
             this.AvailableCountries = new List<SelectListItem>();
             this.AvailableStates = new List<SelectListItem>();
-            this.AvailableVendors = new List<SelectListItem>();
             this.CustomerAttributes = new List<CustomerAttributeModel>();
         }
 
@@ -40,10 +39,6 @@ namespace Nop.Admin.Models.Customers
         [NopResourceDisplayName("Admin.Customers.Customers.Fields.Password")]
         [AllowHtml]
         public string Password { get; set; }
-
-        [NopResourceDisplayName("Admin.Customers.Customers.Fields.Vendor")]
-        public int VendorId { get; set; }
-        public IList<SelectListItem> AvailableVendors { get; set; }
 
         //form fields & properties
         public bool GenderEnabled { get; set; }

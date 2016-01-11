@@ -12,7 +12,7 @@ using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Security;
 using Nop.Services.Stores;
-using Nop.Services.Vendors;
+
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Kendoui;
@@ -28,7 +28,6 @@ namespace Nop.Admin.Controllers
         private readonly ICustomerActivityService _customerActivityService;
         private readonly IPermissionService _permissionService;
         private readonly IStoreService _storeService;
-        private readonly IVendorService _vendorService;
         private readonly IWorkContext _workContext;
 
 		#endregion
@@ -40,7 +39,6 @@ namespace Nop.Admin.Controllers
             ICustomerActivityService customerActivityService,
             IPermissionService permissionService,
             IStoreService storeService,
-            IVendorService vendorService,
             IWorkContext workContext)
 		{
             this._customerService = customerService;
@@ -48,7 +46,6 @@ namespace Nop.Admin.Controllers
             this._customerActivityService = customerActivityService;
             this._permissionService = permissionService;
             this._storeService = storeService;
-            this._vendorService = vendorService;
             this._workContext = workContext;
 		}
 

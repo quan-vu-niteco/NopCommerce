@@ -39,7 +39,7 @@ using Nop.Services.Seo;
 using Nop.Services.Stores;
 using Nop.Services.Tasks;
 using Nop.Services.Topics;
-using Nop.Services.Vendors;
+
 using Nop.Web.Framework.Mvc.Routes;
 using Nop.Web.Framework.Themes;
 using Nop.Web.Framework.UI;
@@ -120,8 +120,7 @@ namespace Nop.Web.Framework
             builder.RegisterType<WebWorkContext>().As<IWorkContext>().InstancePerLifetimeScope();
             //store context
             builder.RegisterType<WebStoreContext>().As<IStoreContext>().InstancePerLifetimeScope();
-
-            builder.RegisterType<VendorService>().As<IVendorService>().InstancePerLifetimeScope();
+        
             builder.RegisterType<SearchTermService>().As<ISearchTermService>().InstancePerLifetimeScope();
             builder.RegisterType<GenericAttributeService>().As<IGenericAttributeService>().InstancePerLifetimeScope();
             builder.RegisterType<FulltextService>().As<IFulltextService>().InstancePerLifetimeScope();

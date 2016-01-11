@@ -123,8 +123,7 @@ namespace Nop.Admin.Models.News
         {
             public AddCataloguesNewsModel()
             {
-                AvailableCatalogues = new List<SelectListItem>(); 
-                AvailableVendors = new List<SelectListItem>();
+                AvailableCatalogues = new List<SelectListItem>();
                 AvailableNewsTypes = new List<SelectListItem>();
             }
 
@@ -142,8 +141,7 @@ namespace Nop.Admin.Models.News
             [NopResourceDisplayName("Admin.ContentManagement.News.List.SearchNewsType")]
             public int SearchNewsTypeId { get; set; }
 
-            public IList<SelectListItem> AvailableCatalogues { get; set; } 
-            public IList<SelectListItem> AvailableVendors { get; set; }
+            public IList<SelectListItem> AvailableCatalogues { get; set; }
             public IList<SelectListItem> AvailableNewsTypes { get; set; }
 
             public int CatalogueId { get; set; }

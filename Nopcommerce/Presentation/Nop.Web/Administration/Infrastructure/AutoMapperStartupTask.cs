@@ -13,12 +13,8 @@ using Nop.Admin.Models.News;
 using Nop.Admin.Models.Plugins;
 using Nop.Admin.Models.Polls;
 using Nop.Admin.Models.Settings;
-
 using Nop.Admin.Models.Stores;
-
-
 using Nop.Admin.Models.Topics;
-using Nop.Admin.Models.Vendors;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Directory;
@@ -128,14 +124,7 @@ namespace Nop.Admin.Infrastructure
                 .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
             Mapper.CreateMap<TopicModel, Topic>();
 
-            //vendors
-            Mapper.CreateMap<Vendor, VendorModel>()
-                .ForMember(dest => dest.AssociatedCustomerEmails, mo => mo.Ignore())
-                .ForMember(dest => dest.Locales, mo => mo.Ignore())
-                .ForMember(dest => dest.SeName, mo => mo.MapFrom(src => src.GetSeName(0, true, false)))
-                .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
-            Mapper.CreateMap<VendorModel, Vendor>()
-                .ForMember(dest => dest.Deleted, mo => mo.Ignore());
+           
             //logs
             Mapper.CreateMap<Log, LogModel>()
                 .ForMember(dest => dest.CustomerEmail, mo => mo.Ignore())
@@ -286,14 +275,7 @@ namespace Nop.Admin.Infrastructure
                 .ForMember(dest => dest.ShowHeaderRssUrl_OverrideForStore, mo => mo.Ignore())
                 .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
             Mapper.CreateMap<NewsSettingsModel, NewsSettings>();
-           
-            Mapper.CreateMap<VendorSettings, VendorSettingsModel>()
-                .ForMember(dest => dest.ActiveStoreScopeConfiguration, mo => mo.Ignore())
-                .ForMember(dest => dest.VendorsBlockItemsToDisplay_OverrideForStore, mo => mo.Ignore())
-                .ForMember(dest => dest.ShowVendorOnProductDetailsPage_OverrideForStore, mo => mo.Ignore())
-                .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
-            Mapper.CreateMap<VendorSettingsModel, VendorSettings>()
-                .ForMember(dest => dest.DefaultVendorPageSizeOptions, mo => mo.Ignore());
+
             Mapper.CreateMap<MediaSettings, MediaSettingsModel>()
                 .ForMember(dest => dest.PicturesStoredIntoDatabase, mo => mo.Ignore())
                 .ForMember(dest => dest.ActiveStoreScopeConfiguration, mo => mo.Ignore())

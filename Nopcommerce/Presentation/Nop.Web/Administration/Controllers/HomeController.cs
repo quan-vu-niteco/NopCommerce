@@ -45,7 +45,6 @@ namespace Nop.Admin.Controllers
         public ActionResult Index()
         {
             var model = new DashboardModel();
-            model.IsLoggedInAsVendor = _workContext.CurrentVendor != null;
             return View(model);
         }
 

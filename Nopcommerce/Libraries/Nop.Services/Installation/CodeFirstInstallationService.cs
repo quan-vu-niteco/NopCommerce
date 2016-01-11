@@ -46,7 +46,7 @@ namespace Nop.Services.Installation
         private readonly IRepository<Customer> _customerRepository;
         private readonly IRepository<CustomerRole> _customerRoleRepository;
         private readonly IRepository<UrlRecord> _urlRecordRepository;
-     private readonly IRepository<EmailAccount> _emailAccountRepository;
+        private readonly IRepository<EmailAccount> _emailAccountRepository;
         private readonly IRepository<MessageTemplate> _messageTemplateRepository;
         private readonly IRepository<Country> _countryRepository;
         private readonly IRepository<StateProvince> _stateProvinceRepository;
@@ -3824,8 +3824,7 @@ namespace Nop.Services.Installation
             {
                 Name = "Vendors",
                 Active = true,
-                IsSystemRole = true,
-                SystemName = SystemCustomerRoleNames.Vendors,
+                IsSystemRole = true
             };
             var customerRoles = new List<CustomerRole>
                                 {
@@ -4565,15 +4564,7 @@ namespace Nop.Services.Installation
                     NewsArchivePageSize = 10,
                     ShowHeaderRssUrl = false,
                 });
-
-           
-            settingService.SaveSetting(new VendorSettings
-            {
-                DefaultVendorPageSizeOptions = "8, 4, 12",
-                VendorsBlockItemsToDisplay = 0,
-                ShowVendorOnProductDetailsPage = true,
-            });
-
+            
             var eaGeneral = _emailAccountRepository.Table.FirstOrDefault();
             if (eaGeneral == null)
                 throw new Exception("Default email account cannot be loaded");

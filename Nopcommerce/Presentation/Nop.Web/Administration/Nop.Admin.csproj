@@ -141,7 +141,6 @@
     <Compile Include="Controllers\RoxyFilemanController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
-    <Compile Include="Controllers\VendorController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Controllers\ScheduleTaskController.cs" />
     <Compile Include="Controllers\ExternalAuthenticationController.cs" />
@@ -158,7 +157,6 @@
     <Compile Include="Controllers\CustomerRoleController.cs" />
     <Compile Include="Controllers\NewsLetterSubscriptionController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
-    <Compile Include="Controllers\MeasureController.cs" />
     <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\EmailAccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -186,9 +184,6 @@
     <Compile Include="Models\Home\DashboardModel.cs" />
     <Compile Include="Models\Plugins\OfficialFeedListModel.cs" />
     <Compile Include="Models\Plugins\PluginListModel.cs" />
-    <Compile Include="Models\Settings\VendorSettingsModel.cs" />
-    <Compile Include="Models\Vendors\VendorListModel.cs" />
-    <Compile Include="Models\Vendors\VendorModel.cs" />
     <Compile Include="Models\Customers\OnlineCustomerModel.cs" />
     <Compile Include="Models\Messages\MessageTemplateListModel.cs" />
     <Compile Include="Models\News\NewsItemListModel.cs" />
@@ -243,7 +238,6 @@
     <Compile Include="Validators\Customers\CustomerAttributeValidator.cs" />
     <Compile Include="Validators\Customers\CustomerAttributeValueValidator.cs" />
     <Compile Include="Validators\News\CataloguesValidator.cs" />
-    <Compile Include="Validators\Vendors\VendorValidator.cs" />
     <Compile Include="Validators\Stores\StoreValidator.cs" />
     <Compile Include="Validators\Tasks\ScheduleTaskValidator.cs" />
     <Compile Include="Validators\Messages\NewsLetterSubscriptionValidator.cs" />
@@ -309,11 +303,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Category\Create.cshtml" />
-    <Content Include="Views\Category\Edit.cshtml" />
-    <Content Include="Views\Category\List.cshtml" />
-    <Content Include="Views\Category\Tree.cshtml" />
-    <Content Include="Views\Category\_CreateOrUpdate.cshtml" />
     <Content Include="Views\EmailAccount\Create.cshtml" />
     <Content Include="Views\EmailAccount\List.cshtml" />
     <Content Include="Views\EmailAccount\_CreateOrUpdate.cshtml" />
@@ -384,31 +373,7 @@
     <Content Include="Views\EmailAccount\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Measure\Weights.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Measure\Dimensions.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Tax\Providers.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Tax\ConfigureProvider.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Tax\Categories.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Setting\Tax.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shipping\Methods.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shipping\Providers.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shipping\ConfigureProvider.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\EditorTemplates\Address.cshtml" />
@@ -417,23 +382,10 @@
     <Content Include="Views\NewsLetterSubscription\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Forum\CreateForum.cshtml" />
-    <Content Include="Views\Forum\CreateForumGroup.cshtml" />
-    <Content Include="Views\Forum\EditForum.cshtml" />
-    <Content Include="Views\Forum\EditForumGroup.cshtml" />
-    <Content Include="Views\Forum\List.cshtml" />
     <Content Include="Views\Setting\Forum.cshtml" />
-    <Content Include="Views\Forum\_CreateOrUpdateForum.cshtml" />
-    <Content Include="Views\Forum\_CreateOrUpdateForumGroup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Setting\Shipping.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Payment\ConfigureMethod.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Payment\Methods.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\CustomerRole\_CreateOrUpdate.cshtml" />
@@ -506,73 +458,10 @@
     <Content Include="Views\Shared\EditorTemplates\DateTimeNullable.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\CheckoutAttribute\_CreateOrUpdate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\CheckoutAttribute\_CreateOrUpdateValue.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\CheckoutAttribute\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\CheckoutAttribute\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\CheckoutAttribute\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\CheckoutAttribute\ValueCreatePopup.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\CheckoutAttribute\ValueEditPopup.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\GiftCard\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\GiftCard\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\GiftCard\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\GiftCard\_CreateOrUpdate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\ActivityLog\ListTypes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\ActivityLog\ListLogs.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\RecurringPayment\_CreateOrUpdate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\RecurringPayment\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\RecurringPayment\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\ReturnRequest\_CreateOrUpdate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\ReturnRequest\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\ReturnRequest\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Affiliate\_CreateOrUpdate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Affiliate\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Affiliate\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Affiliate\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Country\_CreateOrUpdate.cshtml" />
@@ -599,18 +488,6 @@
     <Content Include="Views\MessageTemplate\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Campaign\_CreateOrUpdate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Campaign\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Campaign\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Campaign\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Setting\News.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -627,9 +504,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\News\Comments.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shipping\Restrictions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Topic\_CreateOrUpdate.cshtml" />
@@ -704,21 +578,6 @@
     <Content Include="Views\Log\View.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Manufacturer\_CreateOrUpdate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Manufacturer\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Manufacturer\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Manufacturer\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\ShoppingCart\CurrentCarts.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Poll\_CreateOrUpdate.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -743,9 +602,6 @@
     <Content Include="Views\ExternalAuthentication\Methods.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\ShoppingCart\CurrentWishlists.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Country\StateEditPopup.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -753,15 +609,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Country\_CreateOrUpdateState.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shipping\EditMethod.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shipping\CreateMethod.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shipping\_CreateOrUpdateMethod.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\EditorTemplates\DecimalNullable.cshtml" />
@@ -806,55 +653,10 @@
     <Content Include="Views\Setting\StoreScopeConfiguration.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Vendor\_CreateOrUpdate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Vendor\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Vendor\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Vendor\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shipping\CreateDeliveryDate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shipping\EditDeliveryDate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shipping\DeliveryDates.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shipping\_CreateOrUpdateDeliveryDate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shipping\_CreateOrUpdateWarehouse.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shipping\EditWarehouse.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shipping\Warehouses.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shipping\CreateWarehouse.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Common\PopularSearchTermsReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Payment\MethodRestrictions.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Setting\Vendor.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Template\CategoryTemplates.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Template\ManufacturerTemplates.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Jbimages\Upload.cshtml" />
@@ -885,27 +687,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Customer\_CustomerAttributes.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\AddressAttribute\_CreateOrUpdate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\AddressAttribute\_CreateOrUpdateValue.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\AddressAttribute\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\AddressAttribute\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\AddressAttribute\ListBlock.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\AddressAttribute\ValueCreatePopup.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\AddressAttribute\ValueEditPopup.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\_AddressAttributes.cshtml" />

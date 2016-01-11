@@ -14,7 +14,7 @@ using Nop.Services.Media;
 using Nop.Services.Security;
 using Nop.Services.Seo;
 using Nop.Services.Stores;
-using Nop.Services.Vendors;
+
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Kendoui;
@@ -40,7 +40,6 @@ namespace Nop.Admin.Controllers
         private readonly IStoreMappingService _storeMappingService;
         private readonly IExportManager _exportManager;
         private readonly ICustomerActivityService _customerActivityService;
-        private readonly IVendorService _vendorService;
         private readonly CataloguesSettings _cataloguesSettings;
 
         #endregion
@@ -59,8 +58,7 @@ namespace Nop.Admin.Controllers
             IAclService aclService, 
             IStoreService storeService,
             IStoreMappingService storeMappingService,
-            IExportManager exportManager, 
-            IVendorService vendorService, 
+            IExportManager exportManager,
             ICustomerActivityService customerActivityService,
             CataloguesSettings cataloguesSettings)
         {
@@ -73,7 +71,6 @@ namespace Nop.Admin.Controllers
             this._localizationService = localizationService;
             this._localizedEntityService = localizedEntityService;
             this._permissionService = permissionService;
-            this._vendorService = vendorService;
             this._aclService = aclService;
             this._storeService = storeService;
             this._storeMappingService = storeMappingService;
@@ -519,12 +516,6 @@ namespace Nop.Admin.Controllers
             var catalogues = _cataloguesService.GetAllCatalogues(showHidden: true);
             foreach (var c in catalogues)
                 model.AvailableCatalogues.Add(new SelectListItem { Text = c.GetFormattedBreadCrumb(catalogues), Value = c.Id.ToString() });
-       
-
-            //vendors
-            model.AvailableVendors.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
-            foreach (var v in _vendorService.GetAllVendors(showHidden: true))
-                model.AvailableVendors.Add(new SelectListItem { Text = v.Name, Value = v.Id.ToString() });
 
             //news types
             model.AvailableNewsTypes = NewsType.SimpleNews.ToSelectList(false).ToList();

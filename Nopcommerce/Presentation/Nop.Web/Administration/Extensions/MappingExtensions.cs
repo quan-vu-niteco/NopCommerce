@@ -17,8 +17,6 @@ using Nop.Admin.Models.Settings;
 using Nop.Admin.Models.Stores;
 
 using Nop.Admin.Models.Topics;
-using Nop.Admin.Models.Vendors;
-
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Directory;
@@ -27,13 +25,9 @@ using Nop.Core.Domain.Logging;
 using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.News;
-
 using Nop.Core.Domain.Polls;
-
 using Nop.Core.Domain.Stores;
-using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Topics;
-using Nop.Core.Domain.Vendors;
 using Nop.Core.Plugins;
 using Nop.Services.Authentication.External;
 using Nop.Services.Cms;
@@ -53,25 +47,6 @@ namespace Nop.Admin.Extensions
             return Mapper.Map(source, destination);
         }
         
-
-        #region Vendor
-
-        public static VendorModel ToModel(this Vendor entity)
-        {
-            return entity.MapTo<Vendor, VendorModel>();
-        }
-
-        public static Vendor ToEntity(this VendorModel model)
-        {
-            return model.MapTo<VendorModel, Vendor>();
-        }
-
-        public static Vendor ToEntity(this VendorModel model, Vendor destination)
-        {
-            return model.MapTo(destination);
-        }
-
-        #endregion
 
         #region Customer attributes
 
@@ -449,16 +424,6 @@ namespace Nop.Admin.Extensions
         #endregion
 
         #region Settings
-
-        public static VendorSettingsModel ToModel(this VendorSettings entity)
-        {
-            return entity.MapTo<VendorSettings, VendorSettingsModel>();
-        }
-        public static VendorSettings ToEntity(this VendorSettingsModel model, VendorSettings destination)
-        {
-            return model.MapTo(destination);
-        }
-
 
         public static NewsSettingsModel ToModel(this NewsSettings entity)
         {

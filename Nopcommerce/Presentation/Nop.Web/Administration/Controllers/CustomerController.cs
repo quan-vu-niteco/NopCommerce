@@ -25,7 +25,7 @@ using Nop.Services.Logging;
 using Nop.Services.Messages;
 using Nop.Services.Security;
 using Nop.Services.Stores;
-using Nop.Services.Vendors;
+
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Kendoui;
@@ -53,7 +53,6 @@ namespace Nop.Admin.Controllers
         private readonly CustomerSettings _customerSettings;
         
         private readonly IWorkContext _workContext;
-        private readonly IVendorService _vendorService;
         private readonly IStoreContext _storeContext;
         
         private readonly IExportManager _exportManager;
@@ -86,7 +85,7 @@ namespace Nop.Admin.Controllers
             IStateProvinceService stateProvinceService, 
             CustomerSettings customerSettings,
             IWorkContext workContext,
-            IVendorService vendorService,
+           
             IStoreContext storeContext,
             IExportManager exportManager,
             ICustomerActivityService customerActivityService,
@@ -113,7 +112,6 @@ namespace Nop.Admin.Controllers
             this._stateProvinceService = stateProvinceService;
             this._customerSettings = customerSettings;
             this._workContext = workContext;
-            this._vendorService = vendorService;
             this._storeContext = storeContext;
             this._exportManager = exportManager;
             this._customerActivityService = customerActivityService;
@@ -238,28 +236,7 @@ namespace Nop.Admin.Controllers
             //no errors
             return "";
         }
-
-        [NonAction]
-        protected virtual void PrepareVendorsModel(CustomerModel model)
-        {
-            if (model == null)
-                throw new ArgumentNullException("model");
-
-            model.AvailableVendors.Add(new SelectListItem
-            {
-                Text = _localizationService.GetResource("Admin.Customers.Customers.Fields.Vendor.None"),
-                Value = "0"
-            });
-            var vendors = _vendorService.GetAllVendors(showHidden: true);
-            foreach (var vendor in vendors)
-            {
-                model.AvailableVendors.Add(new SelectListItem
-                {
-                    Text = vendor.Name,
-                    Value = vendor.Id.ToString()
-                });
-            }
-        }
+    
 
         [NonAction]
         protected virtual void PrepareCustomerAttributeModel(CustomerModel model, Customer customer)
@@ -312,7 +289,6 @@ namespace Nop.Admin.Controllers
                 {
                     model.Email = customer.Email;
                     model.Username = customer.Username;
-                    model.VendorId = customer.VendorId;
                     model.AdminComment = customer.AdminComment;
                     model.IsTaxExempt = customer.IsTaxExempt;
                     model.Active = customer.Active;
@@ -359,8 +335,7 @@ namespace Nop.Admin.Controllers
                 model.DisplayVatNumber = false;
             }
 
-            //vendors
-            PrepareVendorsModel(model);
+          
             //customer attributes
             PrepareCustomerAttributeModel(model, customer);
 
@@ -558,7 +533,6 @@ namespace Nop.Admin.Controllers
                     CustomerGuid = Guid.NewGuid(),
                     Email = model.Email,
                     Username = model.Username,
-                    VendorId = model.VendorId,
                     AdminComment = model.AdminComment,
                     IsTaxExempt = model.IsTaxExempt,
                     Active = model.Active,
@@ -628,18 +602,6 @@ namespace Nop.Admin.Controllers
                     customer.VendorId = 0;
                     _customerService.UpdateCustomer(customer);
                     ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.AdminCouldNotbeVendor"));
-                }
-
-                //ensure that a customer in the Vendors role has a vendor account associated.
-                //otherwise, he will have access to ALL products
-                if (customer.IsVendor() && customer.VendorId == 0)
-                {
-                    var vendorRole = customer
-                        .CustomerRoles
-                        .FirstOrDefault(x => x.SystemName == SystemCustomerRoleNames.Vendors);
-                    customer.CustomerRoles.Remove(vendorRole);
-                    _customerService.UpdateCustomer(customer);
-                    ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.CannotBeInVendoRoleWithoutVendorAssociated"));
                 }
 
                 //activity log
@@ -732,9 +694,7 @@ namespace Nop.Admin.Controllers
 
                         _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.VatNumber, model.VatNumber);
                     }
-
-                    //vendor
-                    customer.VendorId = model.VendorId;
+                 
 
                     //form fields
                     if (_dateTimeSettings.AllowCustomersToSetTimeZone)
@@ -799,19 +759,6 @@ namespace Nop.Admin.Controllers
                         _customerService.UpdateCustomer(customer);
                         ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.AdminCouldNotbeVendor"));
                     }
-
-                    //ensure that a customer in the Vendors role has a vendor account associated.
-                    //otherwise, he will have access to ALL products
-                    if (customer.IsVendor() && customer.VendorId == 0)
-                    {
-                        var vendorRole = customer
-                            .CustomerRoles
-                            .FirstOrDefault(x => x.SystemName == SystemCustomerRoleNames.Vendors);
-                        customer.CustomerRoles.Remove(vendorRole);
-                        _customerService.UpdateCustomer(customer);
-                        ErrorNotification(_localizationService.GetResource("Admin.Customers.Customers.CannotBeInVendoRoleWithoutVendorAssociated"));
-                    }
-
 
                     //activity log
                     _customerActivityService.InsertActivity("EditCustomer", _localizationService.GetResource("ActivityLog.EditCustomer"), customer.Id);

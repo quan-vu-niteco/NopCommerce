@@ -144,60 +144,6 @@ namespace Nop.Admin.Controllers
 
             return Redirect(returnUrl);
         }
-
-        public ActionResult Vendor()
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
-                return AccessDeniedView();
-
-            //load settings for a chosen store scope
-            var storeScope = this.GetActiveStoreScopeConfiguration(_storeService, _workContext);
-            var vendorSettings = _settingService.LoadSetting<VendorSettings>(storeScope);
-            var model = vendorSettings.ToModel();
-            model.ActiveStoreScopeConfiguration = storeScope;
-            if (storeScope > 0)
-            {
-                model.VendorsBlockItemsToDisplay_OverrideForStore = _settingService.SettingExists(vendorSettings, x => x.VendorsBlockItemsToDisplay, storeScope);
-                model.ShowVendorOnProductDetailsPage_OverrideForStore = _settingService.SettingExists(vendorSettings, x => x.ShowVendorOnProductDetailsPage, storeScope);
-            }
-
-            return View(model);
-        }
-        [HttpPost]
-        public ActionResult Vendor(VendorSettingsModel model)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
-                return AccessDeniedView();
-
-            //load settings for a chosen store scope
-            var storeScope = this.GetActiveStoreScopeConfiguration(_storeService, _workContext);
-            var vendorSettings = _settingService.LoadSetting<VendorSettings>(storeScope);
-            vendorSettings = model.ToEntity(vendorSettings);
-
-            /* We do not clear cache after each setting update.
-             * This behavior can increase performance because cached settings will not be cleared 
-             * and loaded from database after each update */
-            
-            if (model.VendorsBlockItemsToDisplay_OverrideForStore || storeScope == 0)
-                _settingService.SaveSetting(vendorSettings, x => x.VendorsBlockItemsToDisplay, storeScope, false);
-            else if (storeScope > 0)
-                _settingService.DeleteSetting(vendorSettings, x => x.VendorsBlockItemsToDisplay, storeScope);
-
-            if (model.ShowVendorOnProductDetailsPage_OverrideForStore || storeScope == 0)
-                _settingService.SaveSetting(vendorSettings, x => x.ShowVendorOnProductDetailsPage, storeScope, false);
-            else if (storeScope > 0)
-                _settingService.DeleteSetting(vendorSettings, x => x.ShowVendorOnProductDetailsPage, storeScope);
-
-            //now clear settings cache
-            _settingService.ClearCache();
-
-            //activity log
-            _customerActivityService.InsertActivity("EditSettings", _localizationService.GetResource("ActivityLog.EditSettings"));
-
-            SuccessNotification(_localizationService.GetResource("Admin.Configuration.Updated"));
-            return RedirectToAction("Vendor");
-        }
-
         public ActionResult News()
         {
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageSettings))
