@@ -15,9 +15,9 @@ using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Forums;
 using Nop.Core.Domain.Messages;
-using Nop.Core.Domain.Orders;
-using Nop.Core.Domain.Payments;
-using Nop.Core.Domain.Shipping;
+
+
+
 using Nop.Core.Domain.Tax;
 using Nop.Services.Authentication.External;
 using Nop.Services.Catalog;

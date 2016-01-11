@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Web.Routing;
 using Nop.Core;
-using Nop.Core.Domain.Shipping;
+
 using Nop.Core.Plugins;
 using Nop.Plugin.Shipping.ByWeight.Data;
 using Nop.Plugin.Shipping.ByWeight.Services;

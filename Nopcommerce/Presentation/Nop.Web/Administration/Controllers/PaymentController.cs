@@ -6,7 +6,7 @@ using System.Web.Routing;
 using Nop.Admin.Extensions;
 using Nop.Admin.Models.Payments;
 using Nop.Core;
-using Nop.Core.Domain.Payments;
+
 using Nop.Core.Plugins;
 using Nop.Services.Configuration;
 using Nop.Services.Directory;

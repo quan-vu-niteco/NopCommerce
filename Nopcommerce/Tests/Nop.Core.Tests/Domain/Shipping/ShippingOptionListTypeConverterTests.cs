@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using Nop.Core.Domain.Shipping;
+
 using Nop.Tests;
 using NUnit.Framework;
 

@@ -119,19 +119,12 @@
     <Compile Include="Directory\CurrencyServiceTests.cs" />
     <Compile Include="Directory\TestExchangeRateProvider.cs" />
     <Compile Include="Directory\MeasureServiceTests.cs" />
-    <Compile Include="Discounts\DiscountExtensionsTests.cs" />
-    <Compile Include="Discounts\DiscountServiceTests.cs" />
-    <Compile Include="Discounts\TestDiscountRequirementRule.cs" />
     <Compile Include="ExportImport\ExportManagerTests.cs" />
     <Compile Include="Helpers\DateTimeHelperTests.cs" />
     <Compile Include="Localization\LanguageServiceTests.cs" />
     <Compile Include="Logging\CustomerActivityServiceTests.cs" />
     <Compile Include="Messages\TokenizerTests.cs" />
     <Compile Include="Messages\NewsLetterSubscriptionServiceTests.cs" />
-    <Compile Include="Orders\CheckoutAttributeParserAndFormatterTests.cs" />
-    <Compile Include="Orders\CheckoutAttributeExtensionsTests.cs" />
-    <Compile Include="Orders\OrderProcessingServiceTests.cs" />
-    <Compile Include="Orders\OrderTotalCalculationServiceTests.cs" />
     <Compile Include="Payments\PaymentExtensionTests.cs" />
     <Compile Include="Payments\TestPaymentMethod.cs" />
     <Compile Include="Payments\PaymentServiceTests.cs" />
@@ -172,7 +165,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-       </PropertyGroup>   
+    </PropertyGroup>
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

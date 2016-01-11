@@ -90,15 +90,6 @@ namespace Nop.Services.Media
         /// </summary>
         /// <param name="picture">Picture</param>
         void DeletePicture(Picture picture);
-       
-
-        /// <summary>
-        /// Gets pictures by product identifier
-        /// </summary>
-        /// <param name="productId">Product identifier</param>
-        /// <param name="recordsToReturn">Number of records to return. 0 if you want to get all items</param>
-        /// <returns>Pictures</returns>
-        IList<Picture> GetPicturesByProductId(int productId, int recordsToReturn = 0);
 
         /// <summary>
         /// Inserts a picture

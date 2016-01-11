@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Nop.Core.Domain.Directory;
-using Nop.Core.Domain.Shipping;
+
 using Nop.Tests;
 using NUnit.Framework;
 

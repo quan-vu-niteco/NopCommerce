@@ -8,9 +8,9 @@ using System.Web;
 using System.Web.Routing;
 using Nop.Core;
 using Nop.Core.Domain.Directory;
-using Nop.Core.Domain.Orders;
-using Nop.Core.Domain.Payments;
-using Nop.Core.Domain.Shipping;
+
+
+
 using Nop.Core.Plugins;
 using Nop.Plugin.Payments.PayPalStandard.Controllers;
 using Nop.Services.Configuration;

@@ -11,7 +11,7 @@ using System.Web.Services.Protocols;
 using Nop.Core;
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Discounts;
-using Nop.Core.Domain.Shipping;
+
 using Nop.Core.Plugins;
 using Nop.Plugin.Shipping.Fedex.Domain;
 using Nop.Plugin.Shipping.Fedex.RateServiceWebReference;

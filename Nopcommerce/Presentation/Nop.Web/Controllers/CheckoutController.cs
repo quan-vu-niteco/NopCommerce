@@ -8,9 +8,9 @@ using Nop.Core;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Discounts;
-using Nop.Core.Domain.Orders;
-using Nop.Core.Domain.Payments;
-using Nop.Core.Domain.Shipping;
+
+
+
 using Nop.Core.Plugins;
 using Nop.Services.Catalog;
 using Nop.Services.Common;

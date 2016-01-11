@@ -13,7 +13,7 @@ using System.Web.Routing;
 using System.Xml;
 using Nop.Core;
 using Nop.Core.Domain.Directory;
-using Nop.Core.Domain.Shipping;
+
 using Nop.Core.Plugins;
 using Nop.Plugin.Shipping.USPS.Domain;
 using Nop.Services.Catalog;

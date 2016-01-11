@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Nop.Admin.Models.Settings;
-using Nop.Core.Domain.Orders;
+
 using Nop.Services.Localization;
 using Nop.Web.Framework.Validators;
 

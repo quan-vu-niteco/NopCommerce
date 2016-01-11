@@ -4,7 +4,7 @@ using System.Linq;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Data;
-using Nop.Core.Domain.Catalog;
+
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Security;
 
@@ -37,7 +37,7 @@ namespace Nop.Services.Security
         private readonly IRepository<AclRecord> _aclRecordRepository;
         private readonly IWorkContext _workContext;
         private readonly ICacheManager _cacheManager;
-        private readonly CatalogSettings _catalogSettings;
+        
 
         #endregion
 
@@ -52,13 +52,12 @@ namespace Nop.Services.Security
         /// <param name="catalogSettings">Catalog settings</param>
         public AclService(ICacheManager cacheManager, 
             IWorkContext workContext,
-            IRepository<AclRecord> aclRecordRepository, 
-            CatalogSettings catalogSettings)
+            IRepository<AclRecord> aclRecordRepository)
         {
             this._cacheManager = cacheManager;
             this._workContext = workContext;
             this._aclRecordRepository = aclRecordRepository;
-            this._catalogSettings = catalogSettings;
+            
         }
 
         #endregion
@@ -223,9 +222,6 @@ namespace Nop.Services.Security
 
             if (customer == null)
                 return false;
-
-            if (_catalogSettings.IgnoreAcl)
-                return true;
 
             if (!entity.SubjectToAcl)
                 return true;

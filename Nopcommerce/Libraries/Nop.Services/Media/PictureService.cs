@@ -6,7 +6,7 @@ using System.Linq;
 using ImageResizer;
 using Nop.Core;
 using Nop.Core.Data;
-using Nop.Core.Domain.Catalog;
+
 using Nop.Core.Domain.Media;
 using Nop.Services.Configuration;
 using Nop.Services.Events;
@@ -32,7 +32,6 @@ namespace Nop.Services.Media
         private static readonly object s_lock = new object();
 
         private readonly IRepository<Picture> _pictureRepository;
-        private readonly IRepository<ProductPicture> _productPictureRepository;
         private readonly IRepository<NewsPicture> _newsPictureRepository;
         private readonly ISettingService _settingService;
         private readonly IWebHelper _webHelper;
@@ -55,13 +54,11 @@ namespace Nop.Services.Media
         /// <param name="eventPublisher">Event publisher</param>
         /// <param name="mediaSettings">Media settings</param>
         public PictureService(IRepository<Picture> pictureRepository,
-            IRepository<ProductPicture> productPictureRepository,
             ISettingService settingService, IWebHelper webHelper,
             ILogger logger, IEventPublisher eventPublisher,
             MediaSettings mediaSettings, IRepository<NewsPicture> newsPictureRepository)
         {
             this._pictureRepository = pictureRepository;
-            this._productPictureRepository = productPictureRepository;
             this._newsPictureRepository = newsPictureRepository;
             this._settingService = settingService;
             this._webHelper = webHelper;
@@ -723,33 +720,6 @@ namespace Nop.Services.Media
             var pics = new PagedList<Picture>(query, pageIndex, pageSize);
             return pics;
         }
-
-
-        /// <summary>
-        /// Gets pictures by product identifier
-        /// </summary>
-        /// <param name="productId">Product identifier</param>
-        /// <param name="recordsToReturn">Number of records to return. 0 if you want to get all items</param>
-        /// <returns>Pictures</returns>
-        public virtual IList<Picture> GetPicturesByProductId(int productId, int recordsToReturn = 0)
-        {
-            if (productId == 0)
-                return new List<Picture>();
-
-            
-            var query = from p in _pictureRepository.Table
-                        join pp in _productPictureRepository.Table on p.Id equals pp.PictureId
-                        orderby pp.DisplayOrder
-                        where pp.ProductId == productId
-                        select p;
-
-            if (recordsToReturn > 0)
-                query = query.Take(recordsToReturn);
-
-            var pics = query.ToList();
-            return pics;
-        }
-
 
 
         /// <summary>

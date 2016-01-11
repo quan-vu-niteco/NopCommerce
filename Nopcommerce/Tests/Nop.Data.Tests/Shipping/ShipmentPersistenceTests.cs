@@ -3,8 +3,8 @@ using System.Linq;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Directory;
-using Nop.Core.Domain.Orders;
-using Nop.Core.Domain.Shipping;
+
+
 using Nop.Tests;
 using NUnit.Framework;
 

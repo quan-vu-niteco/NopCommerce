@@ -9,8 +9,6 @@ using Nop.Services.Configuration;
 using Nop.Services.Directory;
 using Nop.Services.Localization;
 using Nop.Services.Security;
-using Nop.Services.Shipping;
-using Nop.Services.Stores;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Kendoui;
 using Nop.Web.Framework.Mvc;
@@ -42,28 +40,6 @@ namespace Nop.Plugin.Widgets.Support.Controllers
 
 		#endregion 
 
-        [ChildActionOnly]
-        public ActionResult Configure()
-        {
-            return View("~/Plugins/Widgets.Support/Views/WidgetsSupport/Configure.cshtml");
-        }
-
-        [ChildActionOnly]
-        public ActionResult PublicInfo(string widgetZone, object additionalData = null)
-        {
-            return View("~/Plugins/Widgets.Support/Views/WidgetsSupport/PublicInfo.cshtml");
-        }
-
-        [ChildActionOnly]
-        public ActionResult PublicInfoTop(string widgetZone, object additionalData = null)
-        {
-            return View("~/Plugins/Widgets.Support/Views/WidgetsSupport/PublicInfoTop.cshtml");
-        }
-        [ChildActionOnly]
-        public ActionResult PublicInfoBottom(string widgetZone, object additionalData = null)
-        {
-            return View("~/Plugins/Widgets.Support/Views/WidgetsSupport/PublicInfoBottom.cshtml");
-        }
 
         [HttpPost]
         public ActionResult List(DataSourceRequest command)

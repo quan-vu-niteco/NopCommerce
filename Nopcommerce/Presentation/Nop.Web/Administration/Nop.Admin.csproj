@@ -142,7 +142,6 @@
     <Compile Include="Controllers\CheckoutAttributeController.cs" />
     <Compile Include="Controllers\AffiliateController.cs" />
     <Compile Include="Controllers\CampaignController.cs" />
-    <Compile Include="Controllers\BlogController.cs" />
     <Compile Include="Controllers\JbimagesController.cs" />
     <Compile Include="Controllers\RoxyFilemanController.cs" />
     <Compile Include="Controllers\TemplateController.cs" />
@@ -160,13 +159,11 @@
     <Compile Include="Controllers\SettingController.cs" />
     <Compile Include="Controllers\TopicController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
-    <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Controllers\MessageTemplateController.cs" />
     <Compile Include="Controllers\ProductReviewController.cs" />
     <Compile Include="Controllers\ReturnRequestController.cs" />
     <Compile Include="Controllers\RecurringPaymentController.cs" />
     <Compile Include="Controllers\GiftCardController.cs" />
-    <Compile Include="Controllers\DiscountController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
     <Compile Include="Controllers\SpecificationAttributeController.cs" />
     <Compile Include="Controllers\ProductAttributeController.cs" />
@@ -218,8 +215,6 @@
     <Compile Include="Models\Customers\CustomerAttributeModel.cs" />
     <Compile Include="Models\Customers\CustomerAttributeValueModel.cs" />
     <Compile Include="Models\Home\DashboardModel.cs" />
-    <Compile Include="Models\Orders\CountryReportLineModel.cs" />
-    <Compile Include="Models\Orders\CountryReportModel.cs" />
     <Compile Include="Models\Payments\PaymentMethodRestrictionModel.cs" />
     <Compile Include="Models\Plugins\OfficialFeedListModel.cs" />
     <Compile Include="Models\Plugins\PluginListModel.cs" />
@@ -239,10 +234,6 @@
     <Compile Include="Models\ExternalAuthentication\AuthenticationMethodModel.cs" />
     <Compile Include="Models\Logging\LogListModel.cs" />
     <Compile Include="Models\Messages\NewsLetterSubscriptionListModel.cs" />
-    <Compile Include="Models\Orders\ShipmentListModel.cs" />
-    <Compile Include="Models\Orders\ShipmentModel.cs" />
-    <Compile Include="Models\Orders\NeverSoldReportLineModel.cs" />
-    <Compile Include="Models\Orders\NeverSoldReportModel.cs" />
     <Compile Include="Models\Plugins\MiscPluginModel.cs" />
     <Compile Include="Models\Plugins\PluginModel.cs" />
     <Compile Include="Models\Polls\PollAnswerModel.cs" />
@@ -254,22 +245,13 @@
     <Compile Include="Models\Logging\ActivityLogTypeModel.cs" />
     <Compile Include="Models\Common\AddressModel.cs" />
     <Compile Include="Models\Catalog\CategoryModel.cs" />
-    <Compile Include="Models\Orders\CheckoutAttributeModel.cs" />
-    <Compile Include="Models\Orders\CheckoutAttributeValueModel.cs" />
     <Compile Include="Models\Affiliates\AffiliateModel.cs" />
     <Compile Include="Models\Messages\CampaignModel.cs" />
-    <Compile Include="Models\Blogs\BlogPostModel.cs" />
-    <Compile Include="Models\Orders\OrderIncompleteReportLineModel.cs" />
-    <Compile Include="Models\Orders\OrderAverageReportLineSummaryModel.cs" />
-    <Compile Include="Models\Settings\BlogSettingsModel.cs" />
-    <Compile Include="Models\Blogs\BlogCommentModel.cs" />
     <Compile Include="Models\Settings\CatalogSettingsModel.cs" />
     <Compile Include="Models\Customers\BestCustomersReportModel.cs" />
     <Compile Include="Models\Customers\BestCustomerReportLineModel.cs" />
     <Compile Include="Models\Customers\RegisteredCustomerReportLineModel.cs" />
     <Compile Include="Models\Customers\CustomerReportsModel.cs" />
-    <Compile Include="Models\Orders\BestsellersReportLineModel.cs" />
-    <Compile Include="Models\Orders\BestsellersReportModel.cs" />
     <Compile Include="Models\Catalog\ProductTagModel.cs" />
     <Compile Include="Models\Settings\GeneralCommonSettingsModel.cs" />
     <Compile Include="Models\Settings\SettingModel.cs" />
@@ -287,18 +269,10 @@
     <Compile Include="Models\News\NewsCommentModel.cs" />
     <Compile Include="Models\News\NewsItemModel.cs" />
     <Compile Include="Models\Settings\NewsSettingsModel.cs" />
-    <Compile Include="Models\Orders\OrderAddressModel.cs" />
-    <Compile Include="Models\Orders\OrderListModel.cs" />
-    <Compile Include="Models\Orders\OrderModel.cs" />
     <Compile Include="Models\Messages\MessageTemplateModel.cs" />
     <Compile Include="Models\Directory\StateProvinceModel.cs" />
     <Compile Include="Models\Directory\CountryModel.cs" />
     <Compile Include="Models\Catalog\ProductReviewModel.cs" />
-    <Compile Include="Models\Orders\ReturnRequestModel.cs" />
-    <Compile Include="Models\Orders\RecurringPaymentModel.cs" />
-    <Compile Include="Models\Orders\GiftCardListModel.cs" />
-    <Compile Include="Models\Orders\GiftCardModel.cs" />
-    <Compile Include="Models\Discounts\DiscountModel.cs" />
     <Compile Include="Models\Catalog\ProductSpecificationAttributeModel.cs" />
     <Compile Include="Models\Catalog\SpecificationAttributeOptionModel.cs" />
     <Compile Include="Models\Catalog\SpecificationAttributeModel.cs" />
@@ -352,7 +326,6 @@
     <Compile Include="Validators\Orders\CheckoutAttributeValueValidator.cs" />
     <Compile Include="Validators\Orders\CheckoutAttributeValidator.cs" />
     <Compile Include="Validators\Messages\CampaignValidator.cs" />
-    <Compile Include="Validators\Blogs\BlogPostValidator.cs" />
     <Compile Include="Validators\Plugins\PluginValidator.cs" />
     <Compile Include="Validators\Polls\PollAnswerValidator.cs" />
     <Compile Include="Validators\Polls\PollValidator.cs" />
@@ -366,7 +339,6 @@
     <Compile Include="Validators\Directory\StateProvinceValidator.cs" />
     <Compile Include="Validators\Directory\CountryValidator.cs" />
     <Compile Include="Validators\Catalog\ProductReviewValidator.cs" />
-    <Compile Include="Validators\Discounts\DiscountValidator.cs" />
     <Compile Include="Validators\Catalog\ProductAttributeValueModelValidator.cs" />
     <Compile Include="Validators\Catalog\SpecificationAttributeOptionValidator.cs" />
     <Compile Include="Validators\Catalog\SpecificationAttributeValidator.cs" />
@@ -690,18 +662,6 @@
     <Content Include="Views\CheckoutAttribute\ValueEditPopup.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Discount\_CreateOrUpdate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Discount\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Discount\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Discount\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\GiftCard\List.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -803,24 +763,6 @@
     <Content Include="Views\Order\List.cshtml" />
     <Content Include="Views\Order\PartiallyRefundOrderPopup.cshtml" />
     <Content Include="Views\Order\_CreateOrUpdateAddress.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Blog\_CreateOrUpdate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Blog\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Blog\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Blog\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Setting\Blog.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Blog\Comments.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Setting\News.cshtml" />
@@ -1316,9 +1258,9 @@
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
-  </ProjectExtensions> 
+  </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
-     </PropertyGroup>  
+    </PropertyGroup>
   </Target>
 </Project>

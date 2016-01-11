@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using Nop.Core;
-using Nop.Core.Domain.Orders;
+
 using Nop.Core.Plugins;
 using Nop.Services.Configuration;
 using Nop.Services.Discounts;

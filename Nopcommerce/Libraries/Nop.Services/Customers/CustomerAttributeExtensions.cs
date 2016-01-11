@@ -1,5 +1,5 @@
 
-using Nop.Core.Domain.Catalog;
+
 using Nop.Core.Domain.Customers;
 
 namespace Nop.Services.Customers
@@ -17,12 +17,6 @@ namespace Nop.Services.Customers
         public static bool ShouldHaveValues(this CustomerAttribute customerAttribute)
         {
             if (customerAttribute == null)
-                return false;
-
-            if (customerAttribute.AttributeControlType == AttributeControlType.TextBox ||
-                customerAttribute.AttributeControlType == AttributeControlType.MultilineTextbox ||
-                customerAttribute.AttributeControlType == AttributeControlType.Datepicker ||
-                customerAttribute.AttributeControlType == AttributeControlType.FileUpload)
                 return false;
 
             //other attribute controle types support values

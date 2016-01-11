@@ -9,7 +9,7 @@ using System.Web.Routing;
 using System.Xml;
 using System.Xml.Linq;
 using Nop.Core;
-using Nop.Core.Domain.Shipping;
+
 using Nop.Core.Plugins;
 using Nop.Plugin.Shipping.CanadaPost.Domain;
 using Nop.Services.Configuration;

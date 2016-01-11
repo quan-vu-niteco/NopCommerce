@@ -15,10 +15,7 @@ namespace Nop.Data.Mapping.Customers
             this.HasRequired(rph => rph.Customer)
                 .WithMany(c => c.RewardPointsHistory)
                 .HasForeignKey(rph => rph.CustomerId);
-
-            this.HasOptional(rph => rph.UsedWithOrder)
-                .WithOptionalDependent(o => o.RedeemedRewardPointsEntry)
-                .WillCascadeOnDelete(false);
+          
         }
     }
 }

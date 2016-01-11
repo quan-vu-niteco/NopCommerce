@@ -1,5 +1,5 @@
 using System;
-using Nop.Core.Domain.Orders;
+
 
 namespace Nop.Core.Domain.Customers
 {
@@ -37,11 +37,6 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets the date and time of instance creation
         /// </summary>
         public DateTime CreatedOnUtc { get; set; }
-
-        /// <summary>
-        /// Gets or sets the order for which points were redeemed as a payment
-        /// </summary>
-        public virtual Order UsedWithOrder { get; set; }
 
         /// <summary>
         /// Gets or sets the customer

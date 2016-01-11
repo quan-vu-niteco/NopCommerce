@@ -5,8 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Web.Mvc;
 using Nop.Core;
-using Nop.Core.Domain.Orders;
-using Nop.Core.Domain.Payments;
+
+
 using Nop.Plugin.Payments.PayPalStandard.Models;
 using Nop.Services.Configuration;
 using Nop.Services.Localization;

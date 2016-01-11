@@ -8,7 +8,7 @@ using Nop.Admin.Models.Directory;
 using Nop.Admin.Models.Shipping;
 using Nop.Core;
 using Nop.Core.Domain.Directory;
-using Nop.Core.Domain.Shipping;
+
 using Nop.Core.Plugins;
 using Nop.Services.Common;
 using Nop.Services.Configuration;

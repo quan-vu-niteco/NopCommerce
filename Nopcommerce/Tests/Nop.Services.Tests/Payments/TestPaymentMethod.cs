@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Routing;
-using Nop.Core.Domain.Orders;
-using Nop.Core.Domain.Payments;
+
+
 using Nop.Core.Plugins;
 using Nop.Services.Payments;
 

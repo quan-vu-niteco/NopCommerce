@@ -6,7 +6,7 @@ using Nop.Admin.Models.Orders;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Directory;
-using Nop.Core.Domain.Orders;
+
 using Nop.Services.Directory;
 using Nop.Services.Localization;
 using Nop.Services.Logging;

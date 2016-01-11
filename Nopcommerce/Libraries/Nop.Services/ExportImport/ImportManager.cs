@@ -3,10 +3,10 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using Nop.Core;
-using Nop.Core.Domain.Catalog;
+
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Messages;
-using Nop.Services.Catalog;
+
 using Nop.Services.Directory;
 using Nop.Services.Media;
 using Nop.Services.Messages;
@@ -21,10 +21,8 @@ namespace Nop.Services.ExportImport
     public partial class ImportManager : IImportManager
     {
         #region Fields
-
-        private readonly IProductService _productService;
-        private readonly ICategoryService _categoryService;
-        private readonly IManufacturerService _manufacturerService;
+        
+      
         private readonly IPictureService _pictureService;
         private readonly IUrlRecordService _urlRecordService;
         private readonly IStoreContext _storeContext;
@@ -36,9 +34,8 @@ namespace Nop.Services.ExportImport
 
         #region Ctor
 
-        public ImportManager(IProductService productService, 
-            ICategoryService categoryService,
-            IManufacturerService manufacturerService,
+        public ImportManager(
+          
             IPictureService pictureService,
             IUrlRecordService urlRecordService,
             IStoreContext storeContext,
@@ -46,9 +43,6 @@ namespace Nop.Services.ExportImport
             ICountryService countryService,
             IStateProvinceService stateProvinceService)
         {
-            this._productService = productService;
-            this._categoryService = categoryService;
-            this._manufacturerService = manufacturerService;
             this._pictureService = pictureService;
             this._urlRecordService = urlRecordService;
             this._storeContext = storeContext;
@@ -319,154 +313,7 @@ namespace Nop.Services.ExportImport
 
 
 
-                    var product = _productService.GetProductBySku(sku);
-                    bool newProduct = false;
-                    if (product == null)
-                    {
-                        product = new Product();
-                        newProduct = true;
-                    }
-                    product.ProductTypeId = productTypeId;
-                    product.ParentGroupedProductId = parentGroupedProductId;
-                    product.VisibleIndividually = visibleIndividually;
-                    product.Name = name;
-                    product.ShortDescription = shortDescription;
-                    product.FullDescription = fullDescription;
-                    product.VendorId = vendorId;
-                    product.ProductTemplateId = productTemplateId;
-                    product.ShowOnHomePage = showOnHomePage;
-                    product.MetaKeywords = metaKeywords;
-                    product.MetaDescription = metaDescription;
-                    product.MetaTitle = metaTitle;
-                    product.AllowCustomerReviews = allowCustomerReviews;
-                    product.Sku = sku;
-                    product.ManufacturerPartNumber = manufacturerPartNumber;
-                    product.Gtin = gtin;
-                    product.IsGiftCard = isGiftCard;
-                    product.GiftCardTypeId = giftCardTypeId;
-                    product.RequireOtherProducts = requireOtherProducts;
-                    product.RequiredProductIds = requiredProductIds;
-                    product.AutomaticallyAddRequiredProducts = automaticallyAddRequiredProducts;
-                    product.IsDownload = isDownload;
-                    product.DownloadId = downloadId;
-                    product.UnlimitedDownloads = unlimitedDownloads;
-                    product.MaxNumberOfDownloads = maxNumberOfDownloads;
-                    product.DownloadActivationTypeId = downloadActivationTypeId;
-                    product.HasSampleDownload = hasSampleDownload;
-                    product.SampleDownloadId = sampleDownloadId;
-                    product.HasUserAgreement = hasUserAgreement;
-                    product.UserAgreementText = userAgreementText;
-                    product.IsRecurring = isRecurring;
-                    product.RecurringCycleLength = recurringCycleLength;
-                    product.RecurringCyclePeriodId = recurringCyclePeriodId;
-                    product.RecurringTotalCycles = recurringTotalCycles;
-                    product.IsRental = isRental;
-                    product.RentalPriceLength = rentalPriceLength;
-                    product.RentalPricePeriodId = rentalPricePeriodId;
-                    product.IsShipEnabled = isShipEnabled;
-                    product.IsFreeShipping = isFreeShipping;
-                    product.ShipSeparately = shipSeparately;
-                    product.AdditionalShippingCharge = additionalShippingCharge;
-                    product.DeliveryDateId = deliveryDateId;
-                    product.IsTaxExempt = isTaxExempt;
-                    product.TaxCategoryId = taxCategoryId;
-                    product.IsTelecommunicationsOrBroadcastingOrElectronicServices = isTelecommunicationsOrBroadcastingOrElectronicServices;
-                    product.ManageInventoryMethodId = manageInventoryMethodId;
-                    product.UseMultipleWarehouses = useMultipleWarehouses;
-                    product.WarehouseId = warehouseId;
-                    product.StockQuantity = stockQuantity;
-                    product.DisplayStockAvailability = displayStockAvailability;
-                    product.DisplayStockQuantity = displayStockQuantity;
-                    product.MinStockQuantity = minStockQuantity;
-                    product.LowStockActivityId = lowStockActivityId;
-                    product.NotifyAdminForQuantityBelow = notifyAdminForQuantityBelow;
-                    product.BackorderModeId = backorderModeId;
-                    product.AllowBackInStockSubscriptions = allowBackInStockSubscriptions;
-                    product.OrderMinimumQuantity = orderMinimumQuantity;
-                    product.OrderMaximumQuantity = orderMaximumQuantity;
-                    product.AllowedQuantities = allowedQuantities;
-                    product.AllowAddingOnlyExistingAttributeCombinations = allowAddingOnlyExistingAttributeCombinations;
-                    product.DisableBuyButton = disableBuyButton;
-                    product.DisableWishlistButton = disableWishlistButton;
-                    product.AvailableForPreOrder = availableForPreOrder;
-                    product.PreOrderAvailabilityStartDateTimeUtc = preOrderAvailabilityStartDateTimeUtc;
-                    product.CallForPrice = callForPrice;
-                    product.Price = price;
-                    product.OldPrice = oldPrice;
-                    product.ProductCost = productCost;
-                    product.SpecialPrice = specialPrice;
-                    product.SpecialPriceStartDateTimeUtc = specialPriceStartDateTimeUtc;
-                    product.SpecialPriceEndDateTimeUtc = specialPriceEndDateTimeUtc;
-                    product.CustomerEntersPrice = customerEntersPrice;
-                    product.MinimumCustomerEnteredPrice = minimumCustomerEnteredPrice;
-                    product.MaximumCustomerEnteredPrice = maximumCustomerEnteredPrice;
-                    product.Weight = weight;
-                    product.Length = length;
-                    product.Width = width;
-                    product.Height = height;
-                    product.Published = published;
-                    product.CreatedOnUtc = createdOnUtc;
-                    product.UpdatedOnUtc = DateTime.UtcNow;
-                    if (newProduct)
-                    {
-                        _productService.InsertProduct(product);
-                    }
-                    else
-                    {
-                        _productService.UpdateProduct(product);
-                    }
-
-                    //search engine name
-                    _urlRecordService.SaveSlug(product, product.ValidateSeName(seName, product.Name, true), 0);
-
-                    //category mappings
-                    if (!String.IsNullOrEmpty(categoryIds))
-                    {
-                        foreach (var id in categoryIds.Split(new [] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => Convert.ToInt32(x.Trim())))
-                        {
-                            if (product.ProductCategories.FirstOrDefault(x => x.CategoryId == id) == null)
-                            {
-                                //ensure that category exists
-                                var category = _categoryService.GetCategoryById(id);
-                                if (category != null)
-                                {
-                                    var productCategory = new ProductCategory
-                                    {
-                                        ProductId = product.Id,
-                                        CategoryId = category.Id,
-                                        IsFeaturedProduct = false,
-                                        DisplayOrder = 1
-                                    };
-                                    _categoryService.InsertProductCategory(productCategory);
-                                }
-                            }
-                        }
-                    }
-
-                    //manufacturer mappings
-                    if (!String.IsNullOrEmpty(manufacturerIds))
-                    {
-                        foreach (var id in manufacturerIds.Split(new [] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(x => Convert.ToInt32(x.Trim())))
-                        {
-                            if (product.ProductManufacturers.FirstOrDefault(x => x.ManufacturerId == id) == null)
-                            {
-                                //ensure that manufacturer exists
-                                var manufacturer = _manufacturerService.GetManufacturerById(id);
-                                if (manufacturer != null)
-                                {
-                                    var productManufacturer = new ProductManufacturer
-                                    {
-                                        ProductId = product.Id,
-                                        ManufacturerId = manufacturer.Id,
-                                        IsFeaturedProduct = false,
-                                        DisplayOrder = 1
-                                    };
-                                    _manufacturerService.InsertProductManufacturer(productManufacturer);
-                                }
-                            }
-                        }
-                    }
-
+                 
                     //pictures
                     foreach (var picturePath in new [] { picture1, picture2, picture3 })
                     {
@@ -476,41 +323,7 @@ namespace Nop.Services.ExportImport
                         var mimeType = GetMimeTypeFromFilePath(picturePath);
                         var newPictureBinary = File.ReadAllBytes(picturePath);
                         var pictureAlreadyExists = false;
-                        if (!newProduct)
-                        {
-                            //compare with existing product pictures
-                            var existingPictures = _pictureService.GetPicturesByProductId(product.Id);
-                            foreach (var existingPicture in existingPictures)
-                            {
-                                var existingBinary = _pictureService.LoadPictureBinary(existingPicture);
-                                //picture binary after validation (like in database)
-                                var validatedPictureBinary = _pictureService.ValidatePicture(newPictureBinary, mimeType);
-                                if (existingBinary.SequenceEqual(validatedPictureBinary))
-                                {
-                                    //the same picture content
-                                    pictureAlreadyExists = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (!pictureAlreadyExists)
-                        {
-                            product.ProductPictures.Add(new ProductPicture
-                            {
-                                Picture = _pictureService.InsertPicture(newPictureBinary, mimeType , _pictureService.GetPictureSeName(name), true),
-                                DisplayOrder = 1,
-                            });
-                            _productService.UpdateProduct(product);
-                        }
                     }
-
-                    //update "HasTierPrices" and "HasDiscountsApplied" properties
-                    _productService.UpdateHasTierPricesProperty(product);
-                    _productService.UpdateHasDiscountsApplied(product);
-
-
-
                     //next product
                     iRow++;
                 }

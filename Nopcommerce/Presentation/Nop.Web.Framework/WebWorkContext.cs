@@ -45,8 +45,6 @@ namespace Nop.Web.Framework
         private readonly CurrencySettings _currencySettings;
         private readonly LocalizationSettings _localizationSettings;
         private readonly IUserAgentHelper _userAgentHelper;
-        private readonly IStoreMappingService _storeMappingService;
-
         private Customer _cachedCustomer;
         private Customer _originalCustomerIfImpersonated;
         private Vendor _cachedVendor;
@@ -69,8 +67,7 @@ namespace Nop.Web.Framework
             TaxSettings taxSettings, 
             CurrencySettings currencySettings,
             LocalizationSettings localizationSettings,
-            IUserAgentHelper userAgentHelper,
-            IStoreMappingService storeMappingService)
+            IUserAgentHelper userAgentHelper)
         {
             this._httpContext = httpContext;
             this._customerService = customerService;
@@ -84,7 +81,6 @@ namespace Nop.Web.Framework
             this._currencySettings = currencySettings;
             this._localizationSettings = localizationSettings;
             this._userAgentHelper = userAgentHelper;
-            this._storeMappingService = storeMappingService;
         }
 
         #endregion
@@ -138,7 +134,7 @@ namespace Nop.Web.Framework
             var language = _languageService
                 .GetAllLanguages()
                 .FirstOrDefault(l => seoCode.Equals(l.UniqueSeoCode, StringComparison.InvariantCultureIgnoreCase));
-            if (language != null && language.Published && _storeMappingService.Authorize(language))
+            if (language != null && language.Published)
             {
                 return language;
             }
@@ -160,7 +156,7 @@ namespace Nop.Web.Framework
             var language = _languageService
                 .GetAllLanguages()
                 .FirstOrDefault(l => userLanguage.Equals(l.LanguageCulture, StringComparison.InvariantCultureIgnoreCase));
-            if (language != null && language.Published && _storeMappingService.Authorize(language))
+            if (language != null && language.Published)
             {
                 return language;
             }

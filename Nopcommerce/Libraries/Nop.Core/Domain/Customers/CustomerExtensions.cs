@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using Nop.Core.Domain.Common;
-using Nop.Core.Domain.Orders;
+
 
 namespace Nop.Core.Domain.Customers
 {
@@ -120,33 +120,18 @@ namespace Nop.Core.Domain.Customers
         }
         #endregion
 
-        #region Addresses
-
-        public static void RemoveAddress(this Customer customer, Address address)
-        {
-            if (customer.Addresses.Contains(address))
-            {
-                if (customer.BillingAddress == address) customer.BillingAddress = null;
-                if (customer.ShippingAddress == address) customer.ShippingAddress = null;
-
-                customer.Addresses.Remove(address);
-            }
-        }
-
-        #endregion
+        
 
         #region Reward points
 
         public static void AddRewardPointsHistoryEntry(this Customer customer, 
-            int points, string message = "", 
-            Order usedWithOrder = null, decimal usedAmount = 0M)
+            int points, string message = "", decimal usedAmount = 0M)
         {
             int newPointsBalance = customer.GetRewardPointsBalance() + points;
 
             var rewardPointsHistory = new RewardPointsHistory
             {
                 Customer = customer,
-                UsedWithOrder = usedWithOrder,
                 Points = points,
                 PointsBalance = newPointsBalance,
                 UsedAmount = usedAmount,

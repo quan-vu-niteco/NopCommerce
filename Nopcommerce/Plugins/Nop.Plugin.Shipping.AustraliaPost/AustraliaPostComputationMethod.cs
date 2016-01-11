@@ -6,7 +6,7 @@ using System.Text;
 using System.Web.Routing;
 using Nop.Core;
 using Nop.Core.Domain.Directory;
-using Nop.Core.Domain.Shipping;
+
 using Nop.Core.Plugins;
 using Nop.Services.Configuration;
 using Nop.Services.Directory;

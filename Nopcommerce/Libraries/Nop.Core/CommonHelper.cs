@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Web;
 using Nop.Core.ComponentModel;
-using Nop.Core.Domain.Shipping;
+
 
 namespace Nop.Core
 {
@@ -244,10 +244,6 @@ namespace Nop.Core
                 return new GenericListTypeConverter<decimal>();
             if (type == typeof(List<string>))
                 return new GenericListTypeConverter<string>();
-            if (type == typeof(ShippingOption))
-                return new ShippingOptionTypeConverter();
-            if (type == typeof(List<ShippingOption>) || type == typeof(IList<ShippingOption>))
-                return new ShippingOptionListTypeConverter();
 
             return TypeDescriptor.GetConverter(type);
         }

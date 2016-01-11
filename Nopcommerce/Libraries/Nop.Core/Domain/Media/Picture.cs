@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using Nop.Core.Domain.News;
-using Nop.Core.Domain.Catalog;
+
 
 namespace Nop.Core.Domain.Media
 {
@@ -10,8 +10,7 @@ namespace Nop.Core.Domain.Media
     public partial class Picture : BaseEntity
     {
         private ICollection<NewsPicture> _newsPictures;
-
-        private ICollection<ProductPicture> _productPictures;
+      
         /// <summary>
         /// Gets or sets the picture binary
         /// </summary>
@@ -40,14 +39,6 @@ namespace Nop.Core.Domain.Media
             get { return _newsPictures ?? (_newsPictures = new List<NewsPicture>()); }
             protected set { _newsPictures = value; }
         }
-
-        /// <summary>
-        /// Gets or sets the product pictures
-        /// </summary>
-        public virtual ICollection<ProductPicture> ProductPictures
-        {
-            get { return _productPictures ?? (_productPictures = new List<ProductPicture>()); }
-            protected set { _productPictures = value; }
-        }
+      
     }
 }

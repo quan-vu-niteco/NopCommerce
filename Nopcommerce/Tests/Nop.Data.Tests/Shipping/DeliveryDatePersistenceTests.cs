@@ -1,4 +1,4 @@
-﻿using Nop.Core.Domain.Shipping;
+﻿
 using Nop.Tests;
 using NUnit.Framework;
 

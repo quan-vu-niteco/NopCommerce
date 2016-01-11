@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Nop.Core;
 using Nop.Core.Data;
-using Nop.Core.Domain.Catalog;
+
 using Nop.Core.Domain.News;
 using Nop.Core.Domain.Stores;
 using Nop.Services.Events;
@@ -28,7 +28,7 @@ namespace Nop.Services.News
         private readonly IRepository<NewsComment> _newsCommentRepository;
         private readonly IRepository<StoreMapping> _storeMappingRepository;
         private readonly IRepository<AclRecord> _aclRepository;
-        private readonly CatalogSettings _catalogSettings;
+        
         private readonly IEventPublisher _eventPublisher;
         private readonly IRepository<NewsPicture> _newsPictureRepository;
         private readonly IRepository<LocalizedProperty> _localizedPropertyRepository;
@@ -48,7 +48,7 @@ namespace Nop.Services.News
             IRepository<NewsComment> newsCommentRepository,
             IRepository<StoreMapping> storeMappingRepository,
             IRepository<AclRecord> aclRepository,
-            CatalogSettings catalogSettings,
+            
             IEventPublisher eventPublisher, 
             IRepository<NewsPicture> newsPictureRepository,
             IRepository<LocalizedProperty> localizedPropertyRepository,
@@ -63,7 +63,7 @@ namespace Nop.Services.News
             this._newsCommentRepository = newsCommentRepository;
             this._storeMappingRepository = storeMappingRepository;
             this._aclRepository = aclRepository;
-            this._catalogSettings = catalogSettings;
+            
             this._eventPublisher = eventPublisher;
             this._newsPictureRepository = newsPictureRepository;
             this._localizedPropertyRepository = localizedPropertyRepository;
@@ -134,7 +134,7 @@ namespace Nop.Services.News
             query = query.OrderByDescending(n => n.CreatedOnUtc);
 
             //Store mapping
-            if (storeId > 0 && !_catalogSettings.IgnoreStoreLimitations)
+            if (storeId > 0 )
             {
                 query = from n in query
                         join sm in _storeMappingRepository.Table
@@ -519,7 +519,7 @@ namespace Nop.Services.News
                         (!p.AvailableEndDateTimeUtc.HasValue || p.AvailableEndDateTimeUtc.Value > nowUtc));
                 }
 
-                if (!showHidden && !_catalogSettings.IgnoreAcl)
+                if (!showHidden)
                 {
                     //ACL (access control list)
                     query = from p in query

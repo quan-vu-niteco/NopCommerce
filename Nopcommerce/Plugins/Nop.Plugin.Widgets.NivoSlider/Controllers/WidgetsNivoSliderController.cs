@@ -6,7 +6,6 @@ using Nop.Plugin.Widgets.NivoSlider.Models;
 using Nop.Services.Configuration;
 using Nop.Services.Localization;
 using Nop.Services.Media;
-using Nop.Services.Stores;
 using Nop.Web.Framework.Controllers;
 
 namespace Nop.Plugin.Widgets.NivoSlider.Controllers
@@ -15,7 +14,6 @@ namespace Nop.Plugin.Widgets.NivoSlider.Controllers
     {
         private readonly IWorkContext _workContext;
         private readonly IStoreContext _storeContext;
-        private readonly IStoreService _storeService;
         private readonly IPictureService _pictureService;
         private readonly ISettingService _settingService;
         private readonly ICacheManager _cacheManager;
@@ -23,7 +21,6 @@ namespace Nop.Plugin.Widgets.NivoSlider.Controllers
 
         public WidgetsNivoSliderController(IWorkContext workContext,
             IStoreContext storeContext,
-            IStoreService storeService, 
             IPictureService pictureService,
             ISettingService settingService,
             ICacheManager cacheManager,
@@ -31,7 +28,6 @@ namespace Nop.Plugin.Widgets.NivoSlider.Controllers
         {
             this._workContext = workContext;
             this._storeContext = storeContext;
-            this._storeService = storeService;
             this._pictureService = pictureService;
             this._settingService = settingService;
             this._cacheManager = cacheManager;
@@ -57,7 +53,7 @@ namespace Nop.Plugin.Widgets.NivoSlider.Controllers
         public ActionResult Configure()
         {
             //load settings for a chosen store scope
-            var storeScope = this.GetActiveStoreScopeConfiguration(_storeService, _workContext);
+        
             var nivoSliderSettings = _settingService.LoadSetting<NivoSliderSettings>(storeScope);
             var model = new ConfigurationModel();
             model.Picture1Id = nivoSliderSettings.Picture1Id;

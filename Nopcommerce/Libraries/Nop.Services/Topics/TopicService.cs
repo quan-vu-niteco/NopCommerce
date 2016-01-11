@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Nop.Core.Data;
-using Nop.Core.Domain.Catalog;
+
 using Nop.Core.Domain.Stores;
 using Nop.Core.Domain.Topics;
 using Nop.Services.Events;
@@ -20,7 +20,7 @@ namespace Nop.Services.Topics
         private readonly IRepository<Topic> _topicRepository;
         private readonly IRepository<StoreMapping> _storeMappingRepository;
         private readonly IStoreMappingService _storeMappingService;
-        private readonly CatalogSettings _catalogSettings;
+        
         private readonly IEventPublisher _eventPublisher;
 
         #endregion
@@ -30,13 +30,13 @@ namespace Nop.Services.Topics
         public TopicService(IRepository<Topic> topicRepository, 
             IRepository<StoreMapping> storeMappingRepository,
             IStoreMappingService storeMappingService,
-            CatalogSettings catalogSettings,
+            
             IEventPublisher eventPublisher)
         {
             this._topicRepository = topicRepository;
             this._storeMappingRepository = storeMappingRepository;
             this._storeMappingService = storeMappingService;
-            this._catalogSettings = catalogSettings;
+            
             this._eventPublisher = eventPublisher;
         }
 
@@ -105,7 +105,7 @@ namespace Nop.Services.Topics
             query = query.OrderBy(t => t.SystemName);
 
             //Store mapping
-            if (storeId > 0 && !_catalogSettings.IgnoreStoreLimitations)
+            if (storeId > 0)
             {
                 query = from t in query
                         join sm in _storeMappingRepository.Table

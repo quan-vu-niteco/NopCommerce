@@ -9,7 +9,7 @@ using Nop.Services.Customers;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Messages;
-using Nop.Services.Orders;
+
 
 namespace Nop.Services.Authentication.External
 {
@@ -29,8 +29,7 @@ namespace Nop.Services.Authentication.External
         private readonly IWorkContext _workContext;
         private readonly CustomerSettings _customerSettings;
         private readonly ExternalAuthenticationSettings _externalAuthenticationSettings;
-        private readonly IShoppingCartService _shoppingCartService;
-        private readonly IWorkflowMessageService _workflowMessageService;
+       
         private readonly LocalizationSettings _localizationSettings;
         #endregion
 
@@ -43,8 +42,7 @@ namespace Nop.Services.Authentication.External
             ICustomerActivityService customerActivityService, ILocalizationService localizationService,
             IWorkContext workContext, CustomerSettings customerSettings,
             ExternalAuthenticationSettings externalAuthenticationSettings,
-            IShoppingCartService shoppingCartService,
-            IWorkflowMessageService workflowMessageService, LocalizationSettings localizationSettings)
+            LocalizationSettings localizationSettings)
         {
             this._authenticationService = authenticationService;
             this._openAuthenticationService = openAuthenticationService;
@@ -55,8 +53,6 @@ namespace Nop.Services.Authentication.External
             this._workContext = workContext;
             this._customerSettings = customerSettings;
             this._externalAuthenticationSettings = externalAuthenticationSettings;
-            this._shoppingCartService = shoppingCartService;
-            this._workflowMessageService = workflowMessageService;
             this._localizationSettings = localizationSettings;
         }
         
@@ -146,10 +142,7 @@ namespace Nop.Services.Authentication.External
                         //authenticate
                         if (isApproved)
                             _authenticationService.SignIn(userFound ?? userLoggedIn, false);
-
-                        //notifications
-                        if (_customerSettings.NotifyNewCustomerRegistration)
-                            _workflowMessageService.SendCustomerRegisteredNotificationMessage(currentCustomer, _localizationSettings.DefaultAdminLanguageId);
+                   
 
                         switch (_customerSettings.UserRegistrationType)
                         {
@@ -157,7 +150,6 @@ namespace Nop.Services.Authentication.External
                                 {
                                     //email validation message
                                     _genericAttributeService.SaveAttribute(currentCustomer, SystemCustomerAttributeNames.AccountActivationToken, Guid.NewGuid().ToString());
-                                    _workflowMessageService.SendCustomerEmailValidationMessage(currentCustomer, _workContext.WorkingLanguage.Id);
 
                                     //result
                                     return new AuthorizationResult(OpenAuthenticationStatus.AutoRegisteredEmailValidation);
@@ -169,9 +161,6 @@ namespace Nop.Services.Authentication.External
                                 }
                             case UserRegistrationType.Standard:
                                 {
-                                    //send customer welcome message
-                                    _workflowMessageService.SendCustomerWelcomeMessage(currentCustomer, _workContext.WorkingLanguage.Id);
-
                                     //result
                                     return new AuthorizationResult(OpenAuthenticationStatus.AutoRegisteredStandard);
                                 }
@@ -209,8 +198,6 @@ namespace Nop.Services.Authentication.External
                 _openAuthenticationService.AssociateExternalAccountWithUser(userLoggedIn, parameters);
             }
 
-            //migrate shopping cart
-            _shoppingCartService.MigrateShoppingCart(_workContext.CurrentCustomer, userFound ?? userLoggedIn, true);
             //authenticate
             _authenticationService.SignIn(userFound ?? userLoggedIn, false);
             //activity log
