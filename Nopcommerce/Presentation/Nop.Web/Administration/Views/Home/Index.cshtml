@@ -32,7 +32,6 @@
                                 <div class="statisticsTitle">
                                     @T("Admin.SalesReport.Average")
                                 </div>
-                                @Html.Action("OrderAverageReport", "Order")
                             </td>
                         </tr>
                     </tbody>
@@ -51,7 +50,6 @@
                                         <div class="statisticsTitle">
                                             @T("Admin.SalesReport.Incomplete")
                                         </div>
-                                        @Html.Action("OrderIncompleteReport", "Order")
                                     </td>
                                 }
                                 @if (canManageCustomers)
@@ -60,7 +58,6 @@
                                         <div class="statisticsTitle">
                                             @T("Admin.Customers.Reports.RegisteredCustomers")
                                         </div>
-                                        @Html.Action("ReportRegisteredCustomers", "Customer")
                                     </td>
                                 }
                                 @if (canManageProducts)
@@ -85,13 +82,11 @@
                             <div class="statisticsTitle">
                                 @T("Admin.SalesReport.BestSellers.ByQuantity")
                             </div>
-                            @Html.Action("BestsellersBriefReportByQuantity", "Order")
                         </td>
                         <td class="bestsellers">
                             <div class="statisticsTitle">
                                 @T("Admin.SalesReport.BestSellers.ByAmount")
                             </div>
-                            @Html.Action("BestsellersBriefReportByAmount", "Order")
                         </td>
                     </tr>
                 </table>

@@ -71,6 +71,8 @@
     <Compile Include="Mapping\News\CataloguesMap.cs" />
     <Compile Include="Mapping\News\NewsPictureMap.cs" />
     <Compile Include="Mapping\News\NewsCataloguesMap.cs" />
+    <Compile Include="Mapping\Stores\StoreMap.cs" />
+    <Compile Include="Mapping\Stores\StoreMappingMap.cs" />
     <Compile Include="QueryableExtensions.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="DataReaderExtensions.cs" />

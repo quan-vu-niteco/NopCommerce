@@ -36,11 +36,7 @@
     else
     {
         @Html.Widget("left_side_column_before")
-        @Html.Action("CategoryNavigation", "Catalog", new { currentCategoryId = currentCategoryId, currentProductId = currentProductId })
         @Html.Widget("left_side_column_after_category_navigation")
-        @Html.Action("ManufacturerNavigation", "Catalog", new { currentManufacturerId = currentManufacturerId })
-        @Html.Action("VendorNavigation", "Catalog")
-        @Html.Action("PopularProductTags", "Catalog")
         @Html.Action("PollBlock", "Poll", new { systemKeyword = "LeftColumnPoll" })
         @Html.Widget("left_side_column_after")
     }
@@ -53,8 +49,6 @@
     else
     {
         @Html.Widget("right_side_column_before")
-        @Html.Action("NewsletterBox", "Newsletter")
-        @Html.Action("RecentlyViewedProductsBlock", "Product", new { productThumbPictureSize = 32 })
         @Html.Action("PollBlock", "Poll", new { systemKeyword = "RightColumnPoll" })
         @Html.Widget("right_side_column_after")
     }
