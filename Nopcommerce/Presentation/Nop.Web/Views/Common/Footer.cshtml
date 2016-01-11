@@ -1,6 +1,6 @@
 ﻿@model FooterModel
 @using Nop.Core
-@using Nop.Core.Domain.Tax
+
 @using Nop.Core.Infrastructure
 @using Nop.Web.Models.Common;
 
@@ -28,26 +28,7 @@
                 {
                     <li><a href="@Url.RouteUrl("NewsArchive")">@T("News")</a></li>
                 }
-                @if (Model.BlogEnabled)
-                {
-                    <li><a href="@Url.RouteUrl("Blog")">@T("Blog")</a></li>
-                }
-                @if (Model.ForumEnabled)
-                {
-                    <li><a href="@Url.RouteUrl("Boards")">@T("Forum.Forums")</a></li>
-                }
-                @if (Model.RecentlyViewedProductsEnabled)
-                {
-                    <li><a href="@Url.RouteUrl("RecentlyViewedProducts")">@T("Products.RecentlyViewedProducts")</a></li>
-                }
-                @if (Model.CompareProductsEnabled)
-                {
-                    <li><a href="@Url.RouteUrl("CompareProducts")">@T("Products.Compare.List")</a></li>
-                }
-                @if (Model.RecentlyAddedProductsEnabled)
-                {
-                    <li><a href="@Url.RouteUrl("RecentlyAddedProducts")">@T("Products.NewProducts")</a></li>
-                }
+              
             </ul>
         </div>
         <div class="column my-account">
@@ -57,14 +38,6 @@
                 @if (!Model.HideOrders)
                 {
                     <li><a href="@Url.RouteUrl("CustomerOrders")">@T("Account.CustomerOrders")</a></li>
-                }
-                @if (!Model.HideAddresses)
-                {
-                    <li><a href="@Url.RouteUrl("CustomerAddresses")" class="">@T("Account.CustomerAddresses")</a></li>
-                }
-                @if (Model.ShoppingCartEnabled)
-                {
-                    <li><a href="@Url.RouteUrl("ShoppingCart")" class="ico-cart">@T("ShoppingCart")</a></li>
                 }
                 @if (Model.WishlistEnabled)
                 {
@@ -103,13 +76,6 @@
         @*Would you like to remove the "Powered by nopCommerce" link in the bottom of the footer?
             Find more info here http://www.nopcommerce.com/copyrightremoval.aspx*@
     </div>
-    @if (Model.DisplayTaxShippingInfoFooter)
-    {
-        var inclTax = EngineContext.Current.Resolve<IWorkContext>().TaxDisplayType == TaxDisplayType.IncludingTax;
-        <div class="footer-tax-shipping">
-            @T(inclTax ? "Footer.TaxShipping.InclTax" : "Footer.TaxShipping.ExclTax", Url.RouteUrl("Topic", new {SeName = Html.GetTopicSeName("shippinginfo")}))
-        </div>
-    }
     <div class="footer-disclaimer">
         @T("Content.CopyrightNotice", DateTime.Now.Year, Model.StoreName)
     </div>

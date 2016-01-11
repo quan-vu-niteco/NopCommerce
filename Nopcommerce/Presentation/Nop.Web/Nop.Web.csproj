@@ -201,7 +201,6 @@
     <Compile Include="Controllers\TopicController.cs" />
     <Compile Include="Controllers\NewsController.cs" />
     <Compile Include="Controllers\DownloadController.cs" />
-    <Compile Include="Controllers\CountryController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Extensions\HtmlExtensions.cs" />
     <Compile Include="Extensions\MappingExtensions.cs" />
@@ -1884,7 +1883,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Catalog\CategoryTemplate.ProductsInGridOrLines.cshtml" />
-    <Content Include="Views\Shared\_ProductBox.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\Head.cshtml" />
@@ -1933,11 +1931,9 @@
     <Content Include="Views\Newsletter\SubscriptionActivation.cshtml" />
     <Content Include="Views\Customer\AccountActivation.cshtml" />
     <Content Include="Views\Common\ContactUs.cshtml" />
-    <Content Include="Views\Common\CurrencySelector.cshtml" />
     <Content Include="Views\Common\HeaderLinks.cshtml" />
     <Content Include="Views\Common\LanguageSelector.cshtml" />
     <Content Include="Views\Catalog\TopMenu.cshtml" />
-    <Content Include="Views\Common\TaxTypeSelector.cshtml" />
     <Content Include="Views\News\HomePageNews.cshtml" />
     <Content Include="Views\News\List.cshtml" />
     <Content Include="Views\News\NewsItem.cshtml" />

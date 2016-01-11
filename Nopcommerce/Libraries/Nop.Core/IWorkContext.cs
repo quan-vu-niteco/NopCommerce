@@ -1,8 +1,6 @@
 ﻿using Nop.Core.Domain.Customers;
-using Nop.Core.Domain.Directory;
+
 using Nop.Core.Domain.Localization;
-using Nop.Core.Domain.Tax;
-using Nop.Core.Domain.Vendors;
 
 namespace Nop.Core
 {
@@ -26,11 +24,6 @@ namespace Nop.Core
         /// <summary>
         /// Get or set current user working currency
         /// </summary>
-        Currency WorkingCurrency { get; set; }
-        /// <summary>
-        /// Get or set current tax display type
-        /// </summary>
-        TaxDisplayType TaxDisplayType { get; set; }
 
         /// <summary>
         /// Get or set value indicating whether we're in admin area

@@ -19,7 +19,7 @@ using Nop.Admin.Models.Stores;
 using Nop.Admin.Models.Topics;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
-using Nop.Core.Domain.Directory;
+
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Logging;
 using Nop.Core.Domain.Media;
@@ -211,62 +211,6 @@ namespace Nop.Admin.Extensions
         }
 
         #endregion
-        
-        #region Currencies
-
-        public static CurrencyModel ToModel(this Currency entity)
-        {
-            return entity.MapTo<Currency, CurrencyModel>();
-        }
-
-        public static Currency ToEntity(this CurrencyModel model)
-        {
-            return model.MapTo<CurrencyModel, Currency>();
-        }
-
-        public static Currency ToEntity(this CurrencyModel model, Currency destination)
-        {
-            return model.MapTo(destination);
-        }
-        #endregion
-
-        #region Measure weights
-
-        public static MeasureWeightModel ToModel(this MeasureWeight entity)
-        {
-            return entity.MapTo<MeasureWeight, MeasureWeightModel>();
-        }
-
-        public static MeasureWeight ToEntity(this MeasureWeightModel model)
-        {
-            return model.MapTo<MeasureWeightModel, MeasureWeight>();
-        }
-
-        public static MeasureWeight ToEntity(this MeasureWeightModel model, MeasureWeight destination)
-        {
-            return model.MapTo(destination);
-        }
-
-        #endregion
-
-        #region Measure dimension
-
-        public static MeasureDimensionModel ToModel(this MeasureDimension entity)
-        {
-            return entity.MapTo<MeasureDimension, MeasureDimensionModel>();
-        }
-
-        public static MeasureDimension ToEntity(this MeasureDimensionModel model)
-        {
-            return model.MapTo<MeasureDimensionModel, MeasureDimension>();
-        }
-
-        public static MeasureDimension ToEntity(this MeasureDimensionModel model, MeasureDimension destination)
-        {
-            return model.MapTo(destination);
-        }
-
-        #endregion
 
         #region External authentication methods
 
@@ -387,41 +331,6 @@ namespace Nop.Admin.Extensions
         #endregion
 
         
-
-        #region Countries / states
-
-        public static CountryModel ToModel(this Country entity)
-        {
-            return entity.MapTo<Country, CountryModel>();
-        }
-
-        public static Country ToEntity(this CountryModel model)
-        {
-            return model.MapTo<CountryModel, Country>();
-        }
-
-        public static Country ToEntity(this CountryModel model, Country destination)
-        {
-            return model.MapTo(destination);
-        }
-
-        public static StateProvinceModel ToModel(this StateProvince entity)
-        {
-            return entity.MapTo<StateProvince, StateProvinceModel>();
-        }
-
-        public static StateProvince ToEntity(this StateProvinceModel model)
-        {
-            return model.MapTo<StateProvinceModel, StateProvince>();
-        }
-
-        public static StateProvince ToEntity(this StateProvinceModel model, StateProvince destination)
-        {
-            return model.MapTo(destination);
-        }
-
-
-        #endregion
 
         #region Settings
 

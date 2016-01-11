@@ -15,7 +15,7 @@ using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.News;
 
-using Nop.Core.Domain.Tax;
+
 
 using Nop.Services.Common;
 using Nop.Services.Customers;
@@ -46,7 +46,6 @@ namespace Nop.Web.Controllers
       
         private readonly ITopicService _topicService;
         private readonly ILanguageService _languageService;
-        private readonly ICurrencyService _currencyService;
         private readonly ILocalizationService _localizationService;
         private readonly IWorkContext _workContext;
         private readonly IStoreContext _storeContext;
@@ -62,7 +61,7 @@ namespace Nop.Web.Controllers
         private readonly ICustomerActivityService _customerActivityService;
 
         private readonly CustomerSettings _customerSettings;
-        private readonly TaxSettings _taxSettings;
+        
        
         private readonly StoreInformationSettings _storeInformationSettings;
         private readonly EmailAccountSettings _emailAccountSettings;
@@ -79,7 +78,6 @@ namespace Nop.Web.Controllers
         public CommonController(
             ITopicService topicService,
             ILanguageService languageService,
-            ICurrencyService currencyService,
             ILocalizationService localizationService,
             IWorkContext workContext, 
             IStoreContext storeContext,
@@ -94,7 +92,6 @@ namespace Nop.Web.Controllers
             ICacheManager cacheManager,
             ICustomerActivityService customerActivityService,
             CustomerSettings customerSettings, 
-            TaxSettings taxSettings, 
             StoreInformationSettings storeInformationSettings,
             EmailAccountSettings emailAccountSettings,
             CommonSettings commonSettings, 
@@ -105,7 +102,6 @@ namespace Nop.Web.Controllers
           
             this._topicService = topicService;
             this._languageService = languageService;
-            this._currencyService = currencyService;
             this._localizationService = localizationService;
             this._workContext = workContext;
             this._storeContext = storeContext;
@@ -119,9 +115,7 @@ namespace Nop.Web.Controllers
             this._permissionService = permissionService;
             this._cacheManager = cacheManager;
             this._customerActivityService = customerActivityService;
-
             this._customerSettings = customerSettings;
-            this._taxSettings = taxSettings;
             this._storeInformationSettings = storeInformationSettings;
             this._emailAccountSettings = emailAccountSettings;
             this._commonSettings = commonSettings;
@@ -245,7 +239,6 @@ namespace Nop.Web.Controllers
             {
                 IsAuthenticated = customer.IsRegistered(),
                 CustomerEmailUsername = customer.IsRegistered() ? (_customerSettings.UsernamesEnabled ? customer.Username : customer.Email) : "",
-                ShoppingCartEnabled = _permissionService.Authorize(StandardPermissionProvider.EnableShoppingCart),
                 WishlistEnabled = _permissionService.Authorize(StandardPermissionProvider.EnableWishlist),
                 AllowPrivateMessages = customer.IsRegistered(),
                 UnreadPrivateMessages = unreadMessage,
@@ -282,7 +275,6 @@ namespace Nop.Web.Controllers
             {
                 StoreName = _storeContext.CurrentStore.GetLocalized(x => x.Name),
                 WishlistEnabled = _permissionService.Authorize(StandardPermissionProvider.EnableWishlist),
-                ShoppingCartEnabled = _permissionService.Authorize(StandardPermissionProvider.EnableShoppingCart),
                 SitemapEnabled = _commonSettings.SitemapEnabled,
                 WorkingLanguageId = _workContext.WorkingLanguage.Id,
                 FacebookLink = _storeInformationSettings.FacebookLink,

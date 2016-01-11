@@ -13,7 +13,7 @@ using Nop.Admin.Models.Common;
 using Nop.Core;
 using Nop.Core.Caching;
 
-using Nop.Core.Domain.Directory;
+
 using Nop.Core.Domain.Seo;
 using Nop.Core.Plugins;
 using Nop.Services.Common;
@@ -35,17 +35,9 @@ namespace Nop.Admin.Controllers
     public partial class CommonController : BaseAdminController
     {
         #region Fields
-
-       
-       
-        
-        private readonly ICurrencyService _currencyService;
-        private readonly IMeasureService _measureService;
         private readonly ICustomerService _customerService;
         private readonly IUrlRecordService _urlRecordService;
         private readonly IWebHelper _webHelper;
-        private readonly CurrencySettings _currencySettings;
-        private readonly MeasureSettings _measureSettings;
         private readonly IDateTimeHelper _dateTimeHelper;
         private readonly ILanguageService _languageService;
         private readonly IWorkContext _workContext;
@@ -61,13 +53,9 @@ namespace Nop.Admin.Controllers
         #region Constructors
 
         public CommonController( 
-            ICurrencyService currencyService, 
-            IMeasureService measureService,
             ICustomerService customerService, 
             IUrlRecordService urlRecordService, 
-            IWebHelper webHelper, 
-            CurrencySettings currencySettings,
-            MeasureSettings measureSettings, 
+            IWebHelper webHelper,
             IDateTimeHelper dateTimeHelper,
             ILanguageService languageService, 
             IWorkContext workContext,
@@ -78,13 +66,10 @@ namespace Nop.Admin.Controllers
             IStoreService storeService,
             HttpContextBase httpContext)
         {
-            this._currencyService = currencyService;
-            this._measureService = measureService;
             this._customerService = customerService;
             this._urlRecordService = urlRecordService;
             this._webHelper = webHelper;
-            this._currencySettings = currencySettings;
-            this._measureSettings = measureSettings;
+          
             this._dateTimeHelper = dateTimeHelper;
             this._languageService = languageService;
             this._workContext = workContext;
@@ -172,111 +157,7 @@ namespace Nop.Admin.Controllers
                     Level = SystemWarningLevel.Warning,
                     Text = string.Format(_localizationService.GetResource("Admin.System.Warnings.URL.NoMatch"), currentStoreUrl, _webHelper.GetStoreLocation(false))
                 });
-
-
-            //primary exchange rate currency
-            var perCurrency = _currencyService.GetCurrencyById(_currencySettings.PrimaryExchangeRateCurrencyId);
-            if (perCurrency != null)
-            {
-                model.Add(new SystemWarningModel
-                {
-                    Level = SystemWarningLevel.Pass,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.ExchangeCurrency.Set"),
-                });
-                if (perCurrency.Rate != 1)
-                {
-                    model.Add(new SystemWarningModel
-                    {
-                        Level = SystemWarningLevel.Fail,
-                        Text = _localizationService.GetResource("Admin.System.Warnings.ExchangeCurrency.Rate1")
-                    });
-                }
-            }
-            else
-            {
-                model.Add(new SystemWarningModel
-                {
-                    Level = SystemWarningLevel.Fail,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.ExchangeCurrency.NotSet")
-                });
-            }
-
-            //primary store currency
-            var pscCurrency = _currencyService.GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId);
-            if (pscCurrency != null)
-            {
-                model.Add(new SystemWarningModel
-                {
-                    Level = SystemWarningLevel.Pass,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.PrimaryCurrency.Set"),
-                });
-            }
-            else
-            {
-                model.Add(new SystemWarningModel
-                {
-                    Level = SystemWarningLevel.Fail,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.PrimaryCurrency.NotSet")
-                });
-            }
-
-
-            //base measure weight
-            var bWeight = _measureService.GetMeasureWeightById(_measureSettings.BaseWeightId);
-            if (bWeight != null)
-            {
-                model.Add(new SystemWarningModel
-                {
-                    Level = SystemWarningLevel.Pass,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.DefaultWeight.Set"),
-                });
-
-                if (bWeight.Ratio != 1)
-                {
-                    model.Add(new SystemWarningModel
-                    {
-                        Level = SystemWarningLevel.Fail,
-                        Text = _localizationService.GetResource("Admin.System.Warnings.DefaultWeight.Ratio1")
-                    });
-                }
-            }
-            else
-            {
-                model.Add(new SystemWarningModel
-                {
-                    Level = SystemWarningLevel.Fail,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.DefaultWeight.NotSet")
-                });
-            }
-
-
-            //base dimension weight
-            var bDimension = _measureService.GetMeasureDimensionById(_measureSettings.BaseDimensionId);
-            if (bDimension != null)
-            {
-                model.Add(new SystemWarningModel
-                {
-                    Level = SystemWarningLevel.Pass,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.DefaultDimension.Set"),
-                });
-
-                if (bDimension.Ratio != 1)
-                {
-                    model.Add(new SystemWarningModel
-                    {
-                        Level = SystemWarningLevel.Fail,
-                        Text = _localizationService.GetResource("Admin.System.Warnings.DefaultDimension.Ratio1")
-                    });
-                }
-            }
-            else
-            {
-                model.Add(new SystemWarningModel
-                {
-                    Level = SystemWarningLevel.Fail,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.DefaultDimension.NotSet")
-                });
-            }
+          
 
             //incompatible plugins
             if (PluginManager.IncompatiblePlugins != null)

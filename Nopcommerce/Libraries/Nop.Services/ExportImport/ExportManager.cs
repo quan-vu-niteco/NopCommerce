@@ -8,7 +8,7 @@ using System.Xml;
 using Nop.Core;
 
 using Nop.Core.Domain.Customers;
-using Nop.Core.Domain.Directory;
+
 using Nop.Core.Domain.Messages;
 
 
@@ -379,33 +379,6 @@ namespace Nop.Services.ExportImport
                 sb.Append(subscription.Active);
                 sb.Append(",");
                 sb.Append(subscription.StoreId);
-                sb.Append(Environment.NewLine);  //new line
-            }
-            return sb.ToString();
-        }
-
-        /// <summary>
-        /// Export states to TXT
-        /// </summary>
-        /// <param name="states">States</param>
-        /// <returns>Result in TXT (string) format</returns>
-        public virtual string ExportStatesToTxt(IList<StateProvince> states)
-        {
-            if (states == null)
-                throw new ArgumentNullException("states");
-
-            var sb = new StringBuilder();
-            foreach (var state in states)
-            {
-                sb.Append(state.Country.TwoLetterIsoCode);
-                sb.Append(",");
-                sb.Append(state.Name);
-                sb.Append(",");
-                sb.Append(state.Abbreviation);
-                sb.Append(",");
-                sb.Append(state.Published);
-                sb.Append(",");
-                sb.Append(state.DisplayOrder);
                 sb.Append(Environment.NewLine);  //new line
             }
             return sb.ToString();

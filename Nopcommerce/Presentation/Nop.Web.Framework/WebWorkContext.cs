@@ -3,10 +3,10 @@ using System.Linq;
 using System.Web;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
-using Nop.Core.Domain.Directory;
+
 using Nop.Core.Domain.Localization;
-using Nop.Core.Domain.Tax;
-using Nop.Core.Domain.Vendors;
+
+
 using Nop.Core.Fakes;
 using Nop.Services.Authentication;
 using Nop.Services.Common;
@@ -38,18 +38,12 @@ namespace Nop.Web.Framework
         private readonly IStoreContext _storeContext;
         private readonly IAuthenticationService _authenticationService;
         private readonly ILanguageService _languageService;
-        private readonly ICurrencyService _currencyService;
         private readonly IGenericAttributeService _genericAttributeService;
-        private readonly TaxSettings _taxSettings;
-        private readonly CurrencySettings _currencySettings;
         private readonly LocalizationSettings _localizationSettings;
         private readonly IUserAgentHelper _userAgentHelper;
         private Customer _cachedCustomer;
         private Customer _originalCustomerIfImpersonated;
-        private Vendor _cachedVendor;
         private Language _cachedLanguage;
-        private Currency _cachedCurrency;
-        private TaxDisplayType? _cachedTaxDisplayType;
 
         #endregion
 
@@ -60,10 +54,7 @@ namespace Nop.Web.Framework
             IStoreContext storeContext,
             IAuthenticationService authenticationService,
             ILanguageService languageService,
-            ICurrencyService currencyService,
             IGenericAttributeService genericAttributeService,
-            TaxSettings taxSettings, 
-            CurrencySettings currencySettings,
             LocalizationSettings localizationSettings,
             IUserAgentHelper userAgentHelper)
         {
@@ -72,10 +63,7 @@ namespace Nop.Web.Framework
             this._storeContext = storeContext;
             this._authenticationService = authenticationService;
             this._languageService = languageService;
-            this._currencyService = currencyService;
             this._genericAttributeService = genericAttributeService;
-            this._taxSettings = taxSettings;
-            this._currencySettings = currencySettings;
             this._localizationSettings = localizationSettings;
             this._userAgentHelper = userAgentHelper;
         }
@@ -339,111 +327,6 @@ namespace Nop.Web.Framework
                 _cachedLanguage = null;
             }
         }
-
-        /// <summary>
-        /// Get or set current user working currency
-        /// </summary>
-        public virtual Currency WorkingCurrency
-        {
-            get
-            {
-                if (_cachedCurrency != null)
-                    return _cachedCurrency;
-                
-                //return primary store currency when we're in admin area/mode
-                if (this.IsAdmin)
-                {
-                    var primaryStoreCurrency =  _currencyService.GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId);
-                    if (primaryStoreCurrency != null)
-                    {
-                        //cache
-                        _cachedCurrency = primaryStoreCurrency;
-                        return primaryStoreCurrency;
-                    }
-                }
-
-                var allCurrencies = _currencyService.GetAllCurrencies(storeId: _storeContext.CurrentStore.Id);
-                //find a currency previously selected by a customer
-                var currencyId = this.CurrentCustomer.GetAttribute<int>(SystemCustomerAttributeNames.CurrencyId,
-                    _genericAttributeService, _storeContext.CurrentStore.Id);
-                var currency = allCurrencies.FirstOrDefault(x => x.Id == currencyId);
-                if (currency == null)
-                {
-                    //it not found, then let's load the default currency for the current language (if specified)
-                    currencyId = this.WorkingLanguage.DefaultCurrencyId;
-                    currency = allCurrencies.FirstOrDefault(x => x.Id == currencyId);
-                }
-                if (currency == null)
-                {
-                    //it not found, then return the first (filtered by current store) found one
-                    currency = allCurrencies.FirstOrDefault();
-                }
-                if (currency == null)
-                {
-                    //it not specified, then return the first found one
-                    currency = _currencyService.GetAllCurrencies().FirstOrDefault();
-                }
-
-                //cache
-                _cachedCurrency = currency;
-                return _cachedCurrency;
-            }
-            set
-            {
-                var currencyId = value != null ? value.Id : 0;
-                _genericAttributeService.SaveAttribute(this.CurrentCustomer,
-                    SystemCustomerAttributeNames.CurrencyId,
-                    currencyId, _storeContext.CurrentStore.Id);
-
-                //reset cache
-                _cachedCurrency = null;
-            }
-        }
-
-        /// <summary>
-        /// Get or set current tax display type
-        /// </summary>
-        public virtual TaxDisplayType TaxDisplayType
-        {
-            get
-            {
-                //cache
-                if (_cachedTaxDisplayType != null)
-                    return _cachedTaxDisplayType.Value;
-
-                TaxDisplayType taxDisplayType;
-                if (_taxSettings.AllowCustomersToSelectTaxDisplayType && this.CurrentCustomer != null)
-                {
-                    taxDisplayType = (TaxDisplayType) this.CurrentCustomer.GetAttribute<int>(
-                        SystemCustomerAttributeNames.TaxDisplayTypeId,
-                        _genericAttributeService,
-                        _storeContext.CurrentStore.Id);
-                }
-                else
-                {
-                    taxDisplayType = _taxSettings.TaxDisplayType;
-                }
-
-                //cache
-                _cachedTaxDisplayType = taxDisplayType;
-                return _cachedTaxDisplayType.Value;
-
-            }
-            set
-            {
-                if (!_taxSettings.AllowCustomersToSelectTaxDisplayType)
-                    return;
-
-                _genericAttributeService.SaveAttribute(this.CurrentCustomer, 
-                    SystemCustomerAttributeNames.TaxDisplayTypeId,
-                    (int)value, _storeContext.CurrentStore.Id);
-
-                //reset cache
-                _cachedTaxDisplayType = null;
-
-            }
-        }
-
         /// <summary>
         /// Get or set value indicating whether we're in admin area
         /// </summary>

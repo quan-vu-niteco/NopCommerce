@@ -5,7 +5,6 @@
     ViewBag.Title = T("Admin.Dashboard").Text;
 
     var permissionService = EngineContext.Current.Resolve<IPermissionService>();
-    var canManageOrders = permissionService.Authorize(StandardPermissionProvider.ManageOrders);
     var canManageCustomers = permissionService.Authorize(StandardPermissionProvider.ManageCustomers);
     var canManageProducts = permissionService.Authorize(StandardPermissionProvider.ManageProducts);
 }
@@ -23,74 +22,6 @@
                     @T("Admin.Dashboard.StoreStatistics")
                 </div>
             </div>
-            @if (!Model.IsLoggedInAsVendor && canManageOrders)
-            {
-                <table class="stats">
-                    <tbody>
-                        <tr>
-                            <td class="orderaveragereport">
-                                <div class="statisticsTitle">
-                                    @T("Admin.SalesReport.Average")
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            }
-            @if (!Model.IsLoggedInAsVendor)
-            {
-                if (canManageOrders || canManageCustomers || canManageProducts)
-                {
-                    <table class="stats">
-                        <tbody>
-                            <tr>
-                                @if (canManageOrders)
-                                {
-                                    <td class="orderstatistics">
-                                        <div class="statisticsTitle">
-                                            @T("Admin.SalesReport.Incomplete")
-                                        </div>
-                                    </td>
-                                }
-                                @if (canManageCustomers)
-                                {
-                                    <td class="customerstatistics">
-                                        <div class="statisticsTitle">
-                                            @T("Admin.Customers.Reports.RegisteredCustomers")
-                                        </div>
-                                    </td>
-                                }
-                                @if (canManageProducts)
-                                {
-                                    <td class="search-term-statistics">
-                                        <div class="statisticsTitle">
-                                            @T("Admin.SearchTermReport")
-                                        </div>
-                                        @Html.Action("PopularSearchTermsReport", "Common")
-                                    </td>
-                                }
-                            </tr>
-                        </tbody>
-                    </table>
-                }
-            }
-            @if (canManageOrders)
-            {
-                <table class="stats">
-                    <tr>
-                        <td class="bestsellers">
-                            <div class="statisticsTitle">
-                                @T("Admin.SalesReport.BestSellers.ByQuantity")
-                            </div>
-                        </td>
-                        <td class="bestsellers">
-                            <div class="statisticsTitle">
-                                @T("Admin.SalesReport.BestSellers.ByAmount")
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            }
         </td>
         @if (!Model.IsLoggedInAsVendor)
         {

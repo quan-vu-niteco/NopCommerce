@@ -143,10 +143,6 @@ namespace Nop.Web.Framework
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<GeoLookupService>().As<IGeoLookupService>().InstancePerLifetimeScope();
-            builder.RegisterType<CountryService>().As<ICountryService>().InstancePerLifetimeScope();
-            builder.RegisterType<CurrencyService>().As<ICurrencyService>().InstancePerLifetimeScope();
-            builder.RegisterType<MeasureService>().As<IMeasureService>().InstancePerLifetimeScope();
-            builder.RegisterType<StateProvinceService>().As<IStateProvinceService>().InstancePerLifetimeScope();
 
             builder.RegisterType<StoreService>().As<IStoreService>().InstancePerLifetimeScope();
             //pass MemoryCacheManager as cacheManager (cache settings between requests)

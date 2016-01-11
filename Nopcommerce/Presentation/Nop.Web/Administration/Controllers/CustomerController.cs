@@ -11,9 +11,8 @@ using Nop.Core;
 
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
-using Nop.Core.Domain.Directory;
+
 using Nop.Core.Domain.Messages;
-using Nop.Core.Domain.Tax;
 using Nop.Services.Authentication.External;
 using Nop.Services.Common;
 using Nop.Services.Customers;
@@ -45,10 +44,7 @@ namespace Nop.Admin.Controllers
         private readonly IDateTimeHelper _dateTimeHelper;
         private readonly ILocalizationService _localizationService;
         private readonly DateTimeSettings _dateTimeSettings;
-        private readonly TaxSettings _taxSettings;
         private readonly RewardPointsSettings _rewardPointsSettings;
-        private readonly ICountryService _countryService;
-        private readonly IStateProvinceService _stateProvinceService;
        
         private readonly CustomerSettings _customerSettings;
         
@@ -79,10 +75,7 @@ namespace Nop.Admin.Controllers
             IDateTimeHelper dateTimeHelper,
             ILocalizationService localizationService, 
             DateTimeSettings dateTimeSettings,
-            TaxSettings taxSettings, 
             RewardPointsSettings rewardPointsSettings,
-            ICountryService countryService, 
-            IStateProvinceService stateProvinceService, 
             CustomerSettings customerSettings,
             IWorkContext workContext,
            
@@ -106,10 +99,7 @@ namespace Nop.Admin.Controllers
             this._dateTimeHelper = dateTimeHelper;
             this._localizationService = localizationService;
             this._dateTimeSettings = dateTimeSettings;
-            this._taxSettings = taxSettings;
             this._rewardPointsSettings = rewardPointsSettings;
-            this._countryService = countryService;
-            this._stateProvinceService = stateProvinceService;
             this._customerSettings = customerSettings;
             this._workContext = workContext;
             this._storeContext = storeContext;
@@ -208,9 +198,6 @@ namespace Nop.Admin.Controllers
                 Email = customer.IsRegistered() ? customer.Email : _localizationService.GetResource("Admin.Customers.Guest"),
                 Username = customer.Username,
                 FullName = customer.GetFullName(),
-                Company = customer.GetAttribute<string>(SystemCustomerAttributeNames.Company),
-                Phone = customer.GetAttribute<string>(SystemCustomerAttributeNames.Phone),
-                ZipPostalCode = customer.GetAttribute<string>(SystemCustomerAttributeNames.ZipPostalCode),
                 CustomerRoleNames = GetCustomerRolesNames(customer.CustomerRoles.ToList()),
                 Active = customer.Active,
                 CreatedOn = _dateTimeHelper.ConvertToUserTime(customer.CreatedOnUtc, DateTimeKind.Utc),
@@ -290,13 +277,8 @@ namespace Nop.Admin.Controllers
                     model.Email = customer.Email;
                     model.Username = customer.Username;
                     model.AdminComment = customer.AdminComment;
-                    model.IsTaxExempt = customer.IsTaxExempt;
                     model.Active = customer.Active;
-                    model.AffiliateId = customer.AffiliateId;
-                    model.TimeZoneId = customer.GetAttribute<string>(SystemCustomerAttributeNames.TimeZoneId);
-                    model.VatNumber = customer.GetAttribute<string>(SystemCustomerAttributeNames.VatNumber);
-                    model.VatNumberStatusNote = ((VatNumberStatus)customer.GetAttribute<int>(SystemCustomerAttributeNames.VatNumberStatusId))
-                        .GetLocalizedEnum(_localizationService, _workContext);
+                    
                     model.CreatedOn = _dateTimeHelper.ConvertToUserTime(customer.CreatedOnUtc, DateTimeKind.Utc);
                     model.LastActivityDate = _dateTimeHelper.ConvertToUserTime(customer.LastActivityDateUtc, DateTimeKind.Utc);
                     model.LastIpAddress = customer.LastIpAddress;
@@ -309,31 +291,12 @@ namespace Nop.Admin.Controllers
                     model.LastName = customer.GetAttribute<string>(SystemCustomerAttributeNames.LastName);
                     model.Gender = customer.GetAttribute<string>(SystemCustomerAttributeNames.Gender);
                     model.DateOfBirth = customer.GetAttribute<DateTime?>(SystemCustomerAttributeNames.DateOfBirth);
-                    model.Company = customer.GetAttribute<string>(SystemCustomerAttributeNames.Company);
-                    model.StreetAddress = customer.GetAttribute<string>(SystemCustomerAttributeNames.StreetAddress);
-                    model.StreetAddress2 = customer.GetAttribute<string>(SystemCustomerAttributeNames.StreetAddress2);
-                    model.ZipPostalCode = customer.GetAttribute<string>(SystemCustomerAttributeNames.ZipPostalCode);
-                    model.City = customer.GetAttribute<string>(SystemCustomerAttributeNames.City);
-                    model.CountryId = customer.GetAttribute<int>(SystemCustomerAttributeNames.CountryId);
-                    model.StateProvinceId = customer.GetAttribute<int>(SystemCustomerAttributeNames.StateProvinceId);
-                    model.Phone = customer.GetAttribute<string>(SystemCustomerAttributeNames.Phone);
-                    model.Fax = customer.GetAttribute<string>(SystemCustomerAttributeNames.Fax);
                 }
             }
 
             model.UsernamesEnabled = _customerSettings.UsernamesEnabled;
             model.AllowUsersToChangeUsernames = _customerSettings.AllowUsersToChangeUsernames;
-            model.AllowCustomersToSetTimeZone = _dateTimeSettings.AllowCustomersToSetTimeZone;
-            foreach (var tzi in _dateTimeHelper.GetSystemTimeZones())
-                model.AvailableTimeZones.Add(new SelectListItem { Text = tzi.DisplayName, Value = tzi.Id, Selected = (tzi.Id == model.TimeZoneId) });
-            if (customer != null)
-            {
-                model.DisplayVatNumber = _taxSettings.EuVatEnabled;
-            }
-            else
-            {
-                model.DisplayVatNumber = false;
-            }
+            
 
           
             //customer attributes
@@ -341,56 +304,6 @@ namespace Nop.Admin.Controllers
 
             model.GenderEnabled = _customerSettings.GenderEnabled;
             model.DateOfBirthEnabled = _customerSettings.DateOfBirthEnabled;
-            model.CompanyEnabled = _customerSettings.CompanyEnabled;
-            model.StreetAddressEnabled = _customerSettings.StreetAddressEnabled;
-            model.StreetAddress2Enabled = _customerSettings.StreetAddress2Enabled;
-            model.ZipPostalCodeEnabled = _customerSettings.ZipPostalCodeEnabled;
-            model.CityEnabled = _customerSettings.CityEnabled;
-            model.CountryEnabled = _customerSettings.CountryEnabled;
-            model.StateProvinceEnabled = _customerSettings.StateProvinceEnabled;
-            model.PhoneEnabled = _customerSettings.PhoneEnabled;
-            model.FaxEnabled = _customerSettings.FaxEnabled;
-
-            //countries and states
-            if (_customerSettings.CountryEnabled)
-            {
-                model.AvailableCountries.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Address.SelectCountry"), Value = "0" });
-                foreach (var c in _countryService.GetAllCountries(true))
-                {
-                    model.AvailableCountries.Add(new SelectListItem
-                    {
-                        Text = c.Name,
-                        Value = c.Id.ToString(),
-                        Selected = c.Id == model.CountryId
-                    });
-                }
-
-                if (_customerSettings.StateProvinceEnabled)
-                {
-                    //states
-                    var states = _stateProvinceService.GetStateProvincesByCountryId(model.CountryId).ToList();
-                    if (states.Count > 0)
-                    {
-                        model.AvailableStates.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Address.SelectState"), Value = "0" });
-
-                        foreach (var s in states)
-                        {
-                            model.AvailableStates.Add(new SelectListItem { Text = s.Name, Value = s.Id.ToString(), Selected = (s.Id == model.StateProvinceId) });
-                        }
-                    }
-                    else
-                    {
-                        bool anyCountrySelected = model.AvailableCountries.Any(x => x.Selected);
-
-                        model.AvailableStates.Add(new SelectListItem
-                        {
-                            Text = _localizationService.GetResource(anyCountrySelected ? "Admin.Address.OtherNonUS" : "Admin.Address.SelectState"),
-                            Value = "0"
-                        });
-                    }
-                }
-            }
-
             //customer roles
             model.AvailableCustomerRoles = _customerService
                 .GetAllCustomerRoles(true)
@@ -435,9 +348,6 @@ namespace Nop.Admin.Controllers
             {
                 UsernamesEnabled = _customerSettings.UsernamesEnabled,
                 DateOfBirthEnabled = _customerSettings.DateOfBirthEnabled,
-                CompanyEnabled = _customerSettings.CompanyEnabled,
-                PhoneEnabled = _customerSettings.PhoneEnabled,
-                ZipPostalCodeEnabled = _customerSettings.ZipPostalCodeEnabled,
                 AvailableCustomerRoles = _customerService.GetAllCustomerRoles(true).Select(cr => cr.ToModel()).ToList(),
                 SearchCustomerRoleIds = defaultRoleIds,
             };
@@ -534,40 +444,17 @@ namespace Nop.Admin.Controllers
                     Email = model.Email,
                     Username = model.Username,
                     AdminComment = model.AdminComment,
-                    IsTaxExempt = model.IsTaxExempt,
                     Active = model.Active,
                     CreatedOnUtc = DateTime.UtcNow,
                     LastActivityDateUtc = DateTime.UtcNow,
                 };
                 _customerService.InsertCustomer(customer);
-
-                //form fields
-                if (_dateTimeSettings.AllowCustomersToSetTimeZone)
-                    _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.TimeZoneId, model.TimeZoneId);
-                if (_customerSettings.GenderEnabled)
+              
                     _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.Gender, model.Gender);
                 _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.FirstName, model.FirstName);
                 _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.LastName, model.LastName);
                 if (_customerSettings.DateOfBirthEnabled)
                     _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.DateOfBirth, model.DateOfBirth);
-                if (_customerSettings.CompanyEnabled)
-                    _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.Company, model.Company);
-                if (_customerSettings.StreetAddressEnabled)
-                    _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.StreetAddress, model.StreetAddress);
-                if (_customerSettings.StreetAddress2Enabled)
-                    _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.StreetAddress2, model.StreetAddress2);
-                if (_customerSettings.ZipPostalCodeEnabled)
-                    _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.ZipPostalCode, model.ZipPostalCode);
-                if (_customerSettings.CityEnabled)
-                    _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.City, model.City);
-                if (_customerSettings.CountryEnabled)
-                    _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.CountryId, model.CountryId);
-                if (_customerSettings.CountryEnabled && _customerSettings.StateProvinceEnabled)
-                    _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.StateProvinceId, model.StateProvinceId);
-                if (_customerSettings.PhoneEnabled)
-                    _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.Phone, model.Phone);
-                if (_customerSettings.FaxEnabled)
-                    _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.Fax, model.Fax);
             
                     
                 //password
@@ -662,7 +549,6 @@ namespace Nop.Admin.Controllers
                 try
                 {
                     customer.AdminComment = model.AdminComment;
-                    customer.IsTaxExempt = model.IsTaxExempt;
                     customer.Active = model.Active;
                     //email
                     if (!String.IsNullOrWhiteSpace(model.Email))
@@ -686,44 +572,13 @@ namespace Nop.Admin.Controllers
                             customer.Username = model.Username;
                         }
                     }
-
-                    //VAT number
-                    if (_taxSettings.EuVatEnabled)
-                    {
-                        var prevVatNumber = customer.GetAttribute<string>(SystemCustomerAttributeNames.VatNumber);
-
-                        _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.VatNumber, model.VatNumber);
-                    }
-                 
-
-                    //form fields
-                    if (_dateTimeSettings.AllowCustomersToSetTimeZone)
-                        _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.TimeZoneId, model.TimeZoneId);
+                   
                     if (_customerSettings.GenderEnabled)
                         _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.Gender, model.Gender);
                     _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.FirstName, model.FirstName);
                     _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.LastName, model.LastName);
                     if (_customerSettings.DateOfBirthEnabled)
                         _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.DateOfBirth, model.DateOfBirth);
-                    if (_customerSettings.CompanyEnabled)
-                        _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.Company, model.Company);
-                    if (_customerSettings.StreetAddressEnabled)
-                        _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.StreetAddress, model.StreetAddress);
-                    if (_customerSettings.StreetAddress2Enabled)
-                        _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.StreetAddress2, model.StreetAddress2);
-                    if (_customerSettings.ZipPostalCodeEnabled)
-                        _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.ZipPostalCode, model.ZipPostalCode);
-                    if (_customerSettings.CityEnabled)
-                        _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.City, model.City);
-                    if (_customerSettings.CountryEnabled)
-                        _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.CountryId, model.CountryId);
-                    if (_customerSettings.CountryEnabled && _customerSettings.StateProvinceEnabled)
-                        _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.StateProvinceId, model.StateProvinceId);
-                    if (_customerSettings.PhoneEnabled)
-                        _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.Phone, model.Phone);
-                    if (_customerSettings.FaxEnabled)
-                        _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.Fax, model.Fax);
-                    
 
                     //customer roles
                     foreach (var customerRole in allCustomerRoles)
@@ -811,44 +666,9 @@ namespace Nop.Admin.Controllers
 
             return RedirectToAction("Edit", customer.Id);
         }
-        
-        [HttpPost, ActionName("Edit")]
-        [FormValueRequired("markVatNumberAsValid")]
-        public ActionResult MarkVatNumberAsValid(CustomerModel model)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return AccessDeniedView();
+       
 
-            var customer = _customerService.GetCustomerById(model.Id);
-            if (customer == null)
-                //No customer found with the specified id
-                return RedirectToAction("List");
-
-            _genericAttributeService.SaveAttribute(customer, 
-                SystemCustomerAttributeNames.VatNumberStatusId,
-                (int)VatNumberStatus.Valid);
-
-            return RedirectToAction("Edit", customer.Id);
-        }
-
-        [HttpPost, ActionName("Edit")]
-        [FormValueRequired("markVatNumberAsInvalid")]
-        public ActionResult MarkVatNumberAsInvalid(CustomerModel model)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return AccessDeniedView();
-
-            var customer = _customerService.GetCustomerById(model.Id);
-            if (customer == null)
-                //No customer found with the specified id
-                return RedirectToAction("List");
-
-            _genericAttributeService.SaveAttribute(customer,
-                SystemCustomerAttributeNames.VatNumberStatusId,
-                (int)VatNumberStatus.Invalid);
-            
-            return RedirectToAction("Edit", customer.Id);
-        }
+      
 
         [HttpPost]
         public ActionResult Delete(int id)

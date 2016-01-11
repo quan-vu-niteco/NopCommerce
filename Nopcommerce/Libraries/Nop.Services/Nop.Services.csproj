@@ -201,8 +201,6 @@
     <Compile Include="News\NewsService.cs" />
     <Compile Include="News\INewsService.cs" />
     <Compile Include="Customers\CustomerExtensions.cs" />
-    <Compile Include="Directory\UpdateExchangeRateTask.cs" />
-    <Compile Include="Directory\IExchangeRateProvider.cs" />
     <Compile Include="ExportImport\ExportManager.cs" />
     <Compile Include="ExportImport\ImportManager.cs" />
     <Compile Include="Authentication\FormsAuthenticationService.cs" />
@@ -210,20 +208,13 @@
     <Compile Include="Helpers\DateTimeSettings.cs" />
     <Compile Include="Helpers\DateTimeHelper.cs" />
     <Compile Include="Authentication\IAuthenticationService.cs" />
-    <Compile Include="Directory\CountryService.cs" />
-    <Compile Include="Directory\CurrencyService.cs" />
     <Compile Include="Customers\CustomerService.cs" />
-    <Compile Include="Directory\ICountryService.cs" />
-    <Compile Include="Directory\ICurrencyService.cs" />
     <Compile Include="Customers\ICustomerService.cs" />
-    <Compile Include="Directory\IMeasureService.cs" />
-    <Compile Include="Directory\IStateProvinceService.cs" />
     <Compile Include="ExportImport\IExportManager.cs" />
     <Compile Include="ExportImport\IImportManager.cs" />
     <Compile Include="Installation\IInstallationService.cs" />
     <Compile Include="Installation\CodeFirstInstallationService.cs" />
     <Compile Include="Localization\LocalizationExtensions.cs" />
-    <Compile Include="Directory\MeasureService.cs" />
     <Compile Include="Logging\CustomerActivityService.cs" />
     <Compile Include="Logging\ICustomerActivityService.cs" />
     <Compile Include="Media\Extensions.cs" />
@@ -260,7 +251,6 @@
     <Compile Include="Security\IPermissionProvider.cs" />
     <Compile Include="Customers\CustomerRegistrationRequest.cs" />
     <Compile Include="Customers\CustomerRegistrationResult.cs" />
-    <Compile Include="Directory\StateProvinceService.cs" />
     <Compile Include="Security\StandardPermissionProvider.cs" />
     <Compile Include="Security\AclService.cs" />
     <Compile Include="Seo\BaseSitemapGenerator.cs" />

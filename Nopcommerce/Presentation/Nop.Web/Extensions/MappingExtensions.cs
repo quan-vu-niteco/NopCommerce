@@ -5,7 +5,7 @@ using System.Web.Mvc;
 
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
-using Nop.Core.Domain.Directory;
+
 using Nop.Services.Common;
 using Nop.Services.Directory;
 using Nop.Services.Localization;

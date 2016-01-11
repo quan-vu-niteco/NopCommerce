@@ -13,9 +13,7 @@ namespace Nop.Web.Infrastructure
         public virtual void Register(ContainerBuilder builder, ITypeFinder typeFinder)
         {
             //we cache presentation models between requests
-          
-            builder.RegisterType<CountryController>()
-                .WithParameter(ResolvedParameter.ForNamed<ICacheManager>("nop_cache_static"));
+        
             builder.RegisterType<CommonController>()
                 .WithParameter(ResolvedParameter.ForNamed<ICacheManager>("nop_cache_static"));
             builder.RegisterType<NewsController>()

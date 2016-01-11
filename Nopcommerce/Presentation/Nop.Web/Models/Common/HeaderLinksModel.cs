@@ -6,10 +6,6 @@ namespace Nop.Web.Models.Common
     {
         public bool IsAuthenticated { get; set; }
         public string CustomerEmailUsername { get; set; }
-        
-        public bool ShoppingCartEnabled { get; set; }
-        public int ShoppingCartItems { get; set; }
-        
         public bool WishlistEnabled { get; set; }
         public int WishlistItems { get; set; }
 

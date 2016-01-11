@@ -11,7 +11,7 @@ using Nop.Core.Domain;
 
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
-using Nop.Core.Domain.Directory;
+
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Media;
 using Nop.Core.Domain.News;
@@ -19,8 +19,8 @@ using Nop.Core.Domain.News;
 using Nop.Core.Domain.Security;
 using Nop.Core.Domain.Seo;
 
-using Nop.Core.Domain.Tax;
-using Nop.Core.Domain.Vendors;
+
+
 using Nop.Services.Common;
 using Nop.Services.Configuration;
 using Nop.Services.Customers;
@@ -47,9 +47,6 @@ namespace Nop.Admin.Controllers
 		#region Fields
 
         private readonly ISettingService _settingService;
-        private readonly ICountryService _countryService;
-        private readonly IStateProvinceService _stateProvinceService;
-        private readonly ICurrencyService _currencyService;
         private readonly IPictureService _pictureService;
         private readonly ILocalizationService _localizationService;
         private readonly IDateTimeHelper _dateTimeHelper;
@@ -69,9 +66,6 @@ namespace Nop.Admin.Controllers
 		#region Constructors
 
         public SettingController(ISettingService settingService,
-            ICountryService countryService, 
-            IStateProvinceService stateProvinceService,
-            ICurrencyService currencyService,
             IPictureService pictureService, 
             ILocalizationService localizationService, 
             IDateTimeHelper dateTimeHelper,
@@ -87,9 +81,6 @@ namespace Nop.Admin.Controllers
             IGenericAttributeService genericAttributeService)
         {
             this._settingService = settingService;
-            this._countryService = countryService;
-            this._stateProvinceService = stateProvinceService;
-            this._currencyService = currencyService;
             this._pictureService = pictureService;
             this._localizationService = localizationService;
             this._dateTimeHelper = dateTimeHelper;

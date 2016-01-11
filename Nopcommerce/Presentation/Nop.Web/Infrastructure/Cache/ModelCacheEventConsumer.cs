@@ -1,12 +1,12 @@
 ﻿using Nop.Core.Caching;
 using Nop.Core.Domain.Configuration;
-using Nop.Core.Domain.Directory;
+
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Media;
 using Nop.Core.Domain.News;
 using Nop.Core.Domain.Polls;
 using Nop.Core.Domain.Topics;
-using Nop.Core.Domain.Vendors;
+
 using Nop.Core.Events;
 using Nop.Core.Infrastructure;
 using Nop.Services.Events;
@@ -21,19 +21,9 @@ namespace Nop.Web.Infrastructure.Cache
         IConsumer<EntityInserted<Language>>,
         IConsumer<EntityUpdated<Language>>,
         IConsumer<EntityDeleted<Language>>,
-        //currencies
-        IConsumer<EntityInserted<Currency>>,
-        IConsumer<EntityUpdated<Currency>>,
-        IConsumer<EntityDeleted<Currency>>,
+      
         //settings
         IConsumer<EntityUpdated<Setting>>,
-        //manufacturers
-     
-        //vendors
-        IConsumer<EntityInserted<Vendor>>,
-        IConsumer<EntityUpdated<Vendor>>,
-        IConsumer<EntityDeleted<Vendor>>,
-       
     
         //Topics
         IConsumer<EntityInserted<Topic>>,
@@ -52,11 +42,8 @@ namespace Nop.Web.Infrastructure.Cache
         //news items
         IConsumer<EntityInserted<NewsItem>>,
         IConsumer<EntityUpdated<NewsItem>>,
-        IConsumer<EntityDeleted<NewsItem>>,
-        //states/province
-        IConsumer<EntityInserted<StateProvince>>,
-        IConsumer<EntityUpdated<StateProvince>>,
-        IConsumer<EntityDeleted<StateProvince>>
+        IConsumer<EntityDeleted<NewsItem>>
+     
         
     {
         /// <summary>
@@ -618,20 +605,7 @@ namespace Nop.Web.Infrastructure.Cache
             _cacheManager.RemoveByPattern(AVAILABLE_LANGUAGES_PATTERN_KEY);
             _cacheManager.RemoveByPattern(AVAILABLE_CURRENCIES_PATTERN_KEY);
         }
-        
-        //currencies
-        public void HandleEvent(EntityInserted<Currency> eventMessage)
-        {
-            _cacheManager.RemoveByPattern(AVAILABLE_CURRENCIES_PATTERN_KEY);
-        }
-        public void HandleEvent(EntityUpdated<Currency> eventMessage)
-        {
-            _cacheManager.RemoveByPattern(AVAILABLE_CURRENCIES_PATTERN_KEY);
-        }
-        public void HandleEvent(EntityDeleted<Currency> eventMessage)
-        {
-            _cacheManager.RemoveByPattern(AVAILABLE_CURRENCIES_PATTERN_KEY);
-        }
+       
 
         public void HandleEvent(EntityUpdated<Setting> eventMessage)
         {
@@ -650,20 +624,6 @@ namespace Nop.Web.Infrastructure.Cache
             _cacheManager.RemoveByPattern(SITEMAP_PATTERN_KEY); //depends on distinct sitemap settings
             _cacheManager.RemoveByPattern(WIDGET_PATTERN_KEY); //depends on WidgetSettings and certain settings of widgets
 
-        }
-
-        //vendors
-        public void HandleEvent(EntityInserted<Vendor> eventMessage)
-        {
-            _cacheManager.RemoveByPattern(VENDOR_NAVIGATION_PATTERN_KEY);
-        }
-        public void HandleEvent(EntityUpdated<Vendor> eventMessage)
-        {
-            _cacheManager.RemoveByPattern(VENDOR_NAVIGATION_PATTERN_KEY);
-        }
-        public void HandleEvent(EntityDeleted<Vendor> eventMessage)
-        {
-            _cacheManager.RemoveByPattern(VENDOR_NAVIGATION_PATTERN_KEY);
         }
 
         //Topics
@@ -748,20 +708,6 @@ namespace Nop.Web.Infrastructure.Cache
         public void HandleEvent(EntityDeleted<NewsItem> eventMessage)
         {
             _cacheManager.RemoveByPattern(NEWS_PATTERN_KEY);
-        }
-
-        //State/province
-        public void HandleEvent(EntityInserted<StateProvince> eventMessage)
-        {
-            _cacheManager.RemoveByPattern(STATEPROVINCES_PATTERN_KEY);
-        }
-        public void HandleEvent(EntityUpdated<StateProvince> eventMessage)
-        {
-            _cacheManager.RemoveByPattern(STATEPROVINCES_PATTERN_KEY);
-        }
-        public void HandleEvent(EntityDeleted<StateProvince> eventMessage)
-        {
-            _cacheManager.RemoveByPattern(STATEPROVINCES_PATTERN_KEY);
         }
     }
 }

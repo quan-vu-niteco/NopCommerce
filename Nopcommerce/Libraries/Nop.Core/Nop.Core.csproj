@@ -103,7 +103,6 @@
     <Compile Include="Domain\News\NewsType.cs" />
     <Compile Include="Domain\News\NewsSortingEnum.cs" />
     <Compile Include="Domain\Seo\WwwRequirement.cs" />
-    <Compile Include="Domain\Vendors\Vendor.cs" />
     <Compile Include="IStoreContext.cs" />
     <Compile Include="Domain\Cms\WidgetSettings.cs" />
     <Compile Include="Domain\Common\FulltextSearchMode.cs" />
@@ -169,7 +168,6 @@
     <Compile Include="Domain\Customers\UserRegistrationType.cs" />
     <Compile Include="Domain\Customers\CustomerNameFormat.cs" />
     <Compile Include="Domain\Customers\SystemCustomerAttributeNames.cs" />
-    <Compile Include="Domain\Directory\ExchangeRate.cs" />
     <Compile Include="Domain\Localization\LocalizationSettings.cs" />
     <Compile Include="Domain\Media\Download.cs" />
     <Compile Include="Domain\Media\PictureType.cs" />
@@ -197,20 +195,8 @@
     <Compile Include="Domain\Customers\CustomerRole.cs" />
     <Compile Include="Domain\Customers\RewardPointsSettings.cs" />
     <Compile Include="Domain\Customers\SystemCustomerRoleNames.cs" />
-    <Compile Include="Domain\Directory\MeasureSettings.cs" />
-    <Compile Include="Domain\Directory\Country.cs" />
-    <Compile Include="Domain\Directory\Currency.cs" />
-    <Compile Include="Domain\Directory\CurrencySettings.cs" />
-    <Compile Include="Domain\Directory\MeasureDimension.cs" />
-    <Compile Include="Domain\Directory\MeasureWeight.cs" />
     <Compile Include="Domain\Localization\ILocalizedEntity.cs" />
-    <Compile Include="Domain\Directory\StateProvince.cs" />
     <Compile Include="Domain\Customers\RewardPointsHistory.cs" />
-    <Compile Include="Domain\Tax\TaxSettings.cs" />
-    <Compile Include="Domain\Tax\TaxBasedOn.cs" />
-    <Compile Include="Domain\Tax\TaxCategory.cs" />
-    <Compile Include="Domain\Tax\TaxDisplayType.cs" />
-    <Compile Include="Domain\Tax\VatNumberStatus.cs" />
     <Compile Include="Html\BBCodeHelper.cs" />
     <Compile Include="Html\CodeFormatter\CLikeFormat.cs" />
     <Compile Include="Html\CodeFormatter\CodeFormat.cs" />
@@ -258,7 +244,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XmlHelper.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Domain\Directory\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config">

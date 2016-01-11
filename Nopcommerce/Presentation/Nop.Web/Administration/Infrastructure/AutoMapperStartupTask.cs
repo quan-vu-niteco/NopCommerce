@@ -4,12 +4,10 @@ using Nop.Admin.Models.Common;
 using Nop.Admin.Models.Customers;
 using Nop.Admin.Models.Directory;
 using Nop.Admin.Models.ExternalAuthentication;
-
 using Nop.Admin.Models.Localization;
 using Nop.Admin.Models.Logging;
 using Nop.Admin.Models.Messages;
 using Nop.Admin.Models.News;
-
 using Nop.Admin.Models.Plugins;
 using Nop.Admin.Models.Polls;
 using Nop.Admin.Models.Settings;
@@ -17,20 +15,15 @@ using Nop.Admin.Models.Stores;
 using Nop.Admin.Models.Topics;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
-using Nop.Core.Domain.Directory;
 
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Logging;
 using Nop.Core.Domain.Media;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.News;
-
 using Nop.Core.Domain.Polls;
-
 using Nop.Core.Domain.Stores;
-using Nop.Core.Domain.Tax;
 using Nop.Core.Domain.Topics;
-using Nop.Core.Domain.Vendors;
 using Nop.Core.Infrastructure;
 using Nop.Core.Plugins;
 using Nop.Services.Authentication.External;
@@ -44,24 +37,8 @@ namespace Nop.Admin.Infrastructure
         public void Execute()
         {
             //TODO remove 'CreatedOnUtc' ignore mappings because now presentation layer models have 'CreatedOn' property and core entities have 'CreatedOnUtc' property (distinct names)
-            
-        
 
-            //countries
-            Mapper.CreateMap<CountryModel, Country>()
-                .ForMember(dest => dest.StateProvinces, mo => mo.Ignore());
-            Mapper.CreateMap<Country, CountryModel>()
-                .ForMember(dest => dest.NumberOfStates, mo => mo.MapFrom(src => src.StateProvinces != null ? src.StateProvinces.Count : 0))
-                .ForMember(dest => dest.Locales, mo => mo.Ignore())
-                .ForMember(dest => dest.AvailableStores, mo => mo.Ignore())
-                .ForMember(dest => dest.SelectedStoreIds, mo => mo.Ignore())
-                .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
-            //state/provinces
-            Mapper.CreateMap<StateProvince, StateProvinceModel>()
-                .ForMember(dest => dest.Locales, mo => mo.Ignore())
-                .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
-            Mapper.CreateMap<StateProvinceModel, StateProvince>()
-                .ForMember(dest => dest.Country, mo => mo.Ignore());
+          
 
             //language
             Mapper.CreateMap<Language, LanguageModel>()
@@ -144,29 +121,6 @@ namespace Nop.Admin.Infrastructure
                 .ForMember(dest => dest.CustomerEmail, mo => mo.MapFrom(src => src.Customer.Email))
                 .ForMember(dest => dest.CreatedOn, mo => mo.Ignore())
                 .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
-            //currencies
-            Mapper.CreateMap<Currency, CurrencyModel>()
-                .ForMember(dest => dest.CreatedOn, mo => mo.Ignore())
-                .ForMember(dest => dest.IsPrimaryExchangeRateCurrency, mo => mo.Ignore())
-                .ForMember(dest => dest.IsPrimaryStoreCurrency, mo => mo.Ignore())
-                .ForMember(dest => dest.Locales, mo => mo.Ignore())
-                .ForMember(dest => dest.AvailableStores, mo => mo.Ignore())
-                .ForMember(dest => dest.SelectedStoreIds, mo => mo.Ignore())
-                .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
-            Mapper.CreateMap<CurrencyModel, Currency>()
-                .ForMember(dest => dest.CreatedOnUtc, mo => mo.Ignore())
-                .ForMember(dest => dest.UpdatedOnUtc, mo => mo.Ignore());
-            //measure weights
-            Mapper.CreateMap<MeasureWeight, MeasureWeightModel>()
-                .ForMember(dest => dest.IsPrimaryWeight, mo => mo.Ignore())
-                .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
-            Mapper.CreateMap<MeasureWeightModel, MeasureWeight>();
-            //measure dimensions
-            Mapper.CreateMap<MeasureDimension, MeasureDimensionModel>()
-                .ForMember(dest => dest.IsPrimaryDimension, mo => mo.Ignore())
-                .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
-            Mapper.CreateMap<MeasureDimensionModel, MeasureDimension>();
-          
             //external authentication methods
             Mapper.CreateMap<IExternalAuthenticationMethod, AuthenticationMethodModel>()
                 .ForMember(dest => dest.FriendlyName, mo => mo.MapFrom(src => src.PluginDescriptor.FriendlyName))

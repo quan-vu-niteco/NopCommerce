@@ -10,7 +10,7 @@ using Nop.Core.Domain.Cms;
 using Nop.Core.Domain.Customers;
 
 
-using Nop.Core.Domain.Tax;
+
 using Nop.Core.Plugins;
 using Nop.Services.Authentication.External;
 using Nop.Services.Cms;
@@ -38,7 +38,7 @@ namespace Nop.Admin.Controllers
         private readonly ILanguageService _languageService;
 	    private readonly ISettingService _settingService;
 	    private readonly IStoreService _storeService;
-        private readonly TaxSettings _taxSettings;
+        
         private readonly ExternalAuthenticationSettings _externalAuthenticationSettings;
         private readonly WidgetSettings _widgetSettings;
 	    #endregion
@@ -53,7 +53,6 @@ namespace Nop.Admin.Controllers
             ILanguageService languageService,
             ISettingService settingService, 
             IStoreService storeService,
-            TaxSettings taxSettings, 
             ExternalAuthenticationSettings externalAuthenticationSettings, 
             WidgetSettings widgetSettings)
 		{
@@ -65,7 +64,6 @@ namespace Nop.Admin.Controllers
             this._languageService = languageService;
             this._settingService = settingService;
             this._storeService = storeService;
-            this._taxSettings = taxSettings;
             this._externalAuthenticationSettings = externalAuthenticationSettings;
             this._widgetSettings = widgetSettings;
 		}
