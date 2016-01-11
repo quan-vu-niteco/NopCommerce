@@ -111,7 +111,6 @@ namespace Nop.Admin.Controllers
                 Data = customerAttributes.Select(x =>
                 {
                     var attributeModel = x.ToModel();
-                    attributeModel.AttributeControlTypeName = x.AttributeControlType.GetLocalizedEnum(_localizationService, _workContext);
                     return attributeModel;
                 }),
                 Total = customerAttributes.Count()

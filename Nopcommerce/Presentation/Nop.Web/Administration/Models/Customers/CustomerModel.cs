@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using FluentValidation.Attributes;
 using Nop.Admin.Validators.Customers;
-using Nop.Core.Domain.Catalog;
+
 using Nop.Web.Framework;
 using Nop.Web.Framework.Mvc;
 
@@ -301,9 +301,7 @@ namespace Nop.Admin.Models.Customers
             /// Default value for textboxes
             /// </summary>
             public string DefaultValue { get; set; }
-
-            public AttributeControlType AttributeControlType { get; set; }
-
+          
             public IList<CustomerAttributeValueModel> Values { get; set; }
 
         }

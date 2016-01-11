@@ -10,7 +10,6 @@ using Nop.Services.Seo;
 using Nop.Services.Topics;
 using Nop.Web.Framework.UI.Paging;
 using Nop.Web.Infrastructure.Cache;
-using Nop.Web.Models.Boards;
 using Nop.Web.Models.Common;
 
 namespace Nop.Web.Extensions
@@ -175,50 +174,6 @@ namespace Nop.Web.Extensions
                 result = "<ul>" + result + "</ul>";
             }
             return MvcHtmlString.Create(result);
-        }
-        public static MvcHtmlString ForumTopicSmallPager<TModel>(this HtmlHelper<TModel> html, ForumTopicRowModel model)
-        {
-            var localizationService = EngineContext.Current.Resolve<ILocalizationService>();
-
-            var forumTopicId = model.Id;
-            var forumTopicSlug = model.SeName;
-            var totalPages = model.TotalPostPages;
-
-            if (totalPages > 0)
-            {
-                var links = new StringBuilder();
-
-                if (totalPages <= 4)
-                {
-                    for (int x = 1; x <= totalPages; x++)
-                    {
-                        links.Append(html.RouteLink(x.ToString(), "TopicSlugPaged", new { id = forumTopicId, page = (x), slug = forumTopicSlug }, new { title = String.Format(localizationService.GetResource("Pager.PageLinkTitle"), x.ToString()) }));
-                        if (x < totalPages)
-                        {
-                            links.Append(", ");
-                        }
-                    }
-                }
-                else
-                {
-                    links.Append(html.RouteLink("1", "TopicSlugPaged", new { id = forumTopicId, page = (1), slug = forumTopicSlug }, new { title = String.Format(localizationService.GetResource("Pager.PageLinkTitle"), 1) }));
-                    links.Append(" ... ");
-
-                    for (int x = (totalPages - 2); x <= totalPages; x++)
-                    {
-                        links.Append(html.RouteLink(x.ToString(), "TopicSlugPaged", new { id = forumTopicId, page = (x), slug = forumTopicSlug }, new { title = String.Format(localizationService.GetResource("Pager.PageLinkTitle"), x.ToString()) }));
-
-                        if (x < totalPages)
-                        {
-                            links.Append(", ");
-                        }
-                    }
-                }
-
-                // Inserts the topic page links into the localized string ([Go to page: {0}])
-                return MvcHtmlString.Create(String.Format(localizationService.GetResource("Forum.Topics.GotoPostPager"), links.ToString()));
-            }
-            return MvcHtmlString.Create(string.Empty);
         }
         public static Pager Pager(this HtmlHelper helper, IPageableModel pagination)
         {

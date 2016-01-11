@@ -7,25 +7,24 @@ using System.Web.Mvc;
 using Nop.Core;
 using Nop.Core.Caching;
 using Nop.Core.Domain;
-using Nop.Core.Domain.Blogs;
-using Nop.Core.Domain.Catalog;
+
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
-using Nop.Core.Domain.Forums;
+
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.News;
 
 using Nop.Core.Domain.Tax;
-using Nop.Services.Catalog;
+
 using Nop.Services.Common;
 using Nop.Services.Customers;
 using Nop.Services.Directory;
-using Nop.Services.Forums;
+
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Messages;
-using Nop.Services.Orders;
+
 using Nop.Services.Security;
 using Nop.Services.Seo;
 using Nop.Services.Topics;
@@ -35,7 +34,6 @@ using Nop.Web.Framework.Security;
 using Nop.Web.Framework.Themes;
 using Nop.Web.Framework.UI.Captcha;
 using Nop.Web.Infrastructure.Cache;
-using Nop.Web.Models.Catalog;
 using Nop.Web.Models.Common;
 using Nop.Web.Models.Topics;
 
@@ -45,9 +43,7 @@ namespace Nop.Web.Controllers
     {
         #region Fields
 
-        private readonly ICategoryService _categoryService;
-        private readonly IProductService _productService;
-        private readonly IManufacturerService _manufacturerService;
+      
         private readonly ITopicService _topicService;
         private readonly ILanguageService _languageService;
         private readonly ICurrencyService _currencyService;
@@ -59,7 +55,6 @@ namespace Nop.Web.Controllers
         private readonly ISitemapGenerator _sitemapGenerator;
         private readonly IThemeContext _themeContext;
         private readonly IThemeProvider _themeProvider;
-        private readonly IForumService _forumservice;
         private readonly IGenericAttributeService _genericAttributeService;
         private readonly IWebHelper _webHelper;
         private readonly IPermissionService _permissionService;
@@ -68,13 +63,12 @@ namespace Nop.Web.Controllers
 
         private readonly CustomerSettings _customerSettings;
         private readonly TaxSettings _taxSettings;
-        private readonly CatalogSettings _catalogSettings;
+       
         private readonly StoreInformationSettings _storeInformationSettings;
         private readonly EmailAccountSettings _emailAccountSettings;
         private readonly CommonSettings _commonSettings;
-        private readonly BlogSettings _blogSettings;
+      
         private readonly NewsSettings _newsSettings;
-        private readonly ForumSettings _forumSettings;
         private readonly LocalizationSettings _localizationSettings;
         private readonly CaptchaSettings _captchaSettings;
 
@@ -82,9 +76,7 @@ namespace Nop.Web.Controllers
 
         #region Constructors
 
-        public CommonController(ICategoryService categoryService,
-            IProductService productService,
-            IManufacturerService manufacturerService,
+        public CommonController(
             ITopicService topicService,
             ILanguageService languageService,
             ICurrencyService currencyService,
@@ -96,7 +88,6 @@ namespace Nop.Web.Controllers
             ISitemapGenerator sitemapGenerator,
             IThemeContext themeContext,
             IThemeProvider themeProvider,
-            IForumService forumService,
             IGenericAttributeService genericAttributeService, 
             IWebHelper webHelper,
             IPermissionService permissionService,
@@ -104,19 +95,14 @@ namespace Nop.Web.Controllers
             ICustomerActivityService customerActivityService,
             CustomerSettings customerSettings, 
             TaxSettings taxSettings, 
-            CatalogSettings catalogSettings,
             StoreInformationSettings storeInformationSettings,
             EmailAccountSettings emailAccountSettings,
             CommonSettings commonSettings, 
-            BlogSettings blogSettings, 
             NewsSettings newsSettings,
-            ForumSettings forumSettings,
             LocalizationSettings localizationSettings, 
             CaptchaSettings captchaSettings)
         {
-            this._categoryService = categoryService;
-            this._productService = productService;
-            this._manufacturerService = manufacturerService;
+          
             this._topicService = topicService;
             this._languageService = languageService;
             this._currencyService = currencyService;
@@ -128,7 +114,6 @@ namespace Nop.Web.Controllers
             this._sitemapGenerator = sitemapGenerator;
             this._themeContext = themeContext;
             this._themeProvider = themeProvider;
-            this._forumservice = forumService;
             this._genericAttributeService = genericAttributeService;
             this._webHelper = webHelper;
             this._permissionService = permissionService;
@@ -137,13 +122,10 @@ namespace Nop.Web.Controllers
 
             this._customerSettings = customerSettings;
             this._taxSettings = taxSettings;
-            this._catalogSettings = catalogSettings;
             this._storeInformationSettings = storeInformationSettings;
             this._emailAccountSettings = emailAccountSettings;
             this._commonSettings = commonSettings;
-            this._blogSettings = blogSettings;
             this._newsSettings = newsSettings;
-            this._forumSettings = forumSettings;
             this._localizationSettings = localizationSettings;
             this._captchaSettings = captchaSettings;
         }
@@ -157,16 +139,6 @@ namespace Nop.Web.Controllers
         {
             var result = 0;
             var customer = _workContext.CurrentCustomer;
-            if (_forumSettings.AllowPrivateMessages && !customer.IsGuest())
-            {
-                var privateMessages = _forumservice.GetAllPrivateMessages(_storeContext.CurrentStore.Id,
-                    0, customer.Id, false, null, false, string.Empty, 0, 1);
-
-                if (privateMessages.TotalCount > 0)
-                {
-                    result = privateMessages.TotalCount;
-                }
-            }
 
             return result;
         }
@@ -243,93 +215,7 @@ namespace Nop.Web.Controllers
             }
             return Redirect(returnUrl);
         }
-
-        //currency
-        [ChildActionOnly]
-        public ActionResult CurrencySelector()
-        {
-            var availableCurrencies = _cacheManager.Get(string.Format(ModelCacheEventConsumer.AVAILABLE_CURRENCIES_MODEL_KEY, _workContext.WorkingLanguage.Id, _storeContext.CurrentStore.Id), () =>
-            {
-                var result = _currencyService
-                    .GetAllCurrencies(storeId: _storeContext.CurrentStore.Id)
-                    .Select(x =>
-                    {
-                        //currency char
-                        var currencySymbol = "";
-                        if (!string.IsNullOrEmpty(x.DisplayLocale))
-                            currencySymbol = new RegionInfo(x.DisplayLocale).CurrencySymbol;
-                        else
-                            currencySymbol = x.CurrencyCode;
-                        //model
-                        var currencyModel = new CurrencyModel
-                        {
-                            Id = x.Id,
-                            Name = x.GetLocalized(y => y.Name),
-                            CurrencySymbol = currencySymbol
-                        };
-                        return currencyModel;
-                    })
-                    .ToList();
-                return result;
-            });
-
-            var model = new CurrencySelectorModel
-            {
-                CurrentCurrencyId = _workContext.WorkingCurrency.Id,
-                AvailableCurrencies = availableCurrencies
-            };
-
-            if (model.AvailableCurrencies.Count == 1)
-                Content("");
-
-            return PartialView(model);
-        }
-        public ActionResult SetCurrency(int customerCurrency, string returnUrl = "")
-        {
-            var currency = _currencyService.GetCurrencyById(customerCurrency);
-            if (currency != null)
-                _workContext.WorkingCurrency = currency;
-
-            //home page
-            if (String.IsNullOrEmpty(returnUrl))
-                returnUrl = Url.RouteUrl("HomePage");
-            
-            //prevent open redirection attack
-            if (!Url.IsLocalUrl(returnUrl))
-                returnUrl = Url.RouteUrl("HomePage");
-
-            return Redirect(returnUrl);
-        }
-
-        //tax type
-        [ChildActionOnly]
-        public ActionResult TaxTypeSelector()
-        {
-            if (!_taxSettings.AllowCustomersToSelectTaxDisplayType)
-                return Content("");
-
-            var model = new TaxTypeSelectorModel
-            {
-                CurrentTaxType = _workContext.TaxDisplayType
-            };
-
-            return PartialView(model);
-        }
-        public ActionResult SetTaxType(int customerTaxType, string returnUrl = "")
-        {
-            var taxDisplayType = (TaxDisplayType)Enum.ToObject(typeof(TaxDisplayType), customerTaxType);
-            _workContext.TaxDisplayType = taxDisplayType;
-
-            //home page
-            if (String.IsNullOrEmpty(returnUrl))
-                returnUrl = Url.RouteUrl("HomePage");
-
-            //prevent open redirection attack
-            if (!Url.IsLocalUrl(returnUrl))
-                returnUrl = Url.RouteUrl("HomePage");
-
-            return Redirect(returnUrl);
-        }
+       
         
         //footer
         [ChildActionOnly]
@@ -353,14 +239,6 @@ namespace Nop.Web.Controllers
             if (unreadMessageCount > 0)
             {
                 unreadMessage = string.Format(_localizationService.GetResource("PrivateMessages.TotalUnread"), unreadMessageCount);
-
-                //notifications here
-                if (_forumSettings.ShowAlertForPM &&
-                    !customer.GetAttribute<bool>(SystemCustomerAttributeNames.NotifiedAboutNewPrivateMessages, _storeContext.CurrentStore.Id))
-                {
-                    _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.NotifiedAboutNewPrivateMessages, true, _storeContext.CurrentStore.Id);
-                    alertMessage = string.Format(_localizationService.GetResource("PrivateMessages.YouHaveUnreadPM"), unreadMessageCount);
-                }
             }
 
             var model = new HeaderLinksModel
@@ -369,23 +247,14 @@ namespace Nop.Web.Controllers
                 CustomerEmailUsername = customer.IsRegistered() ? (_customerSettings.UsernamesEnabled ? customer.Username : customer.Email) : "",
                 ShoppingCartEnabled = _permissionService.Authorize(StandardPermissionProvider.EnableShoppingCart),
                 WishlistEnabled = _permissionService.Authorize(StandardPermissionProvider.EnableWishlist),
-                AllowPrivateMessages = customer.IsRegistered() && _forumSettings.AllowPrivateMessages,
+                AllowPrivateMessages = customer.IsRegistered(),
                 UnreadPrivateMessages = unreadMessage,
                 AlertMessage = alertMessage,
             };
             //performance optimization (use "HasShoppingCartItems" property)
             if (customer.HasShoppingCartItems)
             {
-                model.ShoppingCartItems = customer.ShoppingCartItems
-                    .Where(sci => sci.ShoppingCartType == ShoppingCartType.ShoppingCart)
-                    .LimitPerStore(_storeContext.CurrentStore.Id)
-                    .ToList()
-                    .GetTotalProducts();
-                model.WishlistItems = customer.ShoppingCartItems
-                    .Where(sci => sci.ShoppingCartType == ShoppingCartType.Wishlist)
-                    .LimitPerStore(_storeContext.CurrentStore.Id)
-                    .ToList()
-                    .GetTotalProducts();
+            
             }
 
             return PartialView(model);
@@ -420,13 +289,7 @@ namespace Nop.Web.Controllers
                 TwitterLink = _storeInformationSettings.TwitterLink,
                 YoutubeLink = _storeInformationSettings.YoutubeLink,
                 GooglePlusLink = _storeInformationSettings.GooglePlusLink,
-                BlogEnabled = _blogSettings.Enabled,
-                CompareProductsEnabled = _catalogSettings.CompareProductsEnabled,
-                ForumEnabled = _forumSettings.ForumsEnabled,
-                NewsEnabled = _newsSettings.Enabled,
-                RecentlyViewedProductsEnabled = _catalogSettings.RecentlyViewedProductsEnabled,
-                RecentlyAddedProductsEnabled = _catalogSettings.RecentlyAddedProductsEnabled,
-                DisplayTaxShippingInfoFooter = _catalogSettings.DisplayTaxShippingInfoFooter
+                NewsEnabled = _newsSettings.Enabled
             };
 
             return PartialView(model);
@@ -526,38 +389,9 @@ namespace Nop.Web.Controllers
             {
                 var model = new SitemapModel
                 {
-                    BlogEnabled = _blogSettings.Enabled,
-                    ForumEnabled = _forumSettings.ForumsEnabled,
+                  
                     NewsEnabled = _newsSettings.Enabled,
                 };
-                //categories
-                if (_commonSettings.SitemapIncludeCategories)
-                {
-                    var categories = _categoryService.GetAllCategories();
-                    model.Categories = categories.Select(x => x.ToModel()).ToList();
-                }
-                //manufacturers
-                if (_commonSettings.SitemapIncludeManufacturers)
-                {
-                    var manufacturers = _manufacturerService.GetAllManufacturers();
-                    model.Manufacturers = manufacturers.Select(x => x.ToModel()).ToList();
-                }
-                //products
-                if (_commonSettings.SitemapIncludeProducts)
-                {
-                    //limit product to 200 until paging is supported on this page
-                    var products = _productService.SearchProducts(storeId: _storeContext.CurrentStore.Id,
-                        visibleIndividuallyOnly: true,
-                        pageSize: 200);
-                    model.Products = products.Select(product => new ProductOverviewModel
-                    {
-                        Id = product.Id,
-                        Name = product.GetLocalized(x => x.Name),
-                        ShortDescription = product.GetLocalized(x => x.ShortDescription),
-                        FullDescription = product.GetLocalized(x => x.FullDescription),
-                        SeName = product.GetSeName(),
-                    }).ToList();
-                }
 
                 //topics
                 var topics = _topicService.GetAllTopics(_storeContext.CurrentStore.Id)

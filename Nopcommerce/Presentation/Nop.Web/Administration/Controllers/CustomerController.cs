@@ -7,33 +7,24 @@ using System.Web.Mvc;
 using Nop.Admin.Extensions;
 using Nop.Admin.Models.Common;
 using Nop.Admin.Models.Customers;
-using Nop.Admin.Models.ShoppingCart;
 using Nop.Core;
-using Nop.Core.Domain.Catalog;
+
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Directory;
-using Nop.Core.Domain.Forums;
 using Nop.Core.Domain.Messages;
-
-
-
 using Nop.Core.Domain.Tax;
 using Nop.Services.Authentication.External;
-using Nop.Services.Catalog;
 using Nop.Services.Common;
 using Nop.Services.Customers;
 using Nop.Services.Directory;
 using Nop.Services.ExportImport;
-using Nop.Services.Forums;
 using Nop.Services.Helpers;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
 using Nop.Services.Messages;
-using Nop.Services.Orders;
 using Nop.Services.Security;
 using Nop.Services.Stores;
-using Nop.Services.Tax;
 using Nop.Services.Vendors;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
@@ -58,31 +49,24 @@ namespace Nop.Admin.Controllers
         private readonly RewardPointsSettings _rewardPointsSettings;
         private readonly ICountryService _countryService;
         private readonly IStateProvinceService _stateProvinceService;
-        private readonly IAddressService _addressService;
+       
         private readonly CustomerSettings _customerSettings;
-        private readonly ITaxService _taxService;
+        
         private readonly IWorkContext _workContext;
         private readonly IVendorService _vendorService;
         private readonly IStoreContext _storeContext;
-        private readonly IPriceFormatter _priceFormatter;
-        private readonly IOrderService _orderService;
+        
         private readonly IExportManager _exportManager;
         private readonly ICustomerActivityService _customerActivityService;
-        private readonly IPriceCalculationService _priceCalculationService;
+       
         private readonly IPermissionService _permissionService;
         private readonly IQueuedEmailService _queuedEmailService;
         private readonly EmailAccountSettings _emailAccountSettings;
         private readonly IEmailAccountService _emailAccountService;
-        private readonly ForumSettings _forumSettings;
-        private readonly IForumService _forumService;
         private readonly IOpenAuthenticationService _openAuthenticationService;
-        private readonly AddressSettings _addressSettings;
         private readonly IStoreService _storeService;
         private readonly ICustomerAttributeParser _customerAttributeParser;
         private readonly ICustomerAttributeService _customerAttributeService;
-        private readonly IAddressAttributeParser _addressAttributeParser;
-        private readonly IAddressAttributeService _addressAttributeService;
-        private readonly IAddressAttributeFormatter _addressAttributeFormatter;
 
         #endregion
 
@@ -100,31 +84,20 @@ namespace Nop.Admin.Controllers
             RewardPointsSettings rewardPointsSettings,
             ICountryService countryService, 
             IStateProvinceService stateProvinceService, 
-            IAddressService addressService,
             CustomerSettings customerSettings,
-            ITaxService taxService, 
             IWorkContext workContext,
             IVendorService vendorService,
             IStoreContext storeContext,
-            IPriceFormatter priceFormatter,
-            IOrderService orderService, 
             IExportManager exportManager,
             ICustomerActivityService customerActivityService,
-            IPriceCalculationService priceCalculationService,
             IPermissionService permissionService, 
             IQueuedEmailService queuedEmailService,
             EmailAccountSettings emailAccountSettings,
-            IEmailAccountService emailAccountService, 
-            ForumSettings forumSettings,
-            IForumService forumService, 
+            IEmailAccountService emailAccountService,
             IOpenAuthenticationService openAuthenticationService,
-            AddressSettings addressSettings,
             IStoreService storeService,
             ICustomerAttributeParser customerAttributeParser,
-            ICustomerAttributeService customerAttributeService,
-            IAddressAttributeParser addressAttributeParser,
-            IAddressAttributeService addressAttributeService,
-            IAddressAttributeFormatter addressAttributeFormatter)
+            ICustomerAttributeService customerAttributeService)
         {
             this._customerService = customerService;
             this._newsLetterSubscriptionService = newsLetterSubscriptionService;
@@ -138,31 +111,20 @@ namespace Nop.Admin.Controllers
             this._rewardPointsSettings = rewardPointsSettings;
             this._countryService = countryService;
             this._stateProvinceService = stateProvinceService;
-            this._addressService = addressService;
             this._customerSettings = customerSettings;
-            this._taxService = taxService;
             this._workContext = workContext;
             this._vendorService = vendorService;
             this._storeContext = storeContext;
-            this._priceFormatter = priceFormatter;
-            this._orderService = orderService;
             this._exportManager = exportManager;
             this._customerActivityService = customerActivityService;
-            this._priceCalculationService = priceCalculationService;
             this._permissionService = permissionService;
             this._queuedEmailService = queuedEmailService;
             this._emailAccountSettings = emailAccountSettings;
             this._emailAccountService = emailAccountService;
-            this._forumSettings = forumSettings;
-            this._forumService = forumService;
             this._openAuthenticationService = openAuthenticationService;
-            this._addressSettings = addressSettings;
             this._storeService = storeService;
             this._customerAttributeParser = customerAttributeParser;
             this._customerAttributeService = customerAttributeService;
-            this._addressAttributeParser = addressAttributeParser;
-            this._addressAttributeService = addressAttributeService;
-            this._addressAttributeFormatter = addressAttributeFormatter;
         }
 
         #endregion
@@ -309,8 +271,7 @@ namespace Nop.Admin.Controllers
                 {
                     Id = attribute.Id,
                     Name = attribute.Name,
-                    IsRequired = attribute.IsRequired,
-                    AttributeControlType = attribute.AttributeControlType,
+                    IsRequired = attribute.IsRequired
                 };
 
                 if (attribute.ShouldHaveValues())
@@ -334,138 +295,12 @@ namespace Nop.Admin.Controllers
                 if (customer != null)
                 {
                     var selectedCustomerAttributes = customer.GetAttribute<string>(SystemCustomerAttributeNames.CustomCustomerAttributes, _genericAttributeService);
-                    switch (attribute.AttributeControlType)
-                    {
-                        case AttributeControlType.DropdownList:
-                        case AttributeControlType.RadioList:
-                        case AttributeControlType.Checkboxes:
-                        {
-                            if (!String.IsNullOrEmpty(selectedCustomerAttributes))
-                            {
-                                //clear default selection
-                                foreach (var item in attributeModel.Values)
-                                    item.IsPreSelected = false;
-
-                                //select new values
-                                var selectedValues = _customerAttributeParser.ParseCustomerAttributeValues(selectedCustomerAttributes);
-                                foreach (var attributeValue in selectedValues)
-                                    foreach (var item in attributeModel.Values)
-                                        if (attributeValue.Id == item.Id)
-                                            item.IsPreSelected = true;
-                            }
-                        }
-                            break;
-                        case AttributeControlType.ReadonlyCheckboxes:
-                        {
-                            //do nothing
-                            //values are already pre-set
-                        }
-                            break;
-                        case AttributeControlType.TextBox:
-                        case AttributeControlType.MultilineTextbox:
-                        {
-                            if (!String.IsNullOrEmpty(selectedCustomerAttributes))
-                            {
-                                var enteredText = _customerAttributeParser.ParseValues(selectedCustomerAttributes, attribute.Id);
-                                if (enteredText.Count > 0)
-                                    attributeModel.DefaultValue = enteredText[0];
-                            }
-                        }
-                            break;
-                        case AttributeControlType.ColorSquares:
-                        case AttributeControlType.Datepicker:
-                        case AttributeControlType.FileUpload:
-                        default:
-                            //not supported attribute control types
-                            break;
-                    }
                 }
 
                 model.CustomerAttributes.Add(attributeModel);
             }
         }
-
-        [NonAction]
-        protected virtual string ParseCustomCustomerAttributes(Customer customer, FormCollection form)
-        {
-            if (customer == null)
-                throw new ArgumentNullException("customer");
-
-            if (form == null)
-                throw new ArgumentNullException("form");
-
-            string attributesXml = "";
-            var customerAttributes = _customerAttributeService.GetAllCustomerAttributes();
-            foreach (var attribute in customerAttributes)
-            {
-                string controlId = string.Format("customer_attribute_{0}", attribute.Id);
-                switch (attribute.AttributeControlType)
-                {
-                    case AttributeControlType.DropdownList:
-                    case AttributeControlType.RadioList:
-                        {
-                            var ctrlAttributes = form[controlId];
-                            if (!String.IsNullOrEmpty(ctrlAttributes))
-                            {
-                                int selectedAttributeId = int.Parse(ctrlAttributes);
-                                if (selectedAttributeId > 0)
-                                    attributesXml = _customerAttributeParser.AddCustomerAttribute(attributesXml,
-                                        attribute, selectedAttributeId.ToString());
-                            }
-                        }
-                        break;
-                    case AttributeControlType.Checkboxes:
-                        {
-                            var cblAttributes = form[controlId];
-                            if (!String.IsNullOrEmpty(cblAttributes))
-                            {
-                                foreach (var item in cblAttributes.Split(new [] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                                {
-                                    int selectedAttributeId = int.Parse(item);
-                                    if (selectedAttributeId > 0)
-                                        attributesXml = _customerAttributeParser.AddCustomerAttribute(attributesXml,
-                                            attribute, selectedAttributeId.ToString());
-                                }
-                            }
-                        }
-                        break;
-                    case AttributeControlType.ReadonlyCheckboxes:
-                        {
-                            //load read-only (already server-side selected) values
-                            var attributeValues = _customerAttributeService.GetCustomerAttributeValues(attribute.Id);
-                            foreach (var selectedAttributeId in attributeValues
-                                .Where(v => v.IsPreSelected)
-                                .Select(v => v.Id)
-                                .ToList())
-                            {
-                                attributesXml = _customerAttributeParser.AddCustomerAttribute(attributesXml,
-                                            attribute, selectedAttributeId.ToString());
-                            }
-                        }
-                        break;
-                    case AttributeControlType.TextBox:
-                    case AttributeControlType.MultilineTextbox:
-                        {
-                            var ctrlAttributes = form[controlId];
-                            if (!String.IsNullOrEmpty(ctrlAttributes))
-                            {
-                                string enteredText = ctrlAttributes.Trim();
-                                attributesXml = _customerAttributeParser.AddCustomerAttribute(attributesXml,
-                                    attribute, enteredText);
-                            }
-                        }
-                        break;
-                    case AttributeControlType.Datepicker:
-                    case AttributeControlType.ColorSquares:
-                    case AttributeControlType.FileUpload:
-                    //not supported customer attributes
-                    default:
-                        break;
-                }
-            }
-
-            return attributesXml;
-        }
+       
 
         [NonAction]
         protected virtual void PrepareCustomerModel(CustomerModel model, Customer customer, bool excludeProperties)
@@ -603,63 +438,7 @@ namespace Nop.Admin.Controllers
                 model.AssociatedExternalAuthRecords = GetAssociatedExternalAuthRecords(customer);
             }
         }
-
-        [NonAction]
-        protected virtual void PrepareAddressModel(CustomerAddressModel model, Address address, Customer customer, bool excludeProperties)
-        {
-            if (customer == null)
-                throw new ArgumentNullException("customer");
-
-            model.CustomerId = customer.Id;
-            if (address != null)
-            {
-                if (!excludeProperties)
-                {
-                    model.Address = address.ToModel();
-                }
-            }
-
-            if (model.Address == null)
-                model.Address = new AddressModel();
-
-            model.Address.FirstNameEnabled = true;
-            model.Address.FirstNameRequired = true;
-            model.Address.LastNameEnabled = true;
-            model.Address.LastNameRequired = true;
-            model.Address.EmailEnabled = true;
-            model.Address.EmailRequired = true;
-            model.Address.CompanyEnabled = _addressSettings.CompanyEnabled;
-            model.Address.CompanyRequired = _addressSettings.CompanyRequired;
-            model.Address.CountryEnabled = _addressSettings.CountryEnabled;
-            model.Address.StateProvinceEnabled = _addressSettings.StateProvinceEnabled;
-            model.Address.CityEnabled = _addressSettings.CityEnabled;
-            model.Address.CityRequired = _addressSettings.CityRequired;
-            model.Address.StreetAddressEnabled = _addressSettings.StreetAddressEnabled;
-            model.Address.StreetAddressRequired = _addressSettings.StreetAddressRequired;
-            model.Address.StreetAddress2Enabled = _addressSettings.StreetAddress2Enabled;
-            model.Address.StreetAddress2Required = _addressSettings.StreetAddress2Required;
-            model.Address.ZipPostalCodeEnabled = _addressSettings.ZipPostalCodeEnabled;
-            model.Address.ZipPostalCodeRequired = _addressSettings.ZipPostalCodeRequired;
-            model.Address.PhoneEnabled = _addressSettings.PhoneEnabled;
-            model.Address.PhoneRequired = _addressSettings.PhoneRequired;
-            model.Address.FaxEnabled = _addressSettings.FaxEnabled;
-            model.Address.FaxRequired = _addressSettings.FaxRequired;
-            //countries
-            model.Address.AvailableCountries.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Address.SelectCountry"), Value = "0" });
-            foreach (var c in _countryService.GetAllCountries(true))
-                model.Address.AvailableCountries.Add(new SelectListItem { Text = c.Name, Value = c.Id.ToString(), Selected = (c.Id == model.Address.CountryId) });
-            //states
-            var states = model.Address.CountryId.HasValue ? _stateProvinceService.GetStateProvincesByCountryId(model.Address.CountryId.Value, true).ToList() : new List<StateProvince>();
-            if (states.Count > 0)
-            {
-                foreach (var s in states)
-                    model.Address.AvailableStates.Add(new SelectListItem { Text = s.Name, Value = s.Id.ToString(), Selected = (s.Id == model.Address.StateProvinceId) });
-            }
-            else
-                model.Address.AvailableStates.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Address.OtherNonUS"), Value = "0" });
-            //customer attribute services
-            model.Address.PrepareCustomAddressAttributes(address, _addressAttributeService, _addressAttributeParser);
-        }
+      
 
         #endregion
 
@@ -716,7 +495,6 @@ namespace Nop.Admin.Controllers
                 company: model.SearchCompany,
                 phone: model.SearchPhone,
                 zipPostalCode: model.SearchZipPostalCode,
-                loadOnlyWithShoppingCart: false,
                 pageIndex: command.Page - 1,
                 pageSize: command.PageSize);
             var gridModel = new DataSourceResult
@@ -816,10 +594,7 @@ namespace Nop.Admin.Controllers
                     _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.Phone, model.Phone);
                 if (_customerSettings.FaxEnabled)
                     _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.Fax, model.Fax);
-
-                //custom customer attributes
-                var customerAttributes = ParseCustomCustomerAttributes(customer, form);
-                _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.CustomCustomerAttributes, customerAttributes);
+            
                     
                 //password
                 if (!String.IsNullOrWhiteSpace(model.Password))
@@ -956,22 +731,6 @@ namespace Nop.Admin.Controllers
                         var prevVatNumber = customer.GetAttribute<string>(SystemCustomerAttributeNames.VatNumber);
 
                         _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.VatNumber, model.VatNumber);
-                        //set VAT number status
-                        if (!String.IsNullOrEmpty(model.VatNumber))
-                        {
-                            if (!model.VatNumber.Equals(prevVatNumber, StringComparison.InvariantCultureIgnoreCase))
-                            {
-                                _genericAttributeService.SaveAttribute(customer, 
-                                    SystemCustomerAttributeNames.VatNumberStatusId, 
-                                    (int)_taxService.GetVatNumberStatus(model.VatNumber));
-                            }
-                        }
-                        else
-                        {
-                            _genericAttributeService.SaveAttribute(customer,
-                                SystemCustomerAttributeNames.VatNumberStatusId, 
-                                (int)VatNumberStatus.Empty);
-                        }
                     }
 
                     //vendor
@@ -1004,10 +763,6 @@ namespace Nop.Admin.Controllers
                         _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.Phone, model.Phone);
                     if (_customerSettings.FaxEnabled)
                         _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.Fax, model.Fax);
-
-                    //custom customer attributes
-                    var customerAttributes = ParseCustomCustomerAttributes(customer, form);
-                    _genericAttributeService.SaveAttribute(customer, SystemCustomerAttributeNames.CustomCustomerAttributes, customerAttributes);
                     
 
                     //customer roles
@@ -1273,30 +1028,14 @@ namespace Nop.Admin.Controllers
 
             try
             {
-                if (!_forumSettings.AllowPrivateMessages)
-                    throw new NopException("Private messages are disabled");
+              
                 if (customer.IsGuest())
                     throw new NopException("Customer should be registered");
                 if (String.IsNullOrWhiteSpace(model.SendPm.Subject))
                     throw new NopException("PM subject is empty");
                 if (String.IsNullOrWhiteSpace(model.SendPm.Message))
                     throw new NopException("PM message is empty");
-
-
-                var privateMessage = new PrivateMessage
-                {
-                    StoreId = _storeContext.CurrentStore.Id,
-                    ToCustomerId = customer.Id,
-                    FromCustomerId = _workContext.CurrentCustomer.Id,
-                    Subject = model.SendPm.Subject,
-                    Text = model.SendPm.Message,
-                    IsDeletedByAuthor = false,
-                    IsDeletedByRecipient = false,
-                    IsRead = false,
-                    CreatedOnUtc = DateTime.UtcNow
-                };
-
-                _forumService.InsertPrivateMessage(privateMessage);
+               
                 SuccessNotification(_localizationService.GetResource("Admin.Customers.Customers.SendPM.Sent"));
             }
             catch (Exception exc)
@@ -1357,411 +1096,6 @@ namespace Nop.Admin.Controllers
             return Json(new { Result = true }, JsonRequestBehavior.AllowGet);
         }
         
-        #endregion
-        
-        #region Addresses
-
-        [HttpPost]
-        public ActionResult AddressesSelect(int customerId, DataSourceRequest command)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return AccessDeniedView();
-
-            var customer = _customerService.GetCustomerById(customerId);
-            if (customer == null)
-                throw new ArgumentException("No customer found with the specified id", "customerId");
-
-            var addresses = customer.Addresses.OrderByDescending(a => a.CreatedOnUtc).ThenByDescending(a => a.Id).ToList();
-            var gridModel = new DataSourceResult
-            {
-                Data = addresses.Select(x =>
-                {
-                    var model = x.ToModel();
-                    var addressHtmlSb = new StringBuilder("<div>");
-                    if (_addressSettings.CompanyEnabled && !String.IsNullOrEmpty(model.Company))
-                        addressHtmlSb.AppendFormat("{0}<br />", Server.HtmlEncode(model.Company));
-                    if (_addressSettings.StreetAddressEnabled && !String.IsNullOrEmpty(model.Address1))
-                        addressHtmlSb.AppendFormat("{0}<br />", Server.HtmlEncode(model.Address1));
-                    if (_addressSettings.StreetAddress2Enabled && !String.IsNullOrEmpty(model.Address2))
-                        addressHtmlSb.AppendFormat("{0}<br />", Server.HtmlEncode(model.Address2));
-                    if (_addressSettings.CityEnabled && !String.IsNullOrEmpty(model.City))
-                        addressHtmlSb.AppendFormat("{0},", Server.HtmlEncode(model.City));
-                    if (_addressSettings.StateProvinceEnabled && !String.IsNullOrEmpty(model.StateProvinceName))
-                        addressHtmlSb.AppendFormat("{0},", Server.HtmlEncode(model.StateProvinceName));
-                    if (_addressSettings.ZipPostalCodeEnabled && !String.IsNullOrEmpty(model.ZipPostalCode))
-                        addressHtmlSb.AppendFormat("{0}<br />", Server.HtmlEncode(model.ZipPostalCode));
-                    if (_addressSettings.CountryEnabled && !String.IsNullOrEmpty(model.CountryName))
-                        addressHtmlSb.AppendFormat("{0}", Server.HtmlEncode(model.CountryName));
-                    var customAttributesFormatted = _addressAttributeFormatter.FormatAttributes(x.CustomAttributes);
-                    if (!String.IsNullOrEmpty(customAttributesFormatted))
-                    {
-                        //already encoded
-                        addressHtmlSb.AppendFormat("<br />{0}", customAttributesFormatted);
-                    }
-                    addressHtmlSb.Append("</div>");
-                    model.AddressHtml = addressHtmlSb.ToString();
-                    return model;
-                }),
-                Total = addresses.Count
-            };
-
-            return Json(gridModel);
-        }
-
-        [HttpPost]
-        public ActionResult AddressDelete(int id, int customerId)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return AccessDeniedView();
-
-            var customer = _customerService.GetCustomerById(customerId);
-            if (customer == null)
-                throw new ArgumentException("No customer found with the specified id", "customerId");
-
-            var address = customer.Addresses.FirstOrDefault(a => a.Id == id);
-            if (address == null)
-                //No customer found with the specified id
-                return Content("No customer found with the specified id");
-            customer.RemoveAddress(address);
-            _customerService.UpdateCustomer(customer);
-            //now delete the address record
-            _addressService.DeleteAddress(address);
-
-            return new NullJsonResult();
-        }
-        
-        public ActionResult AddressCreate(int customerId)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return AccessDeniedView();
-
-            var customer = _customerService.GetCustomerById(customerId);
-            if (customer == null)
-                //No customer found with the specified id
-                return RedirectToAction("List");
-
-            var model = new CustomerAddressModel();
-            PrepareAddressModel(model, null, customer, false);
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateInput(false)]
-        public ActionResult AddressCreate(CustomerAddressModel model, FormCollection form)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return AccessDeniedView();
-
-            var customer = _customerService.GetCustomerById(model.CustomerId);
-            if (customer == null)
-                //No customer found with the specified id
-                return RedirectToAction("List");
-
-            //custom address attributes
-            var customAttributes = form.ParseCustomAddressAttributes(_addressAttributeParser, _addressAttributeService);
-            var customAttributeWarnings = _addressAttributeParser.GetAttributeWarnings(customAttributes);
-            foreach (var error in customAttributeWarnings)
-            {
-                ModelState.AddModelError("", error);
-            }
-
-            if (ModelState.IsValid)
-            {
-                var address = model.Address.ToEntity();
-                address.CustomAttributes = customAttributes;
-                address.CreatedOnUtc = DateTime.UtcNow;
-                //some validation
-                if (address.CountryId == 0)
-                    address.CountryId = null;
-                if (address.StateProvinceId == 0)
-                    address.StateProvinceId = null;
-                customer.Addresses.Add(address);
-                _customerService.UpdateCustomer(customer);
-
-                SuccessNotification(_localizationService.GetResource("Admin.Customers.Customers.Addresses.Added"));
-                return RedirectToAction("AddressEdit", new { addressId = address.Id, customerId = model.CustomerId });
-            }
-
-            //If we got this far, something failed, redisplay form
-            PrepareAddressModel(model, null, customer, true);
-            return View(model);
-        }
-
-        public ActionResult AddressEdit(int addressId, int customerId)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return AccessDeniedView();
-
-            var customer = _customerService.GetCustomerById(customerId);
-            if (customer == null)
-                //No customer found with the specified id
-                return RedirectToAction("List");
-
-            var address = _addressService.GetAddressById(addressId);
-            if (address == null)
-                //No address found with the specified id
-                return RedirectToAction("Edit", new { id = customer.Id });
-
-            var model = new CustomerAddressModel();
-            PrepareAddressModel(model, address, customer, false);
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateInput(false)]
-        public ActionResult AddressEdit(CustomerAddressModel model, FormCollection form)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return AccessDeniedView();
-
-            var customer = _customerService.GetCustomerById(model.CustomerId);
-            if (customer == null)
-                //No customer found with the specified id
-                return RedirectToAction("List");
-
-            var address = _addressService.GetAddressById(model.Address.Id);
-            if (address == null)
-                //No address found with the specified id
-                return RedirectToAction("Edit", new { id = customer.Id });
-
-            //custom address attributes
-            var customAttributes = form.ParseCustomAddressAttributes(_addressAttributeParser, _addressAttributeService);
-            var customAttributeWarnings = _addressAttributeParser.GetAttributeWarnings(customAttributes);
-            foreach (var error in customAttributeWarnings)
-            {
-                ModelState.AddModelError("", error);
-            }
-
-            if (ModelState.IsValid)
-            {
-                address = model.Address.ToEntity(address);
-                address.CustomAttributes = customAttributes;
-                _addressService.UpdateAddress(address);
-
-                SuccessNotification(_localizationService.GetResource("Admin.Customers.Customers.Addresses.Updated"));
-                return RedirectToAction("AddressEdit", new { addressId = model.Address.Id, customerId = model.CustomerId });
-            }
-
-            //If we got this far, something failed, redisplay form
-            PrepareAddressModel(model, address, customer, true);
-
-            return View(model);
-        }
-
-        #endregion
-
-        #region Orders
-        
-        [HttpPost]
-        public ActionResult OrderList(int customerId, DataSourceRequest command)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return AccessDeniedView();
-
-            var orders = _orderService.SearchOrders(customerId: customerId);
-
-            var gridModel = new DataSourceResult
-            {
-                Data = orders.PagedForCommand(command)
-                    .Select(order =>
-                    {
-                        var store = _storeService.GetStoreById(order.StoreId);
-                        var orderModel = new CustomerModel.OrderModel
-                        {
-                            Id = order.Id, 
-                            OrderStatus = order.OrderStatus.GetLocalizedEnum(_localizationService, _workContext),
-                            PaymentStatus = order.PaymentStatus.GetLocalizedEnum(_localizationService, _workContext),
-                            ShippingStatus = order.ShippingStatus.GetLocalizedEnum(_localizationService, _workContext),
-                            OrderTotal = _priceFormatter.FormatPrice(order.OrderTotal, true, false),
-                            StoreName = store != null ? store.Name : "Unknown",
-                            CreatedOn = _dateTimeHelper.ConvertToUserTime(order.CreatedOnUtc, DateTimeKind.Utc),
-                        };
-                        return orderModel;
-                    }),
-                Total = orders.Count
-            };
-
-
-            return Json(gridModel);
-        }
-        
-        #endregion
-
-        #region Reports
-
-        public ActionResult Reports()
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return AccessDeniedView();
-
-            var model = new CustomerReportsModel();
-            //customers by number of orders
-            model.BestCustomersByNumberOfOrders = new BestCustomersReportModel();
-            model.BestCustomersByNumberOfOrders.AvailableOrderStatuses = OrderStatus.Pending.ToSelectList(false).ToList();
-            model.BestCustomersByNumberOfOrders.AvailableOrderStatuses.Insert(0, new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
-            model.BestCustomersByNumberOfOrders.AvailablePaymentStatuses = PaymentStatus.Pending.ToSelectList(false).ToList();
-            model.BestCustomersByNumberOfOrders.AvailablePaymentStatuses.Insert(0, new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
-            model.BestCustomersByNumberOfOrders.AvailableShippingStatuses = ShippingStatus.NotYetShipped.ToSelectList(false).ToList();
-            model.BestCustomersByNumberOfOrders.AvailableShippingStatuses.Insert(0, new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
-
-            //customers by order total
-            model.BestCustomersByOrderTotal = new BestCustomersReportModel();
-            model.BestCustomersByOrderTotal.AvailableOrderStatuses = OrderStatus.Pending.ToSelectList(false).ToList();
-            model.BestCustomersByOrderTotal.AvailableOrderStatuses.Insert(0, new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
-            model.BestCustomersByOrderTotal.AvailablePaymentStatuses = PaymentStatus.Pending.ToSelectList(false).ToList();
-            model.BestCustomersByOrderTotal.AvailablePaymentStatuses.Insert(0, new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
-            model.BestCustomersByOrderTotal.AvailableShippingStatuses = ShippingStatus.NotYetShipped.ToSelectList(false).ToList();
-            model.BestCustomersByOrderTotal.AvailableShippingStatuses.Insert(0, new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
-            
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult ReportBestCustomersByOrderTotalList(DataSourceRequest command, BestCustomersReportModel model)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return Content("");
-
-            DateTime? startDateValue = (model.StartDate == null) ? null
-                            : (DateTime?)_dateTimeHelper.ConvertToUtcTime(model.StartDate.Value, _dateTimeHelper.CurrentTimeZone);
-
-            DateTime? endDateValue = (model.EndDate == null) ? null
-                            : (DateTime?)_dateTimeHelper.ConvertToUtcTime(model.EndDate.Value, _dateTimeHelper.CurrentTimeZone).AddDays(1);
-
-            OrderStatus? orderStatus = model.OrderStatusId > 0 ? (OrderStatus?)(model.OrderStatusId) : null;
-            PaymentStatus? paymentStatus = model.PaymentStatusId > 0 ? (PaymentStatus?)(model.PaymentStatusId) : null;
-            ShippingStatus? shippingStatus = model.ShippingStatusId > 0 ? (ShippingStatus?)(model.ShippingStatusId) : null;
-
-
-            var items = _customerReportService.GetBestCustomersReport(startDateValue, endDateValue,
-                orderStatus, paymentStatus, shippingStatus, 1, command.Page - 1, command.PageSize);
-            var gridModel = new DataSourceResult
-            {
-                Data = items.Select(x =>
-                {
-                    var m = new BestCustomerReportLineModel
-                    {
-                        CustomerId = x.CustomerId,
-                        OrderTotal = _priceFormatter.FormatPrice(x.OrderTotal, true, false),
-                        OrderCount = x.OrderCount,
-                    };
-                    var customer = _customerService.GetCustomerById(x.CustomerId);
-                    if (customer != null)
-                    {
-                        m.CustomerName = customer.IsRegistered() ? customer.Email : _localizationService.GetResource("Admin.Customers.Guest");
-                    }
-                    return m;
-                }),
-                Total = items.TotalCount
-            };
-
-            return Json(gridModel);
-        }
-        [HttpPost]
-        public ActionResult ReportBestCustomersByNumberOfOrdersList(DataSourceRequest command, BestCustomersReportModel model)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return Content("");
-
-            DateTime? startDateValue = (model.StartDate == null) ? null
-                            : (DateTime?)_dateTimeHelper.ConvertToUtcTime(model.StartDate.Value, _dateTimeHelper.CurrentTimeZone);
-
-            DateTime? endDateValue = (model.EndDate == null) ? null
-                            : (DateTime?)_dateTimeHelper.ConvertToUtcTime(model.EndDate.Value, _dateTimeHelper.CurrentTimeZone).AddDays(1);
-
-            OrderStatus? orderStatus = model.OrderStatusId > 0 ? (OrderStatus?)(model.OrderStatusId) : null;
-            PaymentStatus? paymentStatus = model.PaymentStatusId > 0 ? (PaymentStatus?)(model.PaymentStatusId) : null;
-            ShippingStatus? shippingStatus = model.ShippingStatusId > 0 ? (ShippingStatus?)(model.ShippingStatusId) : null;
-
-
-            var items = _customerReportService.GetBestCustomersReport(startDateValue, endDateValue,
-                orderStatus, paymentStatus, shippingStatus, 2, command.Page - 1, command.PageSize);
-            var gridModel = new DataSourceResult
-            {
-                Data = items.Select(x =>
-                {
-                    var m = new BestCustomerReportLineModel
-                    {
-                        CustomerId = x.CustomerId,
-                        OrderTotal = _priceFormatter.FormatPrice(x.OrderTotal, true, false),
-                        OrderCount = x.OrderCount,
-                    };
-                    var customer = _customerService.GetCustomerById(x.CustomerId);
-                    if (customer != null)
-                    {
-                        m.CustomerName = customer.IsRegistered() ? customer.Email : _localizationService.GetResource("Admin.Customers.Guest");
-                    }
-                    return m;
-                }),
-                Total = items.TotalCount
-            };
-
-            return Json(gridModel);
-        }
-
-        [ChildActionOnly]
-        public ActionResult ReportRegisteredCustomers()
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return Content("");
-
-            return PartialView();
-        }
-        [HttpPost]
-        public ActionResult ReportRegisteredCustomersList(DataSourceRequest command)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return Content("");
-
-            var model = GetReportRegisteredCustomersModel();
-            var gridModel = new DataSourceResult
-            {
-                Data = model,
-                Total = model.Count
-            };
-
-            return Json(gridModel);
-        }
-        
-        #endregion
-
-        #region Current shopping cart/ wishlist
-
-        [HttpPost]
-        public ActionResult GetCartList(int customerId, int cartTypeId)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return Content("");
-
-            var customer = _customerService.GetCustomerById(customerId);
-            var cart = customer.ShoppingCartItems.Where(x => x.ShoppingCartTypeId == cartTypeId).ToList();
-
-            var gridModel = new DataSourceResult
-            {
-                Data = cart.Select(sci =>
-                {
-                    decimal taxRate;
-                    var store = _storeService.GetStoreById(sci.StoreId); 
-                    var sciModel = new ShoppingCartItemModel
-                    {
-                        Id = sci.Id,
-                        Store = store != null ? store.Name : "Unknown",
-                        ProductId = sci.ProductId,
-                        Quantity = sci.Quantity,
-                        ProductName = sci.Product.Name,
-                        UnitPrice = _priceFormatter.FormatPrice(_taxService.GetProductPrice(sci.Product, _priceCalculationService.GetUnitPrice(sci), out taxRate)),
-                        Total = _priceFormatter.FormatPrice(_taxService.GetProductPrice(sci.Product, _priceCalculationService.GetSubTotal(sci), out taxRate)),
-                        UpdatedOn = _dateTimeHelper.ConvertToUserTime(sci.UpdatedOnUtc, DateTimeKind.Utc)
-                    };
-                    return sciModel;
-                }),
-                Total = cart.Count
-            };
-
-            return Json(gridModel);
-        }
-
         #endregion
 
         #region Activity log

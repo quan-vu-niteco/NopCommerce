@@ -26,7 +26,6 @@ namespace Nop.Admin.Controllers
         private readonly ICountryService _countryService;
         private readonly IStateProvinceService _stateProvinceService;
         private readonly ILocalizationService _localizationService;
-	    private readonly IAddressService _addressService;
         private readonly IPermissionService _permissionService;
 	    private readonly ILocalizedEntityService _localizedEntityService;
         private readonly ILanguageService _languageService;
@@ -42,7 +41,6 @@ namespace Nop.Admin.Controllers
         public CountryController(ICountryService countryService,
             IStateProvinceService stateProvinceService, 
             ILocalizationService localizationService,
-            IAddressService addressService, 
             IPermissionService permissionService,
             ILocalizedEntityService localizedEntityService, 
             ILanguageService languageService,
@@ -54,7 +52,6 @@ namespace Nop.Admin.Controllers
             this._countryService = countryService;
             this._stateProvinceService = stateProvinceService;
             this._localizationService = localizationService;
-            this._addressService = addressService;
             this._permissionService = permissionService;
             this._localizedEntityService = localizedEntityService;
             this._languageService = languageService;
@@ -283,8 +280,6 @@ namespace Nop.Admin.Controllers
 
             try
             {
-                if (_addressService.GetAddressTotalByCountryId(country.Id) > 0)
-                    throw new NopException("The country can't be deleted. It has associated addresses");
 
                 _countryService.DeleteCountry(country);
 
@@ -455,11 +450,7 @@ namespace Nop.Admin.Controllers
             var state = _stateProvinceService.GetStateProvinceById(id);
             if (state == null)
                 throw new ArgumentException("No state found with the specified id");
-
-            if (_addressService.GetAddressTotalByStateProvinceId(state.Id) > 0)
-            {
-                return Json(new DataSourceResult { Errors = _localizationService.GetResource("Admin.Configuration.Countries.States.CantDeleteWithAddresses") });
-            }
+        
 
             //int countryId = state.CountryId;
             _stateProvinceService.DeleteStateProvince(state);

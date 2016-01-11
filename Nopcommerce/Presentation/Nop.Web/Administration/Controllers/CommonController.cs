@@ -12,7 +12,7 @@ using Nop.Admin.Extensions;
 using Nop.Admin.Models.Common;
 using Nop.Core;
 using Nop.Core.Caching;
-using Nop.Core.Domain.Catalog;
+
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Seo;
 using Nop.Core.Plugins;
@@ -21,11 +21,10 @@ using Nop.Services.Customers;
 using Nop.Services.Directory;
 using Nop.Services.Helpers;
 using Nop.Services.Localization;
-using Nop.Services.Orders;
-using Nop.Services.Payments;
+
 using Nop.Services.Security;
 using Nop.Services.Seo;
-using Nop.Services.Shipping;
+
 using Nop.Services.Stores;
 using Nop.Web.Framework.Controllers;
 using Nop.Web.Framework.Kendoui;
@@ -37,9 +36,9 @@ namespace Nop.Admin.Controllers
     {
         #region Fields
 
-        private readonly IPaymentService _paymentService;
-        private readonly IShippingService _shippingService;
-        private readonly IShoppingCartService _shoppingCartService;
+       
+       
+        
         private readonly ICurrencyService _currencyService;
         private readonly IMeasureService _measureService;
         private readonly ICustomerService _customerService;
@@ -55,16 +54,13 @@ namespace Nop.Admin.Controllers
         private readonly ILocalizationService _localizationService;
         private readonly ISearchTermService _searchTermService;
         private readonly IStoreService _storeService;
-        private readonly CatalogSettings _catalogSettings;
         private readonly HttpContextBase _httpContext;
 
         #endregion
 
         #region Constructors
 
-        public CommonController(IPaymentService paymentService, 
-            IShippingService shippingService,
-            IShoppingCartService shoppingCartService, 
+        public CommonController( 
             ICurrencyService currencyService, 
             IMeasureService measureService,
             ICustomerService customerService, 
@@ -80,12 +76,8 @@ namespace Nop.Admin.Controllers
             ILocalizationService localizationService,
             ISearchTermService searchTermService,
             IStoreService storeService,
-            CatalogSettings catalogSettings,
             HttpContextBase httpContext)
         {
-            this._paymentService = paymentService;
-            this._shippingService = shippingService;
-            this._shoppingCartService = shoppingCartService;
             this._currencyService = currencyService;
             this._measureService = measureService;
             this._customerService = customerService;
@@ -101,7 +93,6 @@ namespace Nop.Admin.Controllers
             this._localizationService = localizationService;
             this._searchTermService = searchTermService;
             this._storeService = storeService;
-            this._catalogSettings = catalogSettings;
             this._httpContext = httpContext;
         }
 
@@ -287,35 +278,6 @@ namespace Nop.Admin.Controllers
                 });
             }
 
-            //shipping rate coputation methods
-            var srcMethods = _shippingService.LoadActiveShippingRateComputationMethods();
-            if (srcMethods.Count == 0)
-                model.Add(new SystemWarningModel
-                {
-                    Level = SystemWarningLevel.Fail,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.Shipping.NoComputationMethods")
-                });
-            if (srcMethods.Count(x => x.ShippingRateComputationMethodType == ShippingRateComputationMethodType.Offline) > 1)
-                model.Add(new SystemWarningModel
-                {
-                    Level = SystemWarningLevel.Warning,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.Shipping.OnlyOneOffline")
-                });
-
-            //payment methods
-            if (_paymentService.LoadActivePaymentMethods().Any())
-                model.Add(new SystemWarningModel
-                {
-                    Level = SystemWarningLevel.Pass,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.PaymentMethods.OK")
-                });
-            else
-                model.Add(new SystemWarningModel
-                {
-                    Level = SystemWarningLevel.Fail,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.PaymentMethods.NoActive")
-                });
-
             //incompatible plugins
             if (PluginManager.IncompatiblePlugins != null)
                 foreach (var pluginName in PluginManager.IncompatiblePlugins)
@@ -324,24 +286,7 @@ namespace Nop.Admin.Controllers
                         Level = SystemWarningLevel.Warning,
                         Text = string.Format(_localizationService.GetResource("Admin.System.Warnings.IncompatiblePlugin"), pluginName )
                     });
-
-            //performance settings
-            if (!_catalogSettings.IgnoreStoreLimitations && _storeService.GetAllStores().Count == 1)
-            {
-                model.Add(new SystemWarningModel
-                {
-                    Level = SystemWarningLevel.Warning,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.Performance.IgnoreStoreLimitations")
-                });
-            }
-            if (!_catalogSettings.IgnoreAcl)
-            {
-                model.Add(new SystemWarningModel
-                {
-                    Level = SystemWarningLevel.Warning,
-                    Text = _localizationService.GetResource("Admin.System.Warnings.Performance.IgnoreAcl")
-                });
-            }
+            
 
             //validate write permissions (the same procedure like during installation)
             var dirPermissionsOk = true;
@@ -444,20 +389,7 @@ namespace Nop.Admin.Controllers
 
             return View(model);
         }
-
-        [HttpPost, ActionName("Maintenance")]
-        [FormValueRequired("delete-abondoned-carts")]
-        public ActionResult MaintenanceDeleteAbandonedCarts(MaintenanceModel model)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageMaintenance))
-                return AccessDeniedView();
-
-            var olderThanDateValue = _dateTimeHelper.ConvertToUtcTime(model.DeleteAbandonedCarts.OlderThan, _dateTimeHelper.CurrentTimeZone);
-
-            model.DeleteAbandonedCarts.NumberOfDeletedItems = _shoppingCartService.DeleteExpiredShoppingCartItems(olderThanDateValue);
-            return View(model);
-        }
-
+      
 
         [HttpPost, ActionName("Maintenance")]
         [FormValueRequired("delete-exported-files")]

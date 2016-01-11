@@ -9,7 +9,7 @@ using Nop.Web.Framework.Seo;
 
 namespace Nop.Web.Controllers
 {
-    [CheckAffiliate]
+
     [StoreClosed]
     [PublicStoreAllowNavigation]
     [LanguageSeoCode]

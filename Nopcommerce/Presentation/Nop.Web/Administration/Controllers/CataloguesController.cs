@@ -5,10 +5,8 @@ using System.Web.Mvc;
 using Nop.Admin.Extensions;
 using Nop.Admin.Models.News;
 using Nop.Core.Domain.News;
-using Nop.Core.Domain.Discounts;
 using Nop.Services.News;
 using Nop.Services.Customers;
-using Nop.Services.Discounts;
 using Nop.Services.ExportImport;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
@@ -36,7 +34,6 @@ namespace Nop.Admin.Controllers
         private readonly ILanguageService _languageService;
         private readonly ILocalizationService _localizationService;
         private readonly ILocalizedEntityService _localizedEntityService;
-        private readonly IDiscountService _discountService;
         private readonly IPermissionService _permissionService;
         private readonly IAclService _aclService;
         private readonly IStoreService _storeService;
@@ -58,7 +55,6 @@ namespace Nop.Admin.Controllers
             ILanguageService languageService,
             ILocalizationService localizationService, 
             ILocalizedEntityService localizedEntityService,
-            IDiscountService discountService,
             IPermissionService permissionService,
             IAclService aclService, 
             IStoreService storeService,
@@ -76,7 +72,6 @@ namespace Nop.Admin.Controllers
             this._languageService = languageService;
             this._localizationService = localizationService;
             this._localizedEntityService = localizedEntityService;
-            this._discountService = discountService;
             this._permissionService = permissionService;
             this._vendorService = vendorService;
             this._aclService = aclService;

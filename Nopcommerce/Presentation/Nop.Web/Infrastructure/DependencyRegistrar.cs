@@ -13,10 +13,7 @@ namespace Nop.Web.Infrastructure
         public virtual void Register(ContainerBuilder builder, ITypeFinder typeFinder)
         {
             //we cache presentation models between requests
-            builder.RegisterType<BlogController>()
-                .WithParameter(ResolvedParameter.ForNamed<ICacheManager>("nop_cache_static"));
-            builder.RegisterType<CatalogController>()
-                .WithParameter(ResolvedParameter.ForNamed<ICacheManager>("nop_cache_static"));
+          
             builder.RegisterType<CountryController>()
                 .WithParameter(ResolvedParameter.ForNamed<ICacheManager>("nop_cache_static"));
             builder.RegisterType<CommonController>()
@@ -24,10 +21,6 @@ namespace Nop.Web.Infrastructure
             builder.RegisterType<NewsController>()
                 .WithParameter(ResolvedParameter.ForNamed<ICacheManager>("nop_cache_static"));
             builder.RegisterType<PollController>()
-                .WithParameter(ResolvedParameter.ForNamed<ICacheManager>("nop_cache_static"));
-            builder.RegisterType<ProductController>()
-                .WithParameter(ResolvedParameter.ForNamed<ICacheManager>("nop_cache_static"));
-            builder.RegisterType<ShoppingCartController>()
                 .WithParameter(ResolvedParameter.ForNamed<ICacheManager>("nop_cache_static"));
             builder.RegisterType<TopicController>()
                 .WithParameter(ResolvedParameter.ForNamed<ICacheManager>("nop_cache_static"));

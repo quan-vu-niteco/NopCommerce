@@ -17,11 +17,10 @@ using Nop.Services.Cms;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
 using Nop.Services.Localization;
-using Nop.Services.Payments;
+
 using Nop.Services.Security;
-using Nop.Services.Shipping;
+
 using Nop.Services.Stores;
-using Nop.Services.Tax;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Kendoui;
 
@@ -39,8 +38,6 @@ namespace Nop.Admin.Controllers
         private readonly ILanguageService _languageService;
 	    private readonly ISettingService _settingService;
 	    private readonly IStoreService _storeService;
-        private readonly PaymentSettings _paymentSettings;
-        private readonly ShippingSettings _shippingSettings;
         private readonly TaxSettings _taxSettings;
         private readonly ExternalAuthenticationSettings _externalAuthenticationSettings;
         private readonly WidgetSettings _widgetSettings;
@@ -56,8 +53,6 @@ namespace Nop.Admin.Controllers
             ILanguageService languageService,
             ISettingService settingService, 
             IStoreService storeService,
-            PaymentSettings paymentSettings,
-            ShippingSettings shippingSettings,
             TaxSettings taxSettings, 
             ExternalAuthenticationSettings externalAuthenticationSettings, 
             WidgetSettings widgetSettings)
@@ -70,8 +65,6 @@ namespace Nop.Admin.Controllers
             this._languageService = languageService;
             this._settingService = settingService;
             this._storeService = storeService;
-            this._paymentSettings = paymentSettings;
-            this._shippingSettings = shippingSettings;
             this._taxSettings = taxSettings;
             this._externalAuthenticationSettings = externalAuthenticationSettings;
             this._widgetSettings = widgetSettings;
@@ -120,22 +113,7 @@ namespace Nop.Admin.Controllers
                 //for example, discount requirement plugins require additional parameters and attached to a certain discount
                 var pluginInstance = pluginDescriptor.Instance();
                 string configurationUrl = null;
-                if (pluginInstance is IPaymentMethod)
-                {
-                    //payment plugin
-                    configurationUrl = Url.Action("ConfigureMethod", "Payment", new { systemName = pluginDescriptor.SystemName });
-                }
-                else if (pluginInstance is IShippingRateComputationMethod)
-                {
-                    //shipping rate computation method
-                    configurationUrl = Url.Action("ConfigureProvider", "Shipping", new { systemName = pluginDescriptor.SystemName });
-                }
-                else if (pluginInstance is ITaxProvider)
-                {
-                    //tax provider
-                    configurationUrl = Url.Action("ConfigureProvider", "Tax", new { systemName = pluginDescriptor.SystemName });
-                }
-                else if (pluginInstance is IExternalAuthenticationMethod)
+                if (pluginInstance is IExternalAuthenticationMethod)
                 {
                     //external auth method
                     configurationUrl = Url.Action("ConfigureMethod", "ExternalAuthentication", new { systemName = pluginDescriptor.SystemName });
@@ -151,30 +129,8 @@ namespace Nop.Admin.Controllers
                     configurationUrl = Url.Action("ConfigureMiscPlugin", "Plugin", new { systemName = pluginDescriptor.SystemName });
                 }
                 pluginModel.ConfigurationUrl = configurationUrl;
-
-
-
-
-                //enabled/disabled (only for some plugin types)
-                if (pluginInstance is IPaymentMethod)
-                {
-                    //payment plugin
-                    pluginModel.CanChangeEnabled = true;
-                    pluginModel.IsEnabled = ((IPaymentMethod)pluginInstance).IsPaymentMethodActive(_paymentSettings);
-                }
-                else if (pluginInstance is IShippingRateComputationMethod)
-                {
-                    //shipping rate computation method
-                    pluginModel.CanChangeEnabled = true;
-                    pluginModel.IsEnabled = ((IShippingRateComputationMethod)pluginInstance).IsShippingRateComputationMethodActive(_shippingSettings);
-                }
-                else if (pluginInstance is ITaxProvider)
-                {
-                    //tax provider
-                    pluginModel.CanChangeEnabled = true;
-                    pluginModel.IsEnabled = pluginDescriptor.SystemName.Equals(_taxSettings.ActiveTaxProviderSystemName, StringComparison.InvariantCultureIgnoreCase);
-                }
-                else if (pluginInstance is IExternalAuthenticationMethod)
+               
+                if (pluginInstance is IExternalAuthenticationMethod)
                 {
                     //external auth method
                     pluginModel.CanChangeEnabled = true;
@@ -398,67 +354,8 @@ namespace Nop.Admin.Controllers
                 if (pluginDescriptor.Installed)
                 {
                     var pluginInstance = pluginDescriptor.Instance();
-                    if (pluginInstance is IPaymentMethod)
-                    {
-                        //payment plugin
-                        var pm = (IPaymentMethod)pluginInstance;
-                        if (pm.IsPaymentMethodActive(_paymentSettings))
-                        {
-                            if (!model.IsEnabled)
-                            {
-                                //mark as disabled
-                                _paymentSettings.ActivePaymentMethodSystemNames.Remove(pm.PluginDescriptor.SystemName);
-                                _settingService.SaveSetting(_paymentSettings);
-                            }
-                        }
-                        else
-                        {
-                            if (model.IsEnabled)
-                            {
-                                //mark as active
-                                _paymentSettings.ActivePaymentMethodSystemNames.Add(pm.PluginDescriptor.SystemName);
-                                _settingService.SaveSetting(_paymentSettings);
-                            }
-                        }
-                    }
-                    else if (pluginInstance is IShippingRateComputationMethod)
-                    {
-                        //shipping rate computation method
-                        var srcm = (IShippingRateComputationMethod)pluginInstance;
-                        if (srcm.IsShippingRateComputationMethodActive(_shippingSettings))
-                        {
-                            if (!model.IsEnabled)
-                            {
-                                //mark as disabled
-                                _shippingSettings.ActiveShippingRateComputationMethodSystemNames.Remove(srcm.PluginDescriptor.SystemName);
-                                _settingService.SaveSetting(_shippingSettings);
-                            }
-                        }
-                        else
-                        {
-                            if (model.IsEnabled)
-                            {
-                                //mark as active
-                                _shippingSettings.ActiveShippingRateComputationMethodSystemNames.Add(srcm.PluginDescriptor.SystemName);
-                                _settingService.SaveSetting(_shippingSettings);
-                            }
-                        }
-                    }
-                    else if (pluginInstance is ITaxProvider)
-                    {
-                        //tax provider
-                        if (model.IsEnabled)
-                        {
-                            _taxSettings.ActiveTaxProviderSystemName = model.SystemName;
-                            _settingService.SaveSetting(_taxSettings);
-                        }
-                        else
-                        {
-                            _taxSettings.ActiveTaxProviderSystemName = "";
-                            _settingService.SaveSetting(_taxSettings);
-                        }
-                    }
-                    else if (pluginInstance is IExternalAuthenticationMethod)
+                   
+                    if (pluginInstance is IExternalAuthenticationMethod)
                     {
                         //external auth method
                         var eam = (IExternalAuthenticationMethod)pluginInstance;

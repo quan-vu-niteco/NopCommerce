@@ -40,7 +40,6 @@ namespace Nop.Web.Controllers
         private readonly IPictureService _pictureService;
         private readonly ILocalizationService _localizationService;
         private readonly IDateTimeHelper _dateTimeHelper;
-        private readonly IWorkflowMessageService _workflowMessageService;
         private readonly IWebHelper _webHelper;
         private readonly ICacheManager _cacheManager;
         private readonly ICustomerActivityService _customerActivityService;
@@ -60,7 +59,7 @@ namespace Nop.Web.Controllers
             IWorkContext workContext, IStoreContext storeContext, 
             IPictureService pictureService, ILocalizationService localizationService,
             IDateTimeHelper dateTimeHelper,
-            IWorkflowMessageService workflowMessageService, IWebHelper webHelper,
+          IWebHelper webHelper,
             ICacheManager cacheManager, ICustomerActivityService customerActivityService,
             IStoreMappingService storeMappingService,
             MediaSettings mediaSettings, NewsSettings newsSettings,
@@ -73,7 +72,6 @@ namespace Nop.Web.Controllers
             this._pictureService = pictureService;
             this._localizationService = localizationService;
             this._dateTimeHelper = dateTimeHelper;
-            this._workflowMessageService = workflowMessageService;
             this._webHelper = webHelper;
             this._cacheManager = cacheManager;
             this._customerActivityService = customerActivityService;
@@ -309,11 +307,6 @@ namespace Nop.Web.Controllers
                 //update totals
                 newsItem.CommentCount = newsItem.NewsComments.Count;
                 _newsService.UpdateNews(newsItem);
-
-
-                //notify a store owner;
-                if (_newsSettings.NotifyAboutNewNewsComments)
-                    _workflowMessageService.SendNewsCommentNotificationMessage(comment, _localizationSettings.DefaultAdminLanguageId);
 
                 //activity log
                 _customerActivityService.InsertActivity("PublicStore.AddNewsComment", _localizationService.GetResource("ActivityLog.PublicStore.AddNewsComment"));

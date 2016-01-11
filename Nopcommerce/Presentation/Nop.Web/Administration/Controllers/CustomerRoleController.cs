@@ -5,9 +5,8 @@ using System.Web.Mvc;
 using Nop.Admin.Extensions;
 using Nop.Admin.Models.Customers;
 using Nop.Core;
-using Nop.Core.Domain.Catalog;
+
 using Nop.Core.Domain.Customers;
-using Nop.Services.Catalog;
 using Nop.Services.Customers;
 using Nop.Services.Localization;
 using Nop.Services.Logging;
@@ -28,9 +27,6 @@ namespace Nop.Admin.Controllers
         private readonly ILocalizationService _localizationService;
         private readonly ICustomerActivityService _customerActivityService;
         private readonly IPermissionService _permissionService;
-        private readonly IProductService _productService;
-        private readonly ICategoryService _categoryService;
-        private readonly IManufacturerService _manufacturerService;
         private readonly IStoreService _storeService;
         private readonly IVendorService _vendorService;
         private readonly IWorkContext _workContext;
@@ -43,9 +39,6 @@ namespace Nop.Admin.Controllers
             ILocalizationService localizationService, 
             ICustomerActivityService customerActivityService,
             IPermissionService permissionService,
-            IProductService productService,
-            ICategoryService categoryService,
-            IManufacturerService manufacturerService,
             IStoreService storeService,
             IVendorService vendorService,
             IWorkContext workContext)
@@ -54,9 +47,6 @@ namespace Nop.Admin.Controllers
             this._localizationService = localizationService;
             this._customerActivityService = customerActivityService;
             this._permissionService = permissionService;
-            this._productService = productService;
-            this._categoryService = categoryService;
-            this._manufacturerService = manufacturerService;
             this._storeService = storeService;
             this._vendorService = vendorService;
             this._workContext = workContext;
@@ -70,11 +60,6 @@ namespace Nop.Admin.Controllers
         protected CustomerRoleModel PrepareCustomerRoleModel(CustomerRole customerRole)
         {
             var model = customerRole.ToModel();
-            var product = _productService.GetProductById(customerRole.PurchasedWithProductId);
-            if (product != null)
-            {
-                model.PurchasedWithProductName = product.Name;
-            }
             return model;
         }
 
@@ -233,104 +218,6 @@ namespace Nop.Admin.Controllers
             }
 
 		}
-
-
-
-        public ActionResult AssociateProductToCustomerRolePopup()
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return AccessDeniedView();
-
-            var model = new CustomerRoleModel.AssociateProductToCustomerRoleModel();
-            //a vendor should have access only to his products
-            model.IsLoggedInAsVendor = _workContext.CurrentVendor != null;
-
-            //categories
-            model.AvailableCategories.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
-            var categories = _categoryService.GetAllCategories(showHidden: true);
-            foreach (var c in categories)
-                model.AvailableCategories.Add(new SelectListItem { Text = c.GetFormattedBreadCrumb(categories), Value = c.Id.ToString() });
-
-            //manufacturers
-            model.AvailableManufacturers.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
-            foreach (var m in _manufacturerService.GetAllManufacturers(showHidden: true))
-                model.AvailableManufacturers.Add(new SelectListItem { Text = m.Name, Value = m.Id.ToString() });
-
-            //stores
-            model.AvailableStores.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
-            foreach (var s in _storeService.GetAllStores())
-                model.AvailableStores.Add(new SelectListItem { Text = s.Name, Value = s.Id.ToString() });
-
-            //vendors
-            model.AvailableVendors.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
-            foreach (var v in _vendorService.GetAllVendors(showHidden: true))
-                model.AvailableVendors.Add(new SelectListItem { Text = v.Name, Value = v.Id.ToString() });
-
-            //product types
-            model.AvailableProductTypes = ProductType.SimpleProduct.ToSelectList(false).ToList();
-            model.AvailableProductTypes.Insert(0, new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult AssociateProductToCustomerRolePopupList(DataSourceRequest command,
-            CustomerRoleModel.AssociateProductToCustomerRoleModel model)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return AccessDeniedView();
-
-            //a vendor should have access only to his products
-            if (_workContext.CurrentVendor != null)
-            {
-                model.SearchVendorId = _workContext.CurrentVendor.Id;
-            }
-
-            var products = _productService.SearchProducts(
-                categoryIds: new List<int> { model.SearchCategoryId },
-                manufacturerId: model.SearchManufacturerId,
-                storeId: model.SearchStoreId,
-                vendorId: model.SearchVendorId,
-                productType: model.SearchProductTypeId > 0 ? (ProductType?)model.SearchProductTypeId : null,
-                keywords: model.SearchProductName,
-                pageIndex: command.Page - 1,
-                pageSize: command.PageSize,
-                showHidden: true
-                );
-            var gridModel = new DataSourceResult();
-            gridModel.Data = products.Select(x => x.ToModel());
-            gridModel.Total = products.TotalCount;
-
-            return Json(gridModel);
-        }
-
-        [HttpPost]
-        [FormValueRequired("save")]
-        public ActionResult AssociateProductToCustomerRolePopup(string btnId, string productIdInput,
-            string productNameInput, CustomerRoleModel.AssociateProductToCustomerRoleModel model)
-        {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCustomers))
-                return AccessDeniedView();
-
-            var associatedProduct = _productService.GetProductById(model.AssociatedToProductId);
-            if (associatedProduct == null)
-                return Content("Cannot load a product");
-
-            //a vendor should have access only to his products
-            if (_workContext.CurrentVendor != null && associatedProduct.VendorId != _workContext.CurrentVendor.Id)
-                return Content("This is not your product");
-
-            //a vendor should have access only to his products
-            model.IsLoggedInAsVendor = _workContext.CurrentVendor != null;
-            ViewBag.RefreshPage = true;
-            ViewBag.productIdInput = productIdInput;
-            ViewBag.productNameInput = productNameInput;
-            ViewBag.btnId = btnId;
-            ViewBag.productId = associatedProduct.Id;
-            ViewBag.productName = associatedProduct.Name;
-            return View(model);
-        }
-
 		#endregion
     }
 }
