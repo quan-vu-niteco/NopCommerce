@@ -249,7 +249,6 @@ namespace Nop.Admin.Controllers
             var model = new MaintenanceModel();
             model.DeleteGuests.EndDate = DateTime.UtcNow.AddDays(-7);
             model.DeleteGuests.OnlyWithoutShoppingCart = true;
-            model.DeleteAbandonedCarts.OlderThan = DateTime.UtcNow.AddDays(-182);
             return View(model);
         }
 
