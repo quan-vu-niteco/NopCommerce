@@ -17,9 +17,6 @@ namespace Nop.Core.Domain.Common
         public bool HideAdvertisementsOnAdminArea { get; set; }
 
         public bool SitemapEnabled { get; set; }
-        public bool SitemapIncludeCategories { get; set; }
-        public bool SitemapIncludeManufacturers { get; set; }
-        public bool SitemapIncludeProducts { get; set; }
 
         /// <summary>
         /// Gets a sets a value indicating whether to display a warning if java-script is disabled

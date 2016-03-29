@@ -121,11 +121,7 @@ namespace Nop.Admin.Models.Settings
             [AllowHtml]
             public string DefaultMetaDescription { get; set; }
             public bool DefaultMetaDescription_OverrideForStore { get; set; }
-
-            [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.GenerateProductMetaDescription")]
-            [AllowHtml]
-            public bool GenerateProductMetaDescription { get; set; }
-            public bool GenerateProductMetaDescription_OverrideForStore { get; set; }
+          
 
             [NopResourceDisplayName("Admin.Configuration.Settings.GeneralCommon.ConvertNonWesternChars")]
             public bool ConvertNonWesternChars { get; set; }
