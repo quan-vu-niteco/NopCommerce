@@ -3,7 +3,6 @@ using AutoMapper;
 using Nop.Admin.Models.Cms;
 using Nop.Admin.Models.Common;
 using Nop.Admin.Models.Customers;
-using Nop.Admin.Models.Directory;
 using Nop.Admin.Models.ExternalAuthentication;
 
 using Nop.Admin.Models.Localization;

@@ -234,16 +234,6 @@ namespace Nop.Services.Customers
                         z.Attribute.Value.Contains(phone)))
                     .Select(z => z.Customer);
             }
-            //search by zip
-            if (!String.IsNullOrWhiteSpace(zipPostalCode))
-            {
-                query = query
-                    .Join(_gaRepository.Table, x => x.Id, y => y.EntityId, (x, y) => new { Customer = x, Attribute = y })
-                    .Where((z => z.Attribute.KeyGroup == "Customer" &&
-                        z.Attribute.Key == SystemCustomerAttributeNames.ZipPostalCode &&
-                        z.Attribute.Value.Contains(zipPostalCode)))
-                    .Select(z => z.Customer);
-            }
             query = query.OrderByDescending(c => c.CreatedOnUtc);
 
             var customers = new PagedList<Customer>(query, pageIndex, pageSize);

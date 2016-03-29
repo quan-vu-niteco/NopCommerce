@@ -195,10 +195,6 @@ namespace Nop.Services.ExportImport
                     var company = customer.GetAttribute<string>(SystemCustomerAttributeNames.Company);
                     var streetAddress = customer.GetAttribute<string>(SystemCustomerAttributeNames.StreetAddress);
                     var streetAddress2 = customer.GetAttribute<string>(SystemCustomerAttributeNames.StreetAddress2);
-                    var zipPostalCode = customer.GetAttribute<string>(SystemCustomerAttributeNames.ZipPostalCode);
-                    var city = customer.GetAttribute<string>(SystemCustomerAttributeNames.City);
-                    var countryId = customer.GetAttribute<int>(SystemCustomerAttributeNames.CountryId);
-                    var stateProvinceId = customer.GetAttribute<int>(SystemCustomerAttributeNames.StateProvinceId);
                     var phone = customer.GetAttribute<string>(SystemCustomerAttributeNames.Phone);
                     var fax = customer.GetAttribute<string>(SystemCustomerAttributeNames.Fax);
                     var timeZoneId = customer.GetAttribute<string>(SystemCustomerAttributeNames.TimeZoneId);
@@ -223,18 +219,6 @@ namespace Nop.Services.ExportImport
                     col++;
 
                     worksheet.Cells[row, col].Value = streetAddress2;
-                    col++;
-
-                    worksheet.Cells[row, col].Value = zipPostalCode;
-                    col++;
-
-                    worksheet.Cells[row, col].Value = city;
-                    col++;
-
-                    worksheet.Cells[row, col].Value = countryId;
-                    col++;
-
-                    worksheet.Cells[row, col].Value = stateProvinceId;
                     col++;
 
                     worksheet.Cells[row, col].Value = phone;
@@ -319,14 +303,9 @@ namespace Nop.Services.ExportImport
                 xmlWriter.WriteElementString("LastName", null, customer.GetAttribute<string>(SystemCustomerAttributeNames.LastName));
                 xmlWriter.WriteElementString("Gender", null, customer.GetAttribute<string>(SystemCustomerAttributeNames.Gender));
                 xmlWriter.WriteElementString("Company", null, customer.GetAttribute<string>(SystemCustomerAttributeNames.Company));
-
-                xmlWriter.WriteElementString("CountryId", null, customer.GetAttribute<int>(SystemCustomerAttributeNames.CountryId).ToString());
+              
                 xmlWriter.WriteElementString("StreetAddress", null, customer.GetAttribute<string>(SystemCustomerAttributeNames.StreetAddress));
                 xmlWriter.WriteElementString("StreetAddress2", null, customer.GetAttribute<string>(SystemCustomerAttributeNames.StreetAddress2));
-                xmlWriter.WriteElementString("ZipPostalCode", null, customer.GetAttribute<string>(SystemCustomerAttributeNames.ZipPostalCode));
-                xmlWriter.WriteElementString("City", null, customer.GetAttribute<string>(SystemCustomerAttributeNames.City));
-                xmlWriter.WriteElementString("CountryId", null, customer.GetAttribute<int>(SystemCustomerAttributeNames.CountryId).ToString());
-                xmlWriter.WriteElementString("StateProvinceId", null, customer.GetAttribute<int>(SystemCustomerAttributeNames.StateProvinceId).ToString());
                 xmlWriter.WriteElementString("Phone", null, customer.GetAttribute<string>(SystemCustomerAttributeNames.Phone));
                 xmlWriter.WriteElementString("Fax", null, customer.GetAttribute<string>(SystemCustomerAttributeNames.Fax));
                 xmlWriter.WriteElementString("TimeZoneId", null, customer.GetAttribute<string>(SystemCustomerAttributeNames.TimeZoneId));

@@ -11,10 +11,7 @@ namespace Nop.Core.Domain.Customers
         public static string Company { get { return "Company"; } }
         public static string StreetAddress { get { return "StreetAddress"; } }
         public static string StreetAddress2 { get { return "StreetAddress2"; } }
-        public static string ZipPostalCode { get { return "ZipPostalCode"; } }
-        public static string City { get { return "City"; } }
-        public static string CountryId { get { return "CountryId"; } }
-        public static string StateProvinceId { get { return "StateProvinceId"; } }
+       
         public static string Phone { get { return "Phone"; } }
         public static string Fax { get { return "Fax"; } }
         public static string TimeZoneId { get { return "TimeZoneId"; } }
@@ -40,10 +37,6 @@ namespace Nop.Core.Domain.Customers
         public static string SelectedShippingOption { get { return "SelectedShippingOption"; } }
         //value indicating whether customer chose "pick up in store" option
         public static string SelectedPickUpInStore { get { return "SelectedPickUpInStore"; } }
-        public static string CheckoutAttributes { get { return "CheckoutAttributes"; } }
-        public static string OfferedShippingOptions { get { return "OfferedShippingOptions"; } }
-        public static string LastContinueShoppingPage { get { return "LastContinueShoppingPage"; } }
-        public static string NotifiedAboutNewPrivateMessages { get { return "NotifiedAboutNewPrivateMessages"; } }
         public static string WorkingThemeName { get { return "WorkingThemeName"; } }
         public static string UseRewardPointsDuringCheckout { get { return "UseRewardPointsDuringCheckout"; } }
     }
