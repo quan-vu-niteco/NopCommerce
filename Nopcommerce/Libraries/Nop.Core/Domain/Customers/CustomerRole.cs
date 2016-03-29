@@ -39,12 +39,6 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets the customer role system name
         /// </summary>
         public string SystemName { get; set; }
-
-        /// <summary>
-        /// Gets or sets a product identifier that is required by this customer role. 
-        /// A customer is added to this customer role once a specified product is purchased.
-        /// </summary>
-        public int PurchasedWithProductId { get; set; }
         
         /// <summary>
         /// Gets or sets the permission records

@@ -117,7 +117,7 @@ namespace Nop.Web.Controllers
                 //If a size has been set in the view, we use it in priority
                 int pictureSize = newsThumbPictureSize.HasValue ? newsThumbPictureSize.Value : _mediaSettings.NewsThumbPictureSize;
                 //prepare picture model
-                var defaultNewsPictureCacheKey = string.Format(ModelCacheEventConsumer.PRODUCT_DEFAULTPICTURE_MODEL_KEY, newsItem.Id, pictureSize, true, _workContext.WorkingLanguage.Id, _webHelper.IsCurrentConnectionSecured(), _storeContext.CurrentStore.Id);
+                var defaultNewsPictureCacheKey = string.Format(ModelCacheEventConsumer.NEWS_DEFAULTPICTURE_MODEL_KEY, newsItem.Id, pictureSize, true, _workContext.WorkingLanguage.Id, _webHelper.IsCurrentConnectionSecured(), _storeContext.CurrentStore.Id);
                 model.DefaultPictureModel = _cacheManager.Get(defaultNewsPictureCacheKey, () =>
                 {
                     var picture = _pictureService.GetPicturesByNewsId(newsItem.Id, 1).FirstOrDefault();

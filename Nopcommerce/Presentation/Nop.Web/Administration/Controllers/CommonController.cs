@@ -436,17 +436,13 @@ namespace Nop.Admin.Controllers
         [ChildActionOnly]
         public ActionResult PopularSearchTermsReport()
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
-                return Content("");
-
             return PartialView();
         }
 
         [HttpPost]
         public ActionResult PopularSearchTermsReport(DataSourceRequest command)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageProducts))
-                return AccessDeniedView();
+          
 
             var searchTermRecordLines = _searchTermService.GetStats(command.Page - 1, command.PageSize);
             var gridModel = new DataSourceResult

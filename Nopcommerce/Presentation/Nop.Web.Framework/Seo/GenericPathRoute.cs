@@ -152,38 +152,6 @@ namespace Nop.Web.Framework.Seo
                 //process URL
                 switch (urlRecord.EntityName.ToLowerInvariant())
                 {
-                    case "product":
-                        {
-                            data.Values["controller"] = "Product";
-                            data.Values["action"] = "ProductDetails";
-                            data.Values["productid"] = urlRecord.EntityId;
-                            data.Values["SeName"] = urlRecord.Slug;
-                        }
-                        break;
-                    case "category":
-                        {
-                            data.Values["controller"] = "Catalog";
-                            data.Values["action"] = "Category";
-                            data.Values["categoryid"] = urlRecord.EntityId;
-                            data.Values["SeName"] = urlRecord.Slug;
-                        }
-                        break;
-                    case "manufacturer":
-                        {
-                            data.Values["controller"] = "Catalog";
-                            data.Values["action"] = "Manufacturer";
-                            data.Values["manufacturerid"] = urlRecord.EntityId;
-                            data.Values["SeName"] = urlRecord.Slug;
-                        }
-                        break;
-                    case "vendor":
-                        {
-                            data.Values["controller"] = "Catalog";
-                            data.Values["action"] = "Vendor";
-                            data.Values["vendorid"] = urlRecord.EntityId;
-                            data.Values["SeName"] = urlRecord.Slug;
-                        }
-                        break;
                     case "catalogues":
                         {
                             data.Values["controller"] = "News";

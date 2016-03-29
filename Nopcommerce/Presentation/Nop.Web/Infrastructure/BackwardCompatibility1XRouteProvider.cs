@@ -21,27 +21,6 @@ namespace Nop.Web.Infrastructure
             routes.MapRoute("", "{oldfilename}.aspx",
                             new { controller = "BackwardCompatibility1X", action = "GeneralRedirect" },
                             new[] { "Nop.Web.Controllers" });
-            
-            //products
-            routes.MapRoute("", "products/{id}.aspx",
-                            new { controller = "BackwardCompatibility1X", action = "RedirectProduct"},
-                            new[] { "Nop.Web.Controllers" });
-            
-            //categories
-            routes.MapRoute("", "category/{id}.aspx",
-                            new { controller = "BackwardCompatibility1X", action = "RedirectCategory" },
-                            new[] { "Nop.Web.Controllers" });
-
-            //manufacturers
-            routes.MapRoute("", "manufacturer/{id}.aspx",
-                            new { controller = "BackwardCompatibility1X", action = "RedirectManufacturer" },
-                            new[] { "Nop.Web.Controllers" });
-
-            //product tags
-            routes.MapRoute("", "producttag/{id}.aspx",
-                            new { controller = "BackwardCompatibility1X", action = "RedirectProductTag" },
-                            new[] { "Nop.Web.Controllers" });
-
             //news
             routes.MapRoute("", "news/{id}.aspx",
                             new { controller = "BackwardCompatibility1X", action = "RedirectNewsItem" },

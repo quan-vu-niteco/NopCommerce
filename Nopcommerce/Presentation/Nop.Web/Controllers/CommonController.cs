@@ -574,8 +574,6 @@ namespace Nop.Web.Controllers
                                                    "/subscribenewsletter",
                                                    "/topic/authenticate",
                                                    "/viewpm",
-                                                   "/uploadfileproductattribute",
-                                                   "/uploadfilecheckoutattribute",
                                                    "/wishlist",
                                                };
 

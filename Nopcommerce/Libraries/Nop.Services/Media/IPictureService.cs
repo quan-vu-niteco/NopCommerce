@@ -9,7 +9,7 @@ namespace Nop.Services.Media
     /// </summary>
     public partial interface IPictureService
     {
-     
+
 
         /// <summary>
         /// Get picture SEO friendly name
@@ -25,7 +25,7 @@ namespace Nop.Services.Media
         /// <param name="defaultPictureType">Default picture type</param>
         /// <param name="storeLocation">Store location URL; null to use determine the current store location automatically</param>
         /// <returns>Picture URL</returns>
-        string GetDefaultPictureUrl(int targetSize = 0, 
+        string GetDefaultPictureUrl(int targetSize = 0,
             PictureType defaultPictureType = PictureType.Entity,
             string storeLocation = null);
 
@@ -38,10 +38,10 @@ namespace Nop.Services.Media
         /// <param name="storeLocation">Store location URL; null to use determine the current store location automatically</param>
         /// <param name="defaultPictureType">Default picture type</param>
         /// <returns>Picture URL</returns>
-        string GetPictureUrl(int pictureId, 
+        string GetPictureUrl(int pictureId,
             int targetSize = 0,
-            bool showDefaultPicture = true, 
-            string storeLocation = null, 
+            bool showDefaultPicture = true,
+            string storeLocation = null,
             PictureType defaultPictureType = PictureType.Entity);
 
 
@@ -132,7 +132,7 @@ namespace Nop.Services.Media
         #endregion
 
         #region News
-         
+
 
         /// <summary>
         /// Gets pictures by product identifier
