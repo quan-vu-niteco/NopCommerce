@@ -180,6 +180,7 @@
     <Compile Include="Messages\IMessageTokenProvider.cs" />
     <Compile Include="Messages\IWorkflowMessageService.cs" />
     <Compile Include="Messages\MessageTemplateService.cs" />
+    <Compile Include="Messages\MessageTokenProvider.cs" />
     <Compile Include="Messages\WorkflowMessageService.cs" />
     <Compile Include="News\CataloguesService.cs" />
     <Compile Include="News\CataloguesExtensions.cs" />
