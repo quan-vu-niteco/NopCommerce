@@ -199,10 +199,7 @@
     <Compile Include="Models\Logging\ActivityLogSearchModel.cs" />
     <Compile Include="Models\Logging\ActivityLogTypeModel.cs" />
     <Compile Include="Models\Messages\CampaignModel.cs" />
-    <Compile Include="Models\Customers\BestCustomersReportModel.cs" />
-    <Compile Include="Models\Customers\BestCustomerReportLineModel.cs" />
     <Compile Include="Models\Customers\RegisteredCustomerReportLineModel.cs" />
-    <Compile Include="Models\Customers\CustomerReportsModel.cs" />
     <Compile Include="Models\Settings\GeneralCommonSettingsModel.cs" />
     <Compile Include="Models\Settings\SettingModel.cs" />
     <Compile Include="Models\Settings\CustomerUserSettingsModel.cs" />
