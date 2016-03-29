@@ -201,8 +201,6 @@ namespace Nop.Services.ExportImport
                     var stateProvinceId = customer.GetAttribute<int>(SystemCustomerAttributeNames.StateProvinceId);
                     var phone = customer.GetAttribute<string>(SystemCustomerAttributeNames.Phone);
                     var fax = customer.GetAttribute<string>(SystemCustomerAttributeNames.Fax);
-                    var vatNumber = customer.GetAttribute<string>(SystemCustomerAttributeNames.VatNumber);
-                    var vatNumberStatusId = customer.GetAttribute<int>(SystemCustomerAttributeNames.VatNumberStatusId);
                     var timeZoneId = customer.GetAttribute<string>(SystemCustomerAttributeNames.TimeZoneId);
 
                     var avatarPictureId = customer.GetAttribute<int>(SystemCustomerAttributeNames.AvatarPictureId);
@@ -243,12 +241,6 @@ namespace Nop.Services.ExportImport
                     col++;
 
                     worksheet.Cells[row, col].Value = fax;
-                    col++;
-
-                    worksheet.Cells[row, col].Value = vatNumber;
-                    col++;
-
-                    worksheet.Cells[row, col].Value = vatNumberStatusId;
                     col++;
                     
                     worksheet.Cells[row, col].Value = timeZoneId;
@@ -337,8 +329,6 @@ namespace Nop.Services.ExportImport
                 xmlWriter.WriteElementString("StateProvinceId", null, customer.GetAttribute<int>(SystemCustomerAttributeNames.StateProvinceId).ToString());
                 xmlWriter.WriteElementString("Phone", null, customer.GetAttribute<string>(SystemCustomerAttributeNames.Phone));
                 xmlWriter.WriteElementString("Fax", null, customer.GetAttribute<string>(SystemCustomerAttributeNames.Fax));
-                xmlWriter.WriteElementString("VatNumber", null, customer.GetAttribute<string>(SystemCustomerAttributeNames.VatNumber));
-                xmlWriter.WriteElementString("VatNumberStatusId", null, customer.GetAttribute<int>(SystemCustomerAttributeNames.VatNumberStatusId).ToString());
                 xmlWriter.WriteElementString("TimeZoneId", null, customer.GetAttribute<string>(SystemCustomerAttributeNames.TimeZoneId));
 
                 foreach (var store in _storeService.GetAllStores())
