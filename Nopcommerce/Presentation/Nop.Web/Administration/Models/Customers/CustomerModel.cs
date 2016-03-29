@@ -87,21 +87,7 @@ namespace Nop.Admin.Models.Customers
         public string CustomerRoleNames { get; set; }
         public List<CustomerRoleModel> AvailableCustomerRoles { get; set; }
         public int[] SelectedCustomerRoleIds { get; set; }
-
-
-
-
-
-
-        //reward points history
-        public bool DisplayRewardPointsHistory { get; set; }
-
-        [NopResourceDisplayName("Admin.Customers.Customers.RewardPoints.Fields.AddRewardPointsValue")]
-        public int AddRewardPointsValue { get; set; }
-
-        [NopResourceDisplayName("Admin.Customers.Customers.RewardPoints.Fields.AddRewardPointsMessage")]
-        [AllowHtml]
-        public string AddRewardPointsMessage { get; set; }
+       
         
         //send email model
         public SendEmailModel SendEmail { get; set; }
@@ -162,30 +148,6 @@ namespace Nop.Admin.Models.Customers
             public string Message { get; set; }
         }
 
-        public partial class OrderModel : BaseNopEntityModel
-        {
-            [NopResourceDisplayName("Admin.Customers.Customers.Orders.ID")]
-            public override int Id { get; set; }
-
-            [NopResourceDisplayName("Admin.Customers.Customers.Orders.OrderStatus")]
-            public string OrderStatus { get; set; }
-
-            [NopResourceDisplayName("Admin.Customers.Customers.Orders.PaymentStatus")]
-            public string PaymentStatus { get; set; }
-
-            [NopResourceDisplayName("Admin.Customers.Customers.Orders.ShippingStatus")]
-            public string ShippingStatus { get; set; }
-
-            [NopResourceDisplayName("Admin.Customers.Customers.Orders.OrderTotal")]
-            public string OrderTotal { get; set; }
-
-            [NopResourceDisplayName("Admin.Customers.Customers.Orders.Store")]
-            public string StoreName { get; set; }
-
-            [NopResourceDisplayName("Admin.Customers.Customers.Orders.CreatedOn")]
-            public DateTime CreatedOn { get; set; }
-        }
-
         public partial class ActivityLogModel : BaseNopEntityModel
         {
             [NopResourceDisplayName("Admin.Customers.Customers.ActivityLog.ActivityLogType")]
@@ -211,9 +173,8 @@ namespace Nop.Admin.Models.Customers
             /// Default value for textboxes
             /// </summary>
             public string DefaultValue { get; set; }
-          
-            public IList<CustomerAttributeValueModel> Values { get; set; }
 
+            public IList<CustomerAttributeValueModel> Values { get; set; }
         }
 
         public partial class CustomerAttributeValueModel : BaseNopEntityModel

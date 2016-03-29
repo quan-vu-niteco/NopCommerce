@@ -686,7 +686,6 @@ namespace Nop.Services.Installation
                     DefaultTitle = "Your store",
                     DefaultMetaKeywords = "",
                     DefaultMetaDescription = "",
-                    GenerateProductMetaDescription = true,
                     ConvertNonWesternChars = false,
                     AllowUnicodeCharsInUrls = true,
                     CanonicalUrlsEnabled = false,

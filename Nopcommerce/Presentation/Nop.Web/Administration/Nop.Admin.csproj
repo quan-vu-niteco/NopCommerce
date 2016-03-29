@@ -198,10 +198,7 @@
     <Compile Include="Models\Logging\ActivityLogSearchModel.cs" />
     <Compile Include="Models\Logging\ActivityLogTypeModel.cs" />
     <Compile Include="Models\Messages\CampaignModel.cs" />
-    <Compile Include="Models\Customers\BestCustomersReportModel.cs" />
-    <Compile Include="Models\Customers\BestCustomerReportLineModel.cs" />
     <Compile Include="Models\Customers\RegisteredCustomerReportLineModel.cs" />
-    <Compile Include="Models\Customers\CustomerReportsModel.cs" />
     <Compile Include="Models\Settings\GeneralCommonSettingsModel.cs" />
     <Compile Include="Models\Settings\SettingModel.cs" />
     <Compile Include="Models\Settings\CustomerUserSettingsModel.cs" />
@@ -213,17 +210,12 @@
     <Compile Include="Models\News\NewsItemModel.cs" />
     <Compile Include="Models\Settings\NewsSettingsModel.cs" />
     <Compile Include="Models\Messages\MessageTemplateModel.cs" />
-    <Compile Include="Models\Directory\StateProvinceModel.cs" />
-    <Compile Include="Models\Directory\CountryModel.cs" />
     <Compile Include="Models\Messages\QueuedEmailListModel.cs" />
     <Compile Include="Models\Customers\CustomerAddressModel.cs" />
     <Compile Include="Models\Customers\CustomerListModel.cs" />
     <Compile Include="Models\Customers\CustomerModel.cs" />
     <Compile Include="Models\Customers\CustomerRoleModel.cs" />
     <Compile Include="Models\Messages\NewsLetterSubscriptionModel.cs" />
-    <Compile Include="Models\Directory\MeasureDimensionModel.cs" />
-    <Compile Include="Models\Directory\MeasureWeightModel.cs" />
-    <Compile Include="Models\Directory\CurrencyModel.cs" />
     <Compile Include="Models\Messages\EmailAccountModel.cs" />
     <Compile Include="Models\Localization\LanguageModel.cs" />
     <Compile Include="Models\Localization\LanguageResourceModel.cs" />
@@ -246,14 +238,9 @@
     <Compile Include="Validators\News\NewsItemValidator.cs" />
     <Compile Include="Validators\Messages\MessageTemplateValidator.cs" />
     <Compile Include="Validators\Messages\EmailAccountValidator.cs" />
-    <Compile Include="Validators\Directory\StateProvinceValidator.cs" />
-    <Compile Include="Validators\Directory\CountryValidator.cs" />
     <Compile Include="Validators\Customers\CustomerRoleValidator.cs" />
     <Compile Include="Validators\Customers\CustomerValidator.cs" />
     <Compile Include="Validators\Messages\QueuedEmailValidator.cs" />
-    <Compile Include="Validators\Directory\MeasureDimensionValidator.cs" />
-    <Compile Include="Validators\Directory\MeasureWeightValidator.cs" />
-    <Compile Include="Validators\Directory\CurrencyValidator.cs" />
     <Compile Include="Validators\Localization\LanguageResourceValidator.cs" />
     <Compile Include="Validators\Localization\LanguageValidator.cs" />
   </ItemGroup>
@@ -337,18 +324,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Currency\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Currency\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Currency\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Currency\_CreateOrUpdate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -369,19 +344,10 @@
     <Content Include="Views\EmailAccount\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Setting\Tax.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Shared\EditorTemplates\Address.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\NewsLetterSubscription\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Setting\Forum.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Setting\Shipping.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\CustomerRole\_CreateOrUpdate.cshtml" />
@@ -460,18 +426,6 @@
     <Content Include="Views\ActivityLog\ListLogs.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Country\_CreateOrUpdate.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Country\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Country\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Country\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Shared\EditorTemplates\RichEditor.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -512,18 +466,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Topic\List.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Setting\Catalog.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Setting\RewardPoints.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Setting\Order.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Setting\ShoppingCart.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Setting\Media.cshtml" />
@@ -598,15 +540,6 @@
     <Content Include="Views\ExternalAuthentication\Methods.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Country\StateEditPopup.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Country\StateCreatePopup.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Country\_CreateOrUpdateState.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Shared\EditorTemplates\DecimalNullable.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -650,9 +583,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Common\PopularSearchTermsReport.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Setting\Vendor.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Jbimages\Upload.cshtml" />

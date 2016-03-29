@@ -120,13 +120,7 @@ namespace Nop.Web.Models.Customer
         public string TimeZoneId { get; set; }
         public bool AllowCustomersToSetTimeZone { get; set; }
         public IList<SelectListItem> AvailableTimeZones { get; set; }
-
-        //EU VAT
-        [NopResourceDisplayName("Account.Fields.VatNumber")]
-        [AllowHtml]
-        public string VatNumber { get; set; }
-        public string VatNumberStatusNote { get; set; }
-        public bool DisplayVatNumber { get; set; }
+        
 
         //external authentication
         [NopResourceDisplayName("Account.AssociatedExternalAuth")]

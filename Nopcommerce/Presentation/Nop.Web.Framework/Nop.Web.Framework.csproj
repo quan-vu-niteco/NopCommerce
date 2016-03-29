@@ -143,7 +143,6 @@
     <Compile Include="WebStoreContext.cs" />
     <Compile Include="StoreIpAddressAttribute.cs" />
     <Compile Include="CustomerLastActivityAttribute.cs" />
-    <Compile Include="Events\ProductSearchEvent.cs" />
     <Compile Include="LanguageSeoCodeAttribute.cs" />
     <Compile Include="Events\AdminTabStripCreated.cs" />
     <Compile Include="Mvc\CommaSeparatedModelBinder.cs" />

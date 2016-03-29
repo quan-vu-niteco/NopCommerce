@@ -309,17 +309,6 @@ namespace Nop.Admin.Controllers
                 .GetAllCustomerRoles(true)
                 .Select(cr => cr.ToModel())
                 .ToList();
-            //reward points history
-            if (customer != null)
-            {
-                model.DisplayRewardPointsHistory = _rewardPointsSettings.Enabled;
-            }
-            else
-            {
-                model.DisplayRewardPointsHistory = false;
-            }
-            model.AddRewardPointsValue = 0;
-            model.AddRewardPointsMessage = "Some comment here...";
             //external authentication records
             if (customer != null)
             {
