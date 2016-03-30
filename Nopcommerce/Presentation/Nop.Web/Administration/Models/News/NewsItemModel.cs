@@ -131,8 +131,8 @@ namespace Nop.Admin.Models.News
 
             public int CatalogueId { get; set; }
 
-            [NopResourceDisplayName("Admin.ContentManagement.News.Catalogues.Fields.IsFeaturedProduct")]
-            public bool IsFeaturedProduct { get; set; }
+            [NopResourceDisplayName("Admin.ContentManagement.News.Catalogues.Fields.IsFeaturedNews")]
+            public bool IsFeaturedNews { get; set; }
 
             [NopResourceDisplayName("Admin.ContentManagement.News.Catalogues.Fields.DisplayOrder")]
             public int DisplayOrder { get; set; }

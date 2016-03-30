@@ -31,19 +31,7 @@ namespace Nop.Admin.Models.Customers
         public string SystemName { get; set; }
 
         #region Nested classes
-
-        public partial class AssociateProductToCustomerRoleModel : BaseNopModel
-        {
-            public AssociateProductToCustomerRoleModel()
-            {
-            }
-
-            //vendor
-            public bool IsLoggedInAsVendor { get; set; }
-
-
-            public int AssociatedToProductId { get; set; }
-        }
+        
         #endregion
     }
 }

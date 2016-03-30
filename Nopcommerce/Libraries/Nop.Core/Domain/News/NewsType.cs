@@ -1,7 +1,7 @@
 namespace Nop.Core.Domain.News
 {
     /// <summary>
-    /// Represents a product type
+    /// Represents a news type
     /// </summary>
     public enum NewsType
     {

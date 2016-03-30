@@ -104,8 +104,8 @@ namespace Nop.Core.Domain.News
 
         /// <summary>
         /// Gets or sets a display order.
-        /// This value is used when sorting associated products (used with "grouped" products)
-        /// This value is used when sorting home page products
+        /// This value is used when sorting associated news (used with "grouped" news)
+        /// This value is used when sorting home page news
         /// </summary>
         public int DisplayOrder { get; set; }
 

@@ -1,7 +1,7 @@
 ﻿namespace Nop.Core.Domain.News
 {
     /// <summary>
-    /// Represents the product sorting
+    /// Represents the news sorting
     /// </summary>
     public enum NewsSortingEnum
     {
@@ -18,7 +18,7 @@
         /// </summary>
         NameDesc = 6,      
         /// <summary>
-        /// Product creation date
+        /// News creation date
         /// </summary>
         CreatedOn = 15,
     }

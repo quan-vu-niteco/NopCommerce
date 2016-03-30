@@ -1,12 +1,12 @@
 namespace Nop.Core.Domain.News
 {
     /// <summary>
-    /// Represents a product category mapping
+    /// Represents a news category mapping
     /// </summary>
     public partial class NewsCatalogues : BaseEntity
     {
         /// <summary>
-        /// Gets or sets the product identifier
+        /// Gets or sets the news identifier
         /// </summary>
         public int NewsId { get; set; }
 
@@ -16,7 +16,7 @@ namespace Nop.Core.Domain.News
         public int CatalogueId { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the product is featured
+        /// Gets or sets a value indicating whether the news is featured
         /// </summary>
         public bool IsFeaturedNews { get; set; }
 
@@ -31,7 +31,7 @@ namespace Nop.Core.Domain.News
         public virtual Catalogues Catalogues { get; set; }
 
         /// <summary>
-        /// Gets the product
+        /// Gets the news
         /// </summary>
         public virtual NewsItem News { get; set; }
 
