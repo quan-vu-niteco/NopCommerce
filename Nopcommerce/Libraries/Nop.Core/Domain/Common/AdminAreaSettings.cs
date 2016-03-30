@@ -13,6 +13,11 @@ namespace Nop.Core.Domain.Common
         /// A comma-separated list of available grid page sizes
         /// </summary>
         public string GridPageSizes { get; set; }
+
+        /// <summary>
+        /// A value indicating whether to display product pictures in adin area
+        /// </summary>
+        public bool DisplayProductPictures { get; set; }
         /// <summary>
         /// Additional settings for rich editor
         /// </summary>

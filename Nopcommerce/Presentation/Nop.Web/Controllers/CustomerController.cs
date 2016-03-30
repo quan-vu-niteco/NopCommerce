@@ -753,7 +753,6 @@ namespace Nop.Web.Controllers
             var model = new CustomerNavigationModel();
             model.HideAvatar = !_customerSettings.AllowCustomersToUploadAvatars;
             model.HideRewardPoints = !_rewardPointsSettings.Enabled;
-            model.HideDownloadableProducts = _customerSettings.HideDownloadableProductsTab;
             model.HideBackInStockSubscriptions = _customerSettings.HideBackInStockSubscriptionsTab;
 
             model.SelectedTab = (CustomerNavigationEnum)selectedTabId;
