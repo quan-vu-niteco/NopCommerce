@@ -131,7 +131,7 @@
                     }
                 </div>
             </div>
-            if (Model.CompanyEnabled || Model.DisplayVatNumber)
+            if (Model.CompanyEnabled)
             {
             <div class="fieldset">
                 <div class="title">
@@ -148,15 +148,6 @@
                                 @Html.RequiredHint()
                             }
                             @Html.ValidationMessageFor(model => model.Company)
-                        </div>
-                    }
-                    @if (Model.DisplayVatNumber)
-                    {
-                        <div class="inputs">
-                            @Html.LabelFor(model => model.VatNumber, new { }, ":")
-                            @Html.EditorFor(model => model.VatNumber)
-                            <span class="vat-status">@Model.VatNumberStatusNote</span>
-                            <span class="vat-note"><em>@T("Account.Fields.VatNumber.Note")</em></span>
                         </div>
                     }
                 </div>
