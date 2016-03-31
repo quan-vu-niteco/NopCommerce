@@ -6,6 +6,9 @@
 <div id="customer-edit">
     <ul>
         <li @Html.RenderSelectedTabIndex(0, GetSelectedTabIndex())>
+            @T("Admin.Customers.Customers.Info")
+        </li>
+        <li @Html.RenderSelectedTabIndex(0, GetSelectedTabIndex())>
             @T("Admin.Customers.Customers.CustomerRoles")
         </li>
         @if (Model.Id > 0)
@@ -16,6 +19,9 @@
         }
     </ul>
     <div>
+        @TabInfo()
+    </div>
+    <div>
         @TabCustomerRoles()
     </div>
     @if (Model.Id > 0)
@@ -23,7 +29,7 @@
         <div>
             @TabActivityLog()
         </div>
-        
+
     }
 </div>
 <script>
@@ -51,6 +57,257 @@
 
 @*save selected tab index*@
 <input type="hidden" id="selected-tab-index" name="selected-tab-index" value="@(GetSelectedTabIndex())">
+
+@helper TabInfo()
+{
+    <table class="adminContent customer-info-tab">
+        @if (Model.UsernamesEnabled)
+        {
+            if (Model.Id == 0 || Model.AllowUsersToChangeUsernames)
+            {
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Username):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Username)
+                @Html.ValidationMessageFor(model => model.Username)
+            </td>
+        </tr>
+            }
+            else
+            {
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Username):
+            </td>
+            <td class="adminData">
+                @Model.Username
+                @Html.HiddenFor(model => model.Username)
+            </td>
+        </tr>
+            }
+        }
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Email):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Email)
+                @Html.ValidationMessageFor(model => model.Email)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Password):
+            </td>
+            <td class="adminData">
+                @Html.TextBoxFor(model => model.Password, new { autocomplete = "off", @class = "text-box single-line" })
+                @Html.ValidationMessageFor(model => model.Password)
+                @if (Model.Id > 0)
+                {
+                <input type="submit" name="changepassword" class="k-button" value="@T("Admin.Customers.Customers.Fields.Password.Change")" />
+                }
+            </td>
+        </tr>
+        @if (Model.Id > 0 && Model.AssociatedExternalAuthRecords.Count > 0)
+        {
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AssociatedExternalAuthRecords):
+            </td>
+            <td class="adminData">
+
+                <div id="externalauthrecords-grid"></div>
+
+                <script>
+
+                        //local datasource
+                        var externalauthrecords = [
+                            @for (int i = 0; i < Model.AssociatedExternalAuthRecords.Count; i++)
+                            {
+                                var aear = Model.AssociatedExternalAuthRecords[i];
+                                <text>
+                                    {
+                                        AuthMethodName: "@(Html.Raw(HttpUtility.JavaScriptStringEncode(aear.AuthMethodName)))",
+                                        Email: "@(Html.Raw(HttpUtility.JavaScriptStringEncode(aear.Email)))",
+                                        ExternalIdentifier: "@(Html.Raw(HttpUtility.JavaScriptStringEncode(aear.ExternalIdentifier)))"
+                                    }
+                                </text>
+                                if (i != Model.AssociatedExternalAuthRecords.Count - 1)
+                                {
+                                    <text>,</text>
+                                }
+                            }
+                        ];
+
+                        $(document).ready(function () {
+                            $("#externalauthrecords-grid").kendoGrid({
+                                dataSource: {
+                                    data: externalauthrecords,
+                                    schema: {
+                                        model: {
+                                            fields: {
+                                                AuthMethodName: { type: "string" },
+                                                Email: { type: "string" },
+                                                ExternalIdentifier: { type: "string" }
+                                            }
+                                        }
+                                    },
+                                    error: function (e) {
+                                        display_kendoui_grid_error(e);
+                                        // Cancel the changes
+                                        this.cancelChanges();
+                                    }
+                                },
+                                pageable: {
+                                    refresh: true,
+                                    numeric: false,
+                                    previousNext: false,
+                                    info: false
+                                },
+                                scrollable: false,
+                                columns: [
+                                    {
+                                        field: "AuthMethodName",
+                                        title: "@T("Admin.Customers.Customers.AssociatedExternalAuth.Fields.AuthMethodName")",
+                                        width: 100
+                                    }, {
+                                        field: "Email",
+                                        title: "@T("Admin.Customers.Customers.AssociatedExternalAuth.Fields.Email")",
+                                        width: 100
+                                    },{
+                                        field: "ExternalIdentifier",
+                                        title: "@T("Admin.Customers.Customers.AssociatedExternalAuth.Fields.ExternalIdentifier")",
+                                        width: 300
+                                    }
+                                ]
+                            });
+                        });
+
+                </script>
+            </td>
+        </tr>
+        }
+        @if (Model.GenderEnabled)
+        {
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Gender):
+            </td>
+            <td class="adminData">
+                <div class="gender">
+                    @Html.RadioButton("Gender", "M", (Model.Gender == "M"), new { id = "Gender_Male" })
+                    <label class="forcheckbox" for="Gender_Male">@T("Admin.Customers.Customers.Fields.Gender.Male")</label>
+                </div>
+                <div class="gender">
+                    @Html.RadioButton("Gender", "F", (Model.Gender == "F"), new { id = "Gender_Female" })
+                    <label class="forcheckbox" for="Gender_Female">@T("Admin.Customers.Customers.Fields.Gender.Female")</label>
+                </div>
+            </td>
+        </tr>
+        }
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.FirstName):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.FirstName)
+                @Html.ValidationMessageFor(model => model.FirstName)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.LastName):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.LastName)
+                @Html.ValidationMessageFor(model => model.LastName)
+            </td>
+        </tr>
+        @if (Model.DateOfBirthEnabled)
+        {
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.DateOfBirth):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.DateOfBirth)
+                @Html.ValidationMessageFor(model => model.DateOfBirth)
+            </td>
+        </tr>
+                }
+
+        @if (Model.CustomerAttributes.Count > 0)
+        {
+        @Html.Partial("_CustomerAttributes", Model.CustomerAttributes)
+                }
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.AdminComment):
+            </td>
+            <td class="adminData">
+                @Html.TextAreaFor(model => model.AdminComment, new { style = "Width: 250px; Height: 150px;" })
+                @Html.ValidationMessageFor(model => model.AdminComment)
+            </td>
+        </tr>
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.Active):
+            </td>
+            <td class="adminData">
+                @Html.EditorFor(model => model.Active)
+                @Html.ValidationMessageFor(model => model.Active)
+            </td>
+        </tr>
+        @if (Model.Id > 0)
+        {
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.LastIpAddress):
+            </td>
+            <td class="adminData">
+                @Html.DisplayFor(model => model.LastIpAddress)
+            </td>
+        </tr>
+            }
+        @if (Model.Id > 0)
+        {
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.CreatedOn):
+            </td>
+            <td class="adminData">
+                @Html.DisplayFor(model => model.CreatedOn)
+            </td>
+        </tr>
+            }
+        @if (Model.Id > 0)
+        {
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.LastActivityDate):
+            </td>
+            <td class="adminData">
+                @Html.DisplayFor(model => model.LastActivityDate)
+            </td>
+        </tr>
+            }
+        @if (Model.Id > 0 && !String.IsNullOrEmpty(Model.LastVisitedPage))
+        {
+        <tr>
+            <td class="adminTitle">
+                @Html.NopLabelFor(model => model.LastVisitedPage):
+            </td>
+            <td class="adminData">
+                @Html.DisplayFor(model => model.LastVisitedPage)
+            </td>
+        </tr>
+            }
+    </table>
+}
+
+
 
 @helper TabCustomerRoles()
 {
