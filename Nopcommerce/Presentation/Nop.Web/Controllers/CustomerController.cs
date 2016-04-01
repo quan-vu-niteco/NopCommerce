@@ -909,7 +909,193 @@ namespace Nop.Web.Controllers
         #endregion
 
         #region My account / Addresses
-     
+
+        [NopHttpsRequirement(SslRequirement.Yes)]
+        public ActionResult Addresses()
+        {
+            if (!_workContext.CurrentCustomer.IsRegistered())
+                return new HttpUnauthorizedResult();
+
+            var customer = _workContext.CurrentCustomer;
+
+            var model = new CustomerAddressListModel();
+            var addresses = customer.Addresses
+                //enabled for the current store
+                .Where(a => a.Country == null || _storeMappingService.Authorize(a.Country))
+                .ToList();
+            foreach (var address in addresses)
+            {
+                var addressModel = new AddressModel();
+                addressModel.PrepareModel(
+                    address: address,
+                    excludeProperties: false,
+                    addressSettings: _addressSettings,
+                    localizationService: _localizationService,
+                    stateProvinceService: _stateProvinceService,
+                    addressAttributeFormatter: _addressAttributeFormatter,
+                    loadCountries: () => _countryService.GetAllCountries());
+                model.Addresses.Add(addressModel);
+            }
+            return View(model);
+        }
+
+        [NopHttpsRequirement(SslRequirement.Yes)]
+        public ActionResult AddressDelete(int addressId)
+        {
+            if (!_workContext.CurrentCustomer.IsRegistered())
+                return new HttpUnauthorizedResult();
+
+            var customer = _workContext.CurrentCustomer;
+
+            //find address (ensure that it belongs to the current customer)
+            var address = customer.Addresses.FirstOrDefault(a => a.Id == addressId);
+            if (address != null)
+            {
+                customer.RemoveAddress(address);
+                _customerService.UpdateCustomer(customer);
+                //now delete the address record
+                _addressService.DeleteAddress(address);
+            }
+
+            return RedirectToRoute("CustomerAddresses");
+        }
+
+        [NopHttpsRequirement(SslRequirement.Yes)]
+        public ActionResult AddressAdd()
+        {
+            if (!_workContext.CurrentCustomer.IsRegistered())
+                return new HttpUnauthorizedResult();
+
+            var model = new CustomerAddressEditModel();
+            model.Address.PrepareModel(
+                address: null,
+                excludeProperties: false,
+                addressSettings: _addressSettings,
+                localizationService: _localizationService,
+                stateProvinceService: _stateProvinceService,
+                addressAttributeService: _addressAttributeService,
+                addressAttributeParser: _addressAttributeParser,
+                loadCountries: () => _countryService.GetAllCountries());
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult AddressAdd(CustomerAddressEditModel model, FormCollection form)
+        {
+            if (!_workContext.CurrentCustomer.IsRegistered())
+                return new HttpUnauthorizedResult();
+
+            var customer = _workContext.CurrentCustomer;
+
+            //custom address attributes
+            var customAttributes = form.ParseCustomAddressAttributes(_addressAttributeParser, _addressAttributeService);
+            var customAttributeWarnings = _addressAttributeParser.GetAttributeWarnings(customAttributes);
+            foreach (var error in customAttributeWarnings)
+            {
+                ModelState.AddModelError("", error);
+            }
+
+            if (ModelState.IsValid)
+            {
+                var address = model.Address.ToEntity();
+                address.CustomAttributes = customAttributes;
+                address.CreatedOnUtc = DateTime.UtcNow;
+                //some validation
+                if (address.CountryId == 0)
+                    address.CountryId = null;
+                if (address.StateProvinceId == 0)
+                    address.StateProvinceId = null;
+                customer.Addresses.Add(address);
+                _customerService.UpdateCustomer(customer);
+
+                return RedirectToRoute("CustomerAddresses");
+            }
+
+            //If we got this far, something failed, redisplay form
+            model.Address.PrepareModel(
+                address: null,
+                excludeProperties: true,
+                addressSettings: _addressSettings,
+                localizationService: _localizationService,
+                stateProvinceService: _stateProvinceService,
+                addressAttributeService: _addressAttributeService,
+                addressAttributeParser: _addressAttributeParser,
+                loadCountries: () => _countryService.GetAllCountries());
+
+            return View(model);
+        }
+
+        [NopHttpsRequirement(SslRequirement.Yes)]
+        public ActionResult AddressEdit(int addressId)
+        {
+            if (!_workContext.CurrentCustomer.IsRegistered())
+                return new HttpUnauthorizedResult();
+
+            var customer = _workContext.CurrentCustomer;
+            //find address (ensure that it belongs to the current customer)
+            var address = customer.Addresses.FirstOrDefault(a => a.Id == addressId);
+            if (address == null)
+                //address is not found
+                return RedirectToRoute("CustomerAddresses");
+
+            var model = new CustomerAddressEditModel();
+            model.Address.PrepareModel(address: address,
+                excludeProperties: false,
+                addressSettings: _addressSettings,
+                localizationService: _localizationService,
+                stateProvinceService: _stateProvinceService,
+                addressAttributeService: _addressAttributeService,
+                addressAttributeParser: _addressAttributeParser,
+                loadCountries: () => _countryService.GetAllCountries());
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateInput(false)]
+        public ActionResult AddressEdit(CustomerAddressEditModel model, int addressId, FormCollection form)
+        {
+            if (!_workContext.CurrentCustomer.IsRegistered())
+                return new HttpUnauthorizedResult();
+
+            var customer = _workContext.CurrentCustomer;
+            //find address (ensure that it belongs to the current customer)
+            var address = customer.Addresses.FirstOrDefault(a => a.Id == addressId);
+            if (address == null)
+                //address is not found
+                return RedirectToRoute("CustomerAddresses");
+
+            //custom address attributes
+            var customAttributes = form.ParseCustomAddressAttributes(_addressAttributeParser, _addressAttributeService);
+            var customAttributeWarnings = _addressAttributeParser.GetAttributeWarnings(customAttributes);
+            foreach (var error in customAttributeWarnings)
+            {
+                ModelState.AddModelError("", error);
+            }
+
+            if (ModelState.IsValid)
+            {
+                address = model.Address.ToEntity(address);
+                address.CustomAttributes = customAttributes;
+                _addressService.UpdateAddress(address);
+
+                return RedirectToRoute("CustomerAddresses");
+            }
+
+            //If we got this far, something failed, redisplay form
+            model.Address.PrepareModel(
+                address: address,
+                excludeProperties: true,
+                addressSettings: _addressSettings,
+                localizationService: _localizationService,
+                stateProvinceService: _stateProvinceService,
+                addressAttributeService: _addressAttributeService,
+                addressAttributeParser: _addressAttributeParser,
+                loadCountries: () => _countryService.GetAllCountries());
+            return View(model);
+        }
 
         #endregion
 

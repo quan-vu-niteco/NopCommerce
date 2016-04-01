@@ -1,6 +1,5 @@
 using System;
 
-
 namespace Nop.Core.Domain.Customers
 {
     /// <summary>
@@ -37,7 +36,7 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets the date and time of instance creation
         /// </summary>
         public DateTime CreatedOnUtc { get; set; }
-
+        
         /// <summary>
         /// Gets or sets the customer
         /// </summary>

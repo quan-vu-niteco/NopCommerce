@@ -171,7 +171,15 @@
     <Compile Include="Customers\ICustomerAttributeService.cs" />
     <Compile Include="Customers\CustomerAttributeService.cs" />
     <Compile Include="Customers\CustomerAttributeExtensions.cs" />
+    <Compile Include="Directory\CountryService.cs" />
+    <Compile Include="Directory\CurrencyService.cs" />
     <Compile Include="Directory\GeoLookupService.cs" />
+    <Compile Include="Directory\ICountryService.cs" />
+    <Compile Include="Directory\ICurrencyService.cs" />
+    <Compile Include="Directory\IExchangeRateProvider.cs" />
+    <Compile Include="Directory\IStateProvinceService.cs" />
+    <Compile Include="Directory\StateProvinceService.cs" />
+    <Compile Include="Directory\UpdateExchangeRateTask.cs" />
     <Compile Include="Helpers\IUserAgentHelper.cs" />
     <Compile Include="Helpers\UserAgentHelper.cs" />
     <Compile Include="Logging\ClearLogTask.cs" />

@@ -12,9 +12,8 @@ namespace Nop.Core.Domain.Customers
     {
         private ICollection<ExternalAuthenticationRecord> _externalAuthenticationRecords;
         private ICollection<CustomerRole> _customerRoles;
-        
         private ICollection<RewardPointsHistory> _rewardPointsHistory;
-     
+        private ICollection<Address> _addresses;
 
         /// <summary>
         /// Ctor
@@ -156,10 +155,18 @@ namespace Nop.Core.Domain.Customers
         public virtual ICollection<RewardPointsHistory> RewardPointsHistory
         {
             get { return _rewardPointsHistory ?? (_rewardPointsHistory = new List<RewardPointsHistory>()); }
-            protected set { _rewardPointsHistory = value; }            
+            protected set { _rewardPointsHistory = value; }
         }
-       
-        
+
+        /// <summary>
+        /// Gets or sets customer addresses
+        /// </summary>
+        public virtual ICollection<Address> Addresses
+        {
+            get { return _addresses ?? (_addresses = new List<Address>()); }
+            protected set { _addresses = value; }
+        }
+
         #endregion
     }
 }

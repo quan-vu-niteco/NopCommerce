@@ -219,6 +219,8 @@
     <Compile Include="Infrastructure\DependencyRegistrar.cs" />
     <Compile Include="Infrastructure\BackwardCompatibility1XRouteProvider.cs" />
     <Compile Include="Infrastructure\RouteProvider.cs" />
+    <Compile Include="Models\Common\AddressAttributeModel.cs" />
+    <Compile Include="Models\Common\AddressModel.cs" />
     <Compile Include="Models\Common\AdminHeaderLinksModel.cs" />
     <Compile Include="Models\Common\FooterModel.cs" />
     <Compile Include="Models\Common\FaviconModel.cs" />
@@ -226,6 +228,8 @@
     <Compile Include="Models\Common\StoreThemeModel.cs" />
     <Compile Include="Models\Common\LanguageSelectorModel.cs" />
     <Compile Include="Models\Common\SitemapModel.cs" />
+    <Compile Include="Models\Customer\CustomerAddressEditModel.cs" />
+    <Compile Include="Models\Customer\CustomerAddressListModel.cs" />
     <Compile Include="Models\Customer\CustomerAttributeModel.cs" />
     <Compile Include="Models\Customer\ExternalAuthenticationMethodModel.cs" />
     <Compile Include="Models\Install\InstallModel.cs" />
@@ -264,6 +268,7 @@
     <Compile Include="Models\Profile\ProfilePostsModel.cs" />
     <Compile Include="Models\Topics\TopicModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validators\Common\AddressValidator.cs" />
     <Compile Include="Validators\Customer\LoginValidator.cs" />
     <Compile Include="Validators\Install\InstallValidator.cs" />
     <Compile Include="Validators\News\NewsItemValidator.cs" />

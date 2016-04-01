@@ -1,6 +1,4 @@
 ﻿using Nop.Core.Configuration;
-
-
 namespace Nop.Core.Domain.Customers
 {
     public class RewardPointsSettings : ISettings
@@ -34,7 +32,6 @@ namespace Nop.Core.Domain.Customers
         /// Gets or sets a number of points awarded for purchases
         /// </summary>
         public int PointsForPurchases_Points { get; set; }
-       
 
         /// <summary>
         /// Gets or sets a value indicating whether "You will earn" message should be displayed
