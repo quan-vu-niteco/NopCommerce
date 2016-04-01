@@ -28,6 +28,11 @@ namespace Nop.Core.Domain.Seo
         /// Default META description
         /// </summary>
         public string DefaultMetaDescription { get; set; }
+
+        /// <summary>
+        /// A value indicating whether product META descriptions will be generated automatically (if not entered)
+        /// </summary>
+        //public bool GenerateProductMetaDescription { get; set; }
         /// <summary>
         /// A value indicating whether we should conver non-wetern chars to western ones
         /// </summary>

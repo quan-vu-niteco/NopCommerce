@@ -14,13 +14,6 @@ namespace Nop.Admin.Models.Customers
         [AllowHtml]
         public string Name { get; set; }
 
-        [NopResourceDisplayName("Admin.Customers.CustomerRoles.Fields.FreeShipping")]
-        [AllowHtml]
-        public bool FreeShipping { get; set; }
-
-        [NopResourceDisplayName("Admin.Customers.CustomerRoles.Fields.TaxExempt")]
-        public bool TaxExempt { get; set; }
-
         [NopResourceDisplayName("Admin.Customers.CustomerRoles.Fields.Active")]
         public bool Active { get; set; }
 
