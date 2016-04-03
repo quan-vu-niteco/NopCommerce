@@ -190,10 +190,14 @@
     <Compile Include="Directory\IStateProvinceService.cs" />
     <Compile Include="Directory\StateProvinceService.cs" />
     <Compile Include="Directory\UpdateExchangeRateTask.cs" />
+    <Compile Include="Forums\ForumExtensions.cs" />
+    <Compile Include="Forums\ForumService.cs" />
+    <Compile Include="Forums\IForumService.cs" />
     <Compile Include="Helpers\IUserAgentHelper.cs" />
     <Compile Include="Helpers\UserAgentHelper.cs" />
     <Compile Include="Logging\ClearLogTask.cs" />
     <Compile Include="Media\ResizeType.cs" />
+    <Compile Include="Messages\CampaignService.cs" />
     <Compile Include="Messages\IMessageTemplateService.cs" />
     <Compile Include="Messages\IMessageTokenProvider.cs" />
     <Compile Include="Messages\IWorkflowMessageService.cs" />

@@ -4,6 +4,7 @@ using System.Linq;
 using Nop.Core;
 
 using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Forums;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.News;
 using Nop.Core.Domain.Stores;
@@ -391,11 +392,137 @@ namespace Nop.Services.Messages
 
         #endregion
 
-        
+        #region Forum Notifications
 
-        
+        /// <summary>
+        /// Sends a forum subscription message to a customer
+        /// </summary>
+        /// <param name="customer">Customer instance</param>
+        /// <param name="forumTopic">Forum Topic</param>
+        /// <param name="forum">Forum</param>
+        /// <param name="languageId">Message language identifier</param>
+        /// <returns>Queued email identifier</returns>
+        public int SendNewForumTopicMessage(Customer customer,
+            ForumTopic forumTopic, Forum forum, int languageId)
+        {
+            if (customer == null)
+            {
+                throw new ArgumentNullException("customer");
+            }
+            var store = _storeContext.CurrentStore;
 
-        
+            var messageTemplate = GetActiveMessageTemplate("Forums.NewForumTopic", store.Id);
+            if (messageTemplate == null)
+                return 0;
+
+            //email account
+            var emailAccount = GetEmailAccountOfMessageTemplate(messageTemplate, languageId);
+
+            //tokens
+            var tokens = new List<Token>();
+            _messageTokenProvider.AddStoreTokens(tokens, store, emailAccount);
+            _messageTokenProvider.AddForumTopicTokens(tokens, forumTopic);
+            _messageTokenProvider.AddForumTokens(tokens, forumTopic.Forum);
+
+            //event notification
+            _eventPublisher.MessageTokensAdded(messageTemplate, tokens);
+
+            var toEmail = customer.Email;
+            var toName = customer.GetFullName();
+
+            return SendNotification(messageTemplate, emailAccount, languageId, tokens, toEmail, toName);
+        }
+
+        /// <summary>
+        /// Sends a forum subscription message to a customer
+        /// </summary>
+        /// <param name="customer">Customer instance</param>
+        /// <param name="forumPost">Forum post</param>
+        /// <param name="forumTopic">Forum Topic</param>
+        /// <param name="forum">Forum</param>
+        /// <param name="friendlyForumTopicPageIndex">Friendly (starts with 1) forum topic page to use for URL generation</param>
+        /// <param name="languageId">Message language identifier</param>
+        /// <returns>Queued email identifier</returns>
+        public int SendNewForumPostMessage(Customer customer,
+            ForumPost forumPost, ForumTopic forumTopic,
+            Forum forum, int friendlyForumTopicPageIndex, int languageId)
+        {
+            if (customer == null)
+            {
+                throw new ArgumentNullException("customer");
+            }
+
+            var store = _storeContext.CurrentStore;
+
+            var messageTemplate = GetActiveMessageTemplate("Forums.NewForumPost", store.Id);
+            if (messageTemplate == null)
+            {
+                return 0;
+            }
+
+            //email account
+            var emailAccount = GetEmailAccountOfMessageTemplate(messageTemplate, languageId);
+
+            //tokens
+            var tokens = new List<Token>();
+            _messageTokenProvider.AddStoreTokens(tokens, store, emailAccount);
+            _messageTokenProvider.AddForumPostTokens(tokens, forumPost);
+            _messageTokenProvider.AddForumTopicTokens(tokens, forumPost.ForumTopic,
+                friendlyForumTopicPageIndex, forumPost.Id);
+            _messageTokenProvider.AddForumTokens(tokens, forumPost.ForumTopic.Forum);
+
+            //event notification
+            _eventPublisher.MessageTokensAdded(messageTemplate, tokens);
+
+            var toEmail = customer.Email;
+            var toName = customer.GetFullName();
+
+            return SendNotification(messageTemplate, emailAccount, languageId, tokens, toEmail, toName);
+        }
+
+        /// <summary>
+        /// Sends a private message notification
+        /// </summary>
+        /// <param name="privateMessage">Private message</param>
+        /// <param name="languageId">Message language identifier</param>
+        /// <returns>Queued email identifier</returns>
+        public int SendPrivateMessageNotification(PrivateMessage privateMessage, int languageId)
+        {
+            if (privateMessage == null)
+            {
+                throw new ArgumentNullException("privateMessage");
+            }
+
+            var store = _storeService.GetStoreById(privateMessage.StoreId) ?? _storeContext.CurrentStore;
+
+            var messageTemplate = GetActiveMessageTemplate("Customer.NewPM", store.Id);
+            if (messageTemplate == null)
+            {
+                return 0;
+            }
+
+            //email account
+            var emailAccount = GetEmailAccountOfMessageTemplate(messageTemplate, languageId);
+
+            //tokens
+            var tokens = new List<Token>();
+            _messageTokenProvider.AddStoreTokens(tokens, store, emailAccount);
+            _messageTokenProvider.AddPrivateMessageTokens(tokens, privateMessage);
+
+            //event notification
+            _eventPublisher.MessageTokensAdded(messageTemplate, tokens);
+
+            var toEmail = privateMessage.ToCustomer.Email;
+            var toName = privateMessage.ToCustomer.GetFullName();
+
+            return SendNotification(messageTemplate, emailAccount, languageId, tokens, toEmail, toName);
+        }
+
+        #endregion
+
+
+
+
 
         #endregion
     }

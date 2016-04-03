@@ -6,6 +6,7 @@ using System.Text;
 using System.Web;
 using Nop.Core;
 using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Forums;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.News;
 using Nop.Core.Domain.Stores;
@@ -15,6 +16,7 @@ using Nop.Services.Common;
 using Nop.Services.Customers;
 using Nop.Services.Directory;
 using Nop.Services.Events;
+using Nop.Services.Forums;
 using Nop.Services.Helpers;
 using Nop.Services.Localization;
 using Nop.Services.Media;
@@ -175,7 +177,52 @@ namespace Nop.Services.Messages
             };
             return allowedTokens.ToArray();
         }
+        public virtual void AddForumTopicTokens(IList<Token> tokens, ForumTopic forumTopic,
+          int? friendlyForumTopicPageIndex = null, int? appendedPostIdentifierAnchor = null)
+        {
+            //TODO add a method for getting URL (use routing because it handles all SEO friendly URLs)
+            string topicUrl;
+            if (friendlyForumTopicPageIndex.HasValue && friendlyForumTopicPageIndex.Value > 1)
+                topicUrl = string.Format("{0}boards/topic/{1}/{2}/page/{3}", GetStoreUrl(), forumTopic.Id, forumTopic.GetSeName(), friendlyForumTopicPageIndex.Value);
+            else
+                topicUrl = string.Format("{0}boards/topic/{1}/{2}", GetStoreUrl(), forumTopic.Id, forumTopic.GetSeName());
+            if (appendedPostIdentifierAnchor.HasValue && appendedPostIdentifierAnchor.Value > 0)
+                topicUrl = string.Format("{0}#{1}", topicUrl, appendedPostIdentifierAnchor.Value);
+            tokens.Add(new Token("Forums.TopicURL", topicUrl, true));
+            tokens.Add(new Token("Forums.TopicName", forumTopic.Subject));
 
+            //event notification
+            _eventPublisher.EntityTokensAdded(forumTopic, tokens);
+        }
+
+        public virtual void AddForumPostTokens(IList<Token> tokens, ForumPost forumPost)
+        {
+            tokens.Add(new Token("Forums.PostAuthor", forumPost.Customer.FormatUserName()));
+            tokens.Add(new Token("Forums.PostBody", forumPost.FormatPostText(), true));
+
+            //event notification
+            _eventPublisher.EntityTokensAdded(forumPost, tokens);
+        }
+
+        public virtual void AddForumTokens(IList<Token> tokens, Forum forum)
+        {
+            //TODO add a method for getting URL (use routing because it handles all SEO friendly URLs)
+            var forumUrl = string.Format("{0}boards/forum/{1}/{2}", GetStoreUrl(), forum.Id, forum.GetSeName());
+            tokens.Add(new Token("Forums.ForumURL", forumUrl, true));
+            tokens.Add(new Token("Forums.ForumName", forum.Name));
+
+            //event notification
+            _eventPublisher.EntityTokensAdded(forum, tokens);
+        }
+
+        public virtual void AddPrivateMessageTokens(IList<Token> tokens, PrivateMessage privateMessage)
+        {
+            tokens.Add(new Token("PrivateMessage.Subject", privateMessage.Subject));
+            tokens.Add(new Token("PrivateMessage.Text", privateMessage.FormatPrivateMessageText(), true));
+
+            //event notification
+            _eventPublisher.EntityTokensAdded(privateMessage, tokens);
+        }
         public virtual string[] GetListOfAllowedTokens()
         {
             var allowedTokens = new List<string>

@@ -26,6 +26,7 @@ using Nop.Services.Customers;
 using Nop.Services.Directory;
 using Nop.Services.Events;
 using Nop.Services.ExportImport;
+using Nop.Services.Forums;
 using Nop.Services.Helpers;
 using Nop.Services.Installation;
 using Nop.Services.Localization;
@@ -211,7 +212,7 @@ namespace Nop.Web.Framework
             {
                 builder.RegisterType<CodeFirstInstallationService>().As<IInstallationService>().InstancePerLifetimeScope();
             }
-
+            builder.RegisterType<ForumService>().As<IForumService>().InstancePerLifetimeScope();
             builder.RegisterType<PollService>().As<IPollService>().InstancePerLifetimeScope();
             builder.RegisterType<WidgetService>().As<IWidgetService>().InstancePerLifetimeScope();
             builder.RegisterType<TopicService>().As<ITopicService>().InstancePerLifetimeScope();

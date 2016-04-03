@@ -1,5 +1,6 @@
 ﻿
 using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Forums;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.News;
 
@@ -73,7 +74,43 @@ namespace Nop.Services.Messages
              string customerEmail, string friendsEmail, string personalMessage);
 
         #endregion
-        
+        #region Forum Notifications
+
+        /// <summary>
+        /// Sends a forum subscription message to a customer
+        /// </summary>
+        /// <param name="customer">Customer instance</param>
+        /// <param name="forumTopic">Forum Topic</param>
+        /// <param name="forum">Forum</param>
+        /// <param name="languageId">Message language identifier</param>
+        /// <returns>Queued email identifier</returns>
+        int SendNewForumTopicMessage(Customer customer,
+            ForumTopic forumTopic, Forum forum, int languageId);
+
+        /// <summary>
+        /// Sends a forum subscription message to a customer
+        /// </summary>
+        /// <param name="customer">Customer instance</param>
+        /// <param name="forumPost">Forum post</param>
+        /// <param name="forumTopic">Forum Topic</param>
+        /// <param name="forum">Forum</param>
+        /// <param name="friendlyForumTopicPageIndex">Friendly (starts with 1) forum topic page to use for URL generation</param>
+        /// <param name="languageId">Message language identifier</param>
+        /// <returns>Queued email identifier</returns>
+        int SendNewForumPostMessage(Customer customer,
+            ForumPost forumPost, ForumTopic forumTopic,
+            Forum forum, int friendlyForumTopicPageIndex,
+            int languageId);
+
+        /// <summary>
+        /// Sends a private message notification
+        /// </summary>
+        /// <param name="privateMessage">Private message</param>
+        /// <param name="languageId">Message language identifier</param>
+        /// <returns>Queued email identifier</returns>
+        int SendPrivateMessageNotification(PrivateMessage privateMessage, int languageId);
+
+        #endregion
         #region Misc
         #endregion
     }

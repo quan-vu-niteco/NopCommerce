@@ -17,9 +17,8 @@ namespace Nop.Data.Mapping.Customers
                 .WithMany()
                 .Map(m => m.ToTable("Customer_CustomerRole_Mapping"));
             this.HasMany(c => c.Addresses)
-              .WithMany()
-              .Map(m => m.ToTable("CustomerAddresses"));
-
+                .WithMany()
+                .Map(m => m.ToTable("CustomerAddresses"));
         }
     }
 }

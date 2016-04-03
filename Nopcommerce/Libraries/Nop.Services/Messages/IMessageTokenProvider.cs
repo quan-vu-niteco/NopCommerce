@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Forums;
 using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.News;
 using Nop.Core.Domain.Stores;
@@ -8,6 +9,7 @@ namespace Nop.Services.Messages
 {
     public partial interface IMessageTokenProvider
     {
+
         void AddStoreTokens(IList<Token> tokens, Store store, EmailAccount emailAccount);
        
 
@@ -16,7 +18,14 @@ namespace Nop.Services.Messages
         void AddNewsLetterSubscriptionTokens(IList<Token> tokens, NewsLetterSubscription subscription);
 
         void AddNewsCommentTokens(IList<Token> tokens, NewsComment newsComment);
+        void AddForumTokens(IList<Token> tokens, Forum forum);
 
+        void AddForumTopicTokens(IList<Token> tokens, ForumTopic forumTopic,
+            int? friendlyForumTopicPageIndex = null, int? appendedPostIdentifierAnchor = null);
+
+        void AddForumPostTokens(IList<Token> tokens, ForumPost forumPost);
+
+        void AddPrivateMessageTokens(IList<Token> tokens, PrivateMessage privateMessage);
         string[] GetListOfCampaignAllowedTokens();
 
         string[] GetListOfAllowedTokens();

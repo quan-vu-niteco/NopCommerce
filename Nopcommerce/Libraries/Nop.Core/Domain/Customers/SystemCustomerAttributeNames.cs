@@ -39,6 +39,7 @@ namespace Nop.Core.Domain.Customers
         public static string SelectedShippingOption { get { return "SelectedShippingOption"; } }
         //value indicating whether customer chose "pick up in store" option
         public static string SelectedPickUpInStore { get { return "SelectedPickUpInStore"; } }
+        public static string NotifiedAboutNewPrivateMessages { get { return "NotifiedAboutNewPrivateMessages"; } }
         public static string WorkingThemeName { get { return "WorkingThemeName"; } }
         public static string UseRewardPointsDuringCheckout { get { return "UseRewardPointsDuringCheckout"; } }
     }

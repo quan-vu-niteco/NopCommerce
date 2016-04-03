@@ -303,23 +303,13 @@ namespace Nop.Web.Infrastructure
                             new { controller = "Poll", action = "Vote" },
                             new[] { "Nop.Web.Controllers" });
 
-            //comparing products
-            routes.MapLocalizedRoute("RemoveProductFromCompareList",
-                            "compareproducts/remove/{productId}",
-                            new { controller = "Product", action = "RemoveProductFromCompareList" },
-                            new[] { "Nop.Web.Controllers" });
-            routes.MapLocalizedRoute("ClearCompareList",
-                            "clearcomparelist/",
-                            new { controller = "Product", action = "ClearCompareList" },
+
+            //get state list by country ID  (AJAX link)
+            routes.MapRoute("GetStatesByCountryId",
+                            "country/getstatesbycountryid/",
+                            new { controller = "Country", action = "GetStatesByCountryId" },
                             new[] { "Nop.Web.Controllers" });
 
-            //recently added products RSS
-            routes.MapLocalizedRoute("RecentlyAddedProductsRSS",
-                            "newproducts/rss",
-                            new { controller = "Product", action = "RecentlyAddedProductsRss" },
-                            new[] { "Nop.Web.Controllers" });
-            
-          
 
             //authenticate topic AJAX link
             routes.MapLocalizedRoute("TopicAuthenticate",
