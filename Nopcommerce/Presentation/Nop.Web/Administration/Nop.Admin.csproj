@@ -165,6 +165,12 @@
     <Compile Include="Infrastructure\DependencyRegistrar.cs" />
     <Compile Include="Extensions\MappingExtensions.cs" />
     <Compile Include="Infrastructure\AutoMapperStartupTask.cs" />
+    <Compile Include="Models\Common\AddressAttributeModel.cs" />
+    <Compile Include="Models\Common\AddressAttributeValueModel.cs" />
+    <Compile Include="Models\Common\AddressModel.cs" />
+    <Compile Include="Models\Directory\CountryModel.cs" />
+    <Compile Include="Models\Directory\CurrencyModel.cs" />
+    <Compile Include="Models\Directory\StateProvinceModel.cs" />
     <Compile Include="Models\News\CataloguesModel.cs" />
     <Compile Include="Models\News\CataloguesListModel.cs" />
     <Compile Include="Models\Cms\RenderWidgetModel.cs" />
@@ -223,8 +229,14 @@
     <Compile Include="Models\Messages\QueuedEmailModel.cs" />
     <Compile Include="Models\Cms\WidgetModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Validators\Common\AddressAttributeValidator.cs" />
+    <Compile Include="Validators\Common\AddressAttributeValueValidator.cs" />
+    <Compile Include="Validators\Common\AddressValidator.cs" />
     <Compile Include="Validators\Customers\CustomerAttributeValidator.cs" />
     <Compile Include="Validators\Customers\CustomerAttributeValueValidator.cs" />
+    <Compile Include="Validators\Directory\CountryValidator.cs" />
+    <Compile Include="Validators\Directory\CurrencyValidator.cs" />
+    <Compile Include="Validators\Directory\StateProvinceValidator.cs" />
     <Compile Include="Validators\News\CataloguesValidator.cs" />
     <Compile Include="Validators\Stores\StoreValidator.cs" />
     <Compile Include="Validators\Tasks\ScheduleTaskValidator.cs" />

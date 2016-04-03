@@ -2,6 +2,7 @@
 using Nop.Admin.Models.Cms;
 using Nop.Admin.Models.Common;
 using Nop.Admin.Models.Customers;
+using Nop.Admin.Models.Directory;
 using Nop.Admin.Models.ExternalAuthentication;
 using Nop.Admin.Models.Localization;
 using Nop.Admin.Models.Logging;
@@ -14,7 +15,7 @@ using Nop.Admin.Models.Stores;
 using Nop.Admin.Models.Topics;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
-
+using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Domain.Logging;
 using Nop.Core.Domain.Media;
@@ -37,7 +38,61 @@ namespace Nop.Admin.Infrastructure
         {
             //TODO remove 'CreatedOnUtc' ignore mappings because now presentation layer models have 'CreatedOn' property and core entities have 'CreatedOnUtc' property (distinct names)
 
-          
+
+            //address
+            Mapper.CreateMap<Address, AddressModel>()
+                .ForMember(dest => dest.AddressHtml, mo => mo.Ignore())
+                .ForMember(dest => dest.CustomAddressAttributes, mo => mo.Ignore())
+                .ForMember(dest => dest.FormattedCustomAddressAttributes, mo => mo.Ignore())
+                .ForMember(dest => dest.AvailableCountries, mo => mo.Ignore())
+                .ForMember(dest => dest.AvailableStates, mo => mo.Ignore())
+                .ForMember(dest => dest.FirstNameEnabled, mo => mo.Ignore())
+                .ForMember(dest => dest.FirstNameRequired, mo => mo.Ignore())
+                .ForMember(dest => dest.LastNameEnabled, mo => mo.Ignore())
+                .ForMember(dest => dest.LastNameRequired, mo => mo.Ignore())
+                .ForMember(dest => dest.EmailEnabled, mo => mo.Ignore())
+                .ForMember(dest => dest.EmailRequired, mo => mo.Ignore())
+                .ForMember(dest => dest.CompanyEnabled, mo => mo.Ignore())
+                .ForMember(dest => dest.CompanyRequired, mo => mo.Ignore())
+                .ForMember(dest => dest.CountryEnabled, mo => mo.Ignore())
+                .ForMember(dest => dest.StateProvinceEnabled, mo => mo.Ignore())
+                .ForMember(dest => dest.CityEnabled, mo => mo.Ignore())
+                .ForMember(dest => dest.CityRequired, mo => mo.Ignore())
+                .ForMember(dest => dest.StreetAddressEnabled, mo => mo.Ignore())
+                .ForMember(dest => dest.StreetAddressRequired, mo => mo.Ignore())
+                .ForMember(dest => dest.StreetAddress2Enabled, mo => mo.Ignore())
+                .ForMember(dest => dest.StreetAddress2Required, mo => mo.Ignore())
+                .ForMember(dest => dest.ZipPostalCodeEnabled, mo => mo.Ignore())
+                .ForMember(dest => dest.ZipPostalCodeRequired, mo => mo.Ignore())
+                .ForMember(dest => dest.PhoneEnabled, mo => mo.Ignore())
+                .ForMember(dest => dest.PhoneRequired, mo => mo.Ignore())
+                .ForMember(dest => dest.FaxEnabled, mo => mo.Ignore())
+                .ForMember(dest => dest.FaxRequired, mo => mo.Ignore())
+                .ForMember(dest => dest.CountryName, mo => mo.MapFrom(src => src.Country != null ? src.Country.Name : null))
+                .ForMember(dest => dest.StateProvinceName, mo => mo.MapFrom(src => src.StateProvince != null ? src.StateProvince.Name : null))
+                .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
+            Mapper.CreateMap<AddressModel, Address>()
+                .ForMember(dest => dest.CreatedOnUtc, mo => mo.Ignore())
+                .ForMember(dest => dest.Country, mo => mo.Ignore())
+                .ForMember(dest => dest.CustomAttributes, mo => mo.Ignore())
+                .ForMember(dest => dest.StateProvince, mo => mo.Ignore());
+
+            //countries
+            Mapper.CreateMap<CountryModel, Country>()
+                .ForMember(dest => dest.StateProvinces, mo => mo.Ignore());
+            Mapper.CreateMap<Country, CountryModel>()
+                .ForMember(dest => dest.NumberOfStates, mo => mo.MapFrom(src => src.StateProvinces != null ? src.StateProvinces.Count : 0))
+                .ForMember(dest => dest.Locales, mo => mo.Ignore())
+                .ForMember(dest => dest.AvailableStores, mo => mo.Ignore())
+                .ForMember(dest => dest.SelectedStoreIds, mo => mo.Ignore())
+                .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
+            //state/provinces
+            Mapper.CreateMap<StateProvince, StateProvinceModel>()
+                .ForMember(dest => dest.Locales, mo => mo.Ignore())
+                .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
+            Mapper.CreateMap<StateProvinceModel, StateProvince>()
+                .ForMember(dest => dest.Country, mo => mo.Ignore());
+
 
             //language
             Mapper.CreateMap<Language, LanguageModel>()

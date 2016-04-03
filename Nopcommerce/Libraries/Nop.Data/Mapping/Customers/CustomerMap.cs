@@ -16,7 +16,10 @@ namespace Nop.Data.Mapping.Customers
             this.HasMany(c => c.CustomerRoles)
                 .WithMany()
                 .Map(m => m.ToTable("Customer_CustomerRole_Mapping"));
-           
+            this.HasMany(c => c.Addresses)
+              .WithMany()
+              .Map(m => m.ToTable("CustomerAddresses"));
+
         }
     }
 }

@@ -49,12 +49,19 @@ namespace Nop.Web.Controllers
     
         private readonly RewardPointsSettings _rewardPointsSettings;
         private readonly CustomerSettings _customerSettings;
+        private readonly AddressSettings _addressSettings;
+        private readonly IAddressService _addressService;
+        private readonly ICountryService _countryService;
+        private readonly IStateProvinceService _stateProvinceService;
         private readonly IPictureService _pictureService;
         private readonly INewsLetterSubscriptionService _newsLetterSubscriptionService;
         private readonly IOpenAuthenticationService _openAuthenticationService;
         private readonly IDownloadService _downloadService;
         private readonly IWebHelper _webHelper;
         private readonly ICustomerActivityService _customerActivityService;
+        private readonly IAddressAttributeParser _addressAttributeParser;
+        private readonly IAddressAttributeService _addressAttributeService;
+        private readonly IAddressAttributeFormatter _addressAttributeFormatter;
 
         private readonly MediaSettings _mediaSettings;
         private readonly IWorkflowMessageService _workflowMessageService;
@@ -81,12 +88,19 @@ namespace Nop.Web.Controllers
             ICustomerRegistrationService customerRegistrationService,
             RewardPointsSettings rewardPointsSettings,
             CustomerSettings customerSettings,
+            AddressSettings addressSettings,
+            IAddressService addressService,
+            ICountryService countryService,
+            IStateProvinceService stateProvinceService,
             IPictureService pictureService,
             INewsLetterSubscriptionService newsLetterSubscriptionService,
             IOpenAuthenticationService openAuthenticationService,
             IDownloadService downloadService,
             IWebHelper webHelper,
             ICustomerActivityService customerActivityService,
+            IAddressAttributeParser addressAttributeParser,
+            IAddressAttributeService addressAttributeService,
+            IAddressAttributeFormatter addressAttributeFormatter,
             MediaSettings mediaSettings,
             IWorkflowMessageService workflowMessageService,
             LocalizationSettings localizationSettings,
@@ -100,6 +114,8 @@ namespace Nop.Web.Controllers
             this._workContext = workContext;
             this._storeContext = storeContext;
             this._storeMappingService = storeMappingService;
+            this._customerSettings = customerSettings;
+            this._addressSettings = addressSettings;
             this._customerService = customerService;
             this._customerAttributeParser = customerAttributeParser;
             this._customerAttributeService = customerAttributeService;
@@ -107,12 +123,18 @@ namespace Nop.Web.Controllers
             this._customerRegistrationService = customerRegistrationService;
             this._rewardPointsSettings = rewardPointsSettings;
             this._customerSettings = customerSettings;
+            this._addressService = addressService;
+            this._countryService = countryService;
+            this._stateProvinceService = stateProvinceService;
             this._pictureService = pictureService;
             this._newsLetterSubscriptionService = newsLetterSubscriptionService;
             this._openAuthenticationService = openAuthenticationService;
             this._downloadService = downloadService;
             this._webHelper = webHelper;
             this._customerActivityService = customerActivityService;
+            this._addressAttributeParser = addressAttributeParser;
+            this._addressAttributeService = addressAttributeService;
+            this._addressAttributeFormatter = addressAttributeFormatter;
             this._mediaSettings = mediaSettings;
             this._workflowMessageService = workflowMessageService;
             this._localizationSettings = localizationSettings;

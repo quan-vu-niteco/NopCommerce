@@ -11,7 +11,10 @@ namespace Nop.Core.Domain.Customers
         public static string Company { get { return "Company"; } }
         public static string StreetAddress { get { return "StreetAddress"; } }
         public static string StreetAddress2 { get { return "StreetAddress2"; } }
-       
+        public static string ZipPostalCode { get { return "ZipPostalCode"; } }
+        public static string City { get { return "City"; } }
+        public static string CountryId { get { return "CountryId"; } }
+        public static string StateProvinceId { get { return "StateProvinceId"; } }
         public static string Phone { get { return "Phone"; } }
         public static string Fax { get { return "Fax"; } }
         public static string TimeZoneId { get { return "TimeZoneId"; } }
@@ -26,7 +29,6 @@ namespace Nop.Core.Domain.Customers
         public static string LastVisitedPage { get { return "LastVisitedPage"; } }
         public static string ImpersonatedCustomerId { get { return "ImpersonatedCustomerId"; } }
         public static string AdminAreaStoreScopeConfiguration { get { return "AdminAreaStoreScopeConfiguration"; } }
-
 
 
         //depends on store

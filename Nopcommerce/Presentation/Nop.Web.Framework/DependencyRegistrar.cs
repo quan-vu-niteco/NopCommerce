@@ -126,7 +126,10 @@ namespace Nop.Web.Framework
             builder.RegisterType<FulltextService>().As<IFulltextService>().InstancePerLifetimeScope();
             builder.RegisterType<MaintenanceService>().As<IMaintenanceService>().InstancePerLifetimeScope();
 
-
+            builder.RegisterType<AddressAttributeFormatter>().As<IAddressAttributeFormatter>().InstancePerLifetimeScope();
+            builder.RegisterType<AddressAttributeParser>().As<IAddressAttributeParser>().InstancePerLifetimeScope();
+            builder.RegisterType<AddressAttributeService>().As<IAddressAttributeService>().InstancePerLifetimeScope();
+            builder.RegisterType<AddressService>().As<IAddressService>().InstancePerLifetimeScope();
             builder.RegisterType<CustomerAttributeParser>().As<ICustomerAttributeParser>().InstancePerLifetimeScope();
             builder.RegisterType<CustomerAttributeService>().As<ICustomerAttributeService>().InstancePerLifetimeScope();
             builder.RegisterType<CustomerService>().As<ICustomerService>().InstancePerLifetimeScope();
@@ -143,6 +146,9 @@ namespace Nop.Web.Framework
                 .InstancePerLifetimeScope();
 
             builder.RegisterType<GeoLookupService>().As<IGeoLookupService>().InstancePerLifetimeScope();
+            builder.RegisterType<CountryService>().As<ICountryService>().InstancePerLifetimeScope();
+            builder.RegisterType<CurrencyService>().As<ICurrencyService>().InstancePerLifetimeScope();
+            builder.RegisterType<StateProvinceService>().As<IStateProvinceService>().InstancePerLifetimeScope();
 
             builder.RegisterType<StoreService>().As<IStoreService>().InstancePerLifetimeScope();
             //pass MemoryCacheManager as cacheManager (cache settings between requests)

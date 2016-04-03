@@ -107,10 +107,20 @@ namespace Nop.Core.Domain.Customers
         {
             return IsInCustomerRole(customer, SystemCustomerRoleNames.Guests, onlyActiveCustomerRoles);
         }
-       
+
         #endregion
 
-        
+        #region Addresses
+
+        public static void RemoveAddress(this Customer customer, Address address)
+        {
+            if (customer.Addresses.Contains(address))
+            {
+                customer.Addresses.Remove(address);
+            }
+        }
+
+        #endregion
 
         #region Reward points
 

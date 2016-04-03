@@ -90,6 +90,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ComponentModel\WriteLockDisposable.cs" />
+    <Compile Include="Domain\Catalog\AttributeControlType.cs" />
+    <Compile Include="Domain\Catalog\AttributeValueType.cs" />
     <Compile Include="Domain\Common\Address.cs" />
     <Compile Include="Domain\Common\AddressAttribute.cs" />
     <Compile Include="Domain\Common\AddressAttributeValue.cs" />
