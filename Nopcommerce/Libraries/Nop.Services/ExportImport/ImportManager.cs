@@ -3,8 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using Nop.Core;
-
-
+using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Messages;
 
 using Nop.Services.Directory;
@@ -27,6 +26,8 @@ namespace Nop.Services.ExportImport
         private readonly IUrlRecordService _urlRecordService;
         private readonly IStoreContext _storeContext;
         private readonly INewsLetterSubscriptionService _newsLetterSubscriptionService;
+        private readonly ICountryService _countryService;
+        private readonly IStateProvinceService _stateProvinceService;
 
         #endregion
 
@@ -37,12 +38,16 @@ namespace Nop.Services.ExportImport
             IPictureService pictureService,
             IUrlRecordService urlRecordService,
             IStoreContext storeContext,
-            INewsLetterSubscriptionService newsLetterSubscriptionService)
+            INewsLetterSubscriptionService newsLetterSubscriptionService,
+            ICountryService countryService,
+            IStateProvinceService stateProvinceService)
         {
             this._pictureService = pictureService;
             this._urlRecordService = urlRecordService;
             this._storeContext = storeContext;
             this._newsLetterSubscriptionService = newsLetterSubscriptionService;
+            this._countryService = countryService;
+            this._stateProvinceService = stateProvinceService;
         }
 
         #endregion
@@ -155,6 +160,69 @@ namespace Nop.Services.ExportImport
             return count;
         }
 
+        /// <summary>
+        /// Import states from TXT file
+        /// </summary>
+        /// <param name="stream">Stream</param>
+        /// <returns>Number of imported states</returns>
+        public virtual int ImportStatesFromTxt(Stream stream)
+        {
+            int count = 0;
+            using (var reader = new StreamReader(stream))
+            {
+                while (!reader.EndOfStream)
+                {
+                    string line = reader.ReadLine();
+                    if (String.IsNullOrWhiteSpace(line))
+                        continue;
+                    string[] tmp = line.Split(',');
+
+                    if (tmp.Length != 5)
+                        throw new NopException("Wrong file format");
+
+                    //parse
+                    var countryTwoLetterIsoCode = tmp[0].Trim();
+                    var name = tmp[1].Trim();
+                    var abbreviation = tmp[2].Trim();
+                    bool published = Boolean.Parse(tmp[3].Trim());
+                    int displayOrder = Int32.Parse(tmp[4].Trim());
+
+                    var country = _countryService.GetCountryByTwoLetterIsoCode(countryTwoLetterIsoCode);
+                    if (country == null)
+                    {
+                        //country cannot be loaded. skip
+                        continue;
+                    }
+
+                    //import
+                    var states = _stateProvinceService.GetStateProvincesByCountryId(country.Id, true);
+                    var state = states.FirstOrDefault(x => x.Name.Equals(name, StringComparison.InvariantCultureIgnoreCase));
+
+                    if (state != null)
+                    {
+                        state.Abbreviation = abbreviation;
+                        state.Published = published;
+                        state.DisplayOrder = displayOrder;
+                        _stateProvinceService.UpdateStateProvince(state);
+                    }
+                    else
+                    {
+                        state = new StateProvince
+                        {
+                            CountryId = country.Id,
+                            Name = name,
+                            Abbreviation = abbreviation,
+                            Published = published,
+                            DisplayOrder = displayOrder,
+                        };
+                        _stateProvinceService.InsertStateProvince(state);
+                    }
+                    count++;
+                }
+            }
+
+            return count;
+        }
         #endregion
     }
 }

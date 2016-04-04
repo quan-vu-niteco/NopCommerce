@@ -15,6 +15,7 @@ namespace Nop.Services.ExportImport
         /// <returns>Number of imported subscribers</returns>
         int ImportNewsletterSubscribersFromTxt(Stream stream);
 
-       
+        int ImportStatesFromTxt(Stream stream);
+
     }
 }

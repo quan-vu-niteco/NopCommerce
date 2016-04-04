@@ -2,7 +2,7 @@
 using System.IO;
 
 using Nop.Core.Domain.Customers;
-
+using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Messages;
 
 
@@ -33,5 +33,7 @@ namespace Nop.Services.ExportImport
         /// <param name="subscriptions">Subscriptions</param>
         /// <returns>Result in TXT (string) format</returns>
         string ExportNewsletterSubscribersToTxt(IList<NewsLetterSubscription> subscriptions);
+
+        string ExportStatesToTxt(IList<StateProvince> states);
     }
 }
