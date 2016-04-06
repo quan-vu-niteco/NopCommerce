@@ -12,9 +12,10 @@ namespace Nop.Services.Security
         //admin area permissions
         public static readonly PermissionRecord AccessAdminPanel = new PermissionRecord { Name = "Access admin area", SystemName = "AccessAdminPanel", Category = "Standard" };
         public static readonly PermissionRecord AllowCustomerImpersonation = new PermissionRecord { Name = "Admin area. Allow Customer Impersonation", SystemName = "AllowCustomerImpersonation", Category = "Customers" };
-     
-      
-     
+        public static readonly PermissionRecord ManageProducts = new PermissionRecord { Name = "Admin area. Manage Products", SystemName = "ManageProducts", Category = "Catalog" };
+        public static readonly PermissionRecord ManageCategories = new PermissionRecord { Name = "Admin area. Manage Categories", SystemName = "ManageCategories", Category = "Catalog" };
+
+
         public static readonly PermissionRecord ManageAttributes = new PermissionRecord { Name = "Admin area. Manage Attributes", SystemName = "ManageAttributes", Category = "Catalog" };
         public static readonly PermissionRecord ManageCustomers = new PermissionRecord { Name = "Admin area. Manage Customers", SystemName = "ManageCustomers", Category = "Customers" };
         public static readonly PermissionRecord ManageReturnRequests = new PermissionRecord { Name = "Admin area. Manage Return Requests", SystemName = "ManageReturnRequests", Category = "Orders" };
@@ -54,6 +55,8 @@ namespace Nop.Services.Security
             {
                 AccessAdminPanel,
                 AllowCustomerImpersonation,
+                  ManageProducts,
+                ManageCategories,
                 ManageAttributes,
                 ManageCustomers,
                 ManageReturnRequests,
@@ -96,6 +99,8 @@ namespace Nop.Services.Security
                     {
                         AccessAdminPanel,
                         AllowCustomerImpersonation,
+                        ManageProducts,
+                        ManageCategories,
                         ManageAttributes,
                         ManageCustomers,
                         ManageReturnRequests,

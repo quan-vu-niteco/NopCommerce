@@ -69,6 +69,7 @@ namespace Nop.Services.Installation
             IRepository<Topic> topicRepository,
             IRepository<NewsItem> newsItemRepository,
             IRepository<Poll> pollRepository,
+            IRepository<ActivityLogType> activityLogTypeRepository,
             IRepository<ScheduleTask> scheduleTaskRepository,
             IGenericAttributeService genericAttributeService,
             IWebHelper webHelper)
@@ -84,6 +85,7 @@ namespace Nop.Services.Installation
             this._topicRepository = topicRepository;
             this._newsItemRepository = newsItemRepository;
             this._pollRepository = pollRepository;
+            this._activityLogTypeRepository = activityLogTypeRepository;
             this._scheduleTaskRepository = scheduleTaskRepository;
             this._genericAttributeService = genericAttributeService;
             this._webHelper = webHelper;

@@ -13,6 +13,12 @@ namespace Nop.Services.ExportImport
     /// </summary>
     public partial interface IExportManager
     {
+
+        /// <summary>
+        /// Export category list to xml
+        /// </summary>
+        /// <returns>Result in XML format</returns>
+        string ExportCategoriesToXml();
         /// <summary>
         /// Export customer list to XLSX
         /// </summary>

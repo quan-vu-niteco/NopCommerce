@@ -1,5 +1,6 @@
 ﻿using System;
 using AutoMapper;
+using Nop.Admin.Models.Catalog;
 using Nop.Admin.Models.Cms;
 using Nop.Admin.Models.Common;
 using Nop.Admin.Models.Customers;
@@ -17,6 +18,7 @@ using Nop.Admin.Models.Settings;
 using Nop.Admin.Models.Stores;
 
 using Nop.Admin.Models.Topics;
+using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Directory;
@@ -220,7 +222,101 @@ namespace Nop.Admin.Extensions
         }
 
         #endregion
-        
+
+        #region Products
+
+        public static ProductModel ToModel(this Product entity)
+        {
+            return entity.MapTo<Product, ProductModel>();
+        }
+
+        public static Product ToEntity(this ProductModel model)
+        {
+            return model.MapTo<ProductModel, Product>();
+        }
+
+        public static Product ToEntity(this ProductModel model, Product destination)
+        {
+            return model.MapTo(destination);
+        }
+
+        #endregion
+
+        #region Product attributes
+
+        public static ProductAttributeModel ToModel(this ProductAttribute entity)
+        {
+            return entity.MapTo<ProductAttribute, ProductAttributeModel>();
+        }
+
+        public static ProductAttribute ToEntity(this ProductAttributeModel model)
+        {
+            return model.MapTo<ProductAttributeModel, ProductAttribute>();
+        }
+
+        public static ProductAttribute ToEntity(this ProductAttributeModel model, ProductAttribute destination)
+        {
+            return model.MapTo(destination);
+        }
+
+        #endregion
+
+        #region Specification attributes
+
+        //attributes
+        public static SpecificationAttributeModel ToModel(this SpecificationAttribute entity)
+        {
+            return entity.MapTo<SpecificationAttribute, SpecificationAttributeModel>();
+        }
+
+        public static SpecificationAttribute ToEntity(this SpecificationAttributeModel model)
+        {
+            return model.MapTo<SpecificationAttributeModel, SpecificationAttribute>();
+        }
+
+        public static SpecificationAttribute ToEntity(this SpecificationAttributeModel model, SpecificationAttribute destination)
+        {
+            return model.MapTo(destination);
+        }
+
+        //attribute options
+        public static SpecificationAttributeOptionModel ToModel(this SpecificationAttributeOption entity)
+        {
+            return entity.MapTo<SpecificationAttributeOption, SpecificationAttributeOptionModel>();
+        }
+
+        public static SpecificationAttributeOption ToEntity(this SpecificationAttributeOptionModel model)
+        {
+            return model.MapTo<SpecificationAttributeOptionModel, SpecificationAttributeOption>();
+        }
+
+        public static SpecificationAttributeOption ToEntity(this SpecificationAttributeOptionModel model, SpecificationAttributeOption destination)
+        {
+            return model.MapTo(destination);
+        }
+        #endregion
+
+        #region Address attributes
+
+        //attributes
+        public static AddressAttributeModel ToModel(this AddressAttribute entity)
+        {
+            return entity.MapTo<AddressAttribute, AddressAttributeModel>();
+        }
+
+        public static AddressAttribute ToEntity(this AddressAttributeModel model)
+        {
+            return model.MapTo<AddressAttributeModel, AddressAttribute>();
+        }
+
+        public static AddressAttribute ToEntity(this AddressAttributeModel model, AddressAttribute destination)
+        {
+            return model.MapTo(destination);
+        }
+
+        #endregion
+
+
         #region Widgets
 
         public static WidgetModel ToModel(this IWidgetPlugin entity)
@@ -249,9 +345,29 @@ namespace Nop.Admin.Extensions
         }
 
         #endregion
-    
 
         #region Category
+
+        public static CategoryModel ToModel(this Category entity)
+        {
+            return entity.MapTo<Category, CategoryModel>();
+        }
+
+        public static Category ToEntity(this CategoryModel model)
+        {
+            return model.MapTo<CategoryModel, Category>();
+        }
+
+        public static Category ToEntity(this CategoryModel model, Category destination)
+        {
+            return model.MapTo(destination);
+        }
+
+        #endregion
+
+
+
+        #region Catalogues
 
         public static CataloguesModel ToModel(this Catalogues entity)
         {
@@ -269,6 +385,7 @@ namespace Nop.Admin.Extensions
         }
 
         #endregion
+
 
         #region News
 

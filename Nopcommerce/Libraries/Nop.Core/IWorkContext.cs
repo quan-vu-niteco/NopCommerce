@@ -1,5 +1,5 @@
 ﻿using Nop.Core.Domain.Customers;
-
+using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Localization;
 
 namespace Nop.Core
@@ -24,7 +24,10 @@ namespace Nop.Core
         /// <summary>
         /// Get or set current user working currency
         /// </summary>
-
+        /// <summary>
+        /// Get or set current user working currency
+        /// </summary>
+        Currency WorkingCurrency { get; set; }
         /// <summary>
         /// Get or set value indicating whether we're in admin area
         /// </summary>
