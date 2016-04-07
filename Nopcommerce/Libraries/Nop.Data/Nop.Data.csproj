@@ -68,6 +68,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Mapping\Catalog\CategoryMap.cs" />
+    <Compile Include="Mapping\Catalog\CategoryTemplateMap.cs" />
     <Compile Include="Mapping\Catalog\ProductAttributeCombinationMap.cs" />
     <Compile Include="Mapping\Catalog\ProductAttributeMap.cs" />
     <Compile Include="Mapping\Catalog\ProductAttributeMappingMap.cs" />

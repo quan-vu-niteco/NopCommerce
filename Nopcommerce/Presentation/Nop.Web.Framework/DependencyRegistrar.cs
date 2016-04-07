@@ -19,6 +19,7 @@ using Nop.Core.Plugins;
 using Nop.Data;
 using Nop.Services.Authentication;
 using Nop.Services.Authentication.External;
+using Nop.Services.Catalog;
 using Nop.Services.Cms;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
@@ -121,7 +122,18 @@ namespace Nop.Web.Framework
             builder.RegisterType<WebWorkContext>().As<IWorkContext>().InstancePerLifetimeScope();
             //store context
             builder.RegisterType<WebStoreContext>().As<IStoreContext>().InstancePerLifetimeScope();
-        
+
+            //services
+          
+            builder.RegisterType<CategoryService>().As<ICategoryService>().InstancePerLifetimeScope();
+          
+            builder.RegisterType<PriceFormatter>().As<IPriceFormatter>().InstancePerLifetimeScope();
+            builder.RegisterType<ProductAttributeFormatter>().As<IProductAttributeFormatter>().InstancePerLifetimeScope();
+            builder.RegisterType<ProductAttributeParser>().As<IProductAttributeParser>().InstancePerLifetimeScope();
+            builder.RegisterType<ProductAttributeService>().As<IProductAttributeService>().InstancePerLifetimeScope();
+            builder.RegisterType<ProductService>().As<IProductService>().InstancePerLifetimeScope();
+            builder.RegisterType<CategoryTemplateService>().As<ICategoryTemplateService>().InstancePerLifetimeScope();
+
             builder.RegisterType<SearchTermService>().As<ISearchTermService>().InstancePerLifetimeScope();
             builder.RegisterType<GenericAttributeService>().As<IGenericAttributeService>().InstancePerLifetimeScope();
             builder.RegisterType<FulltextService>().As<IFulltextService>().InstancePerLifetimeScope();
