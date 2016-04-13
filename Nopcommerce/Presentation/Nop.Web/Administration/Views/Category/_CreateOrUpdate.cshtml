@@ -14,9 +14,6 @@
         <li @Html.RenderSelectedTabIndex(2, GetSelectedTabIndex())>
             @T("Admin.Catalog.Categories.Products")
         </li>
-        <li @Html.RenderSelectedTabIndex(3, GetSelectedTabIndex())>
-            @T("Admin.Catalog.Categories.Discounts")
-        </li>
         <li @Html.RenderSelectedTabIndex(4, GetSelectedTabIndex())>
             @T("Admin.Catalog.Categories.Acl")
         </li>
@@ -32,9 +29,6 @@
     </div>
     <div>
         @TabProducts()
-    </div>
-    <div>
-        @TabDiscounts()
     </div>
     <div>
         @TabAcl()
@@ -459,27 +453,6 @@
     {
             @T("Admin.Catalog.Categories.Products.SaveBeforeEdit")
     }
-}
-
-@helper TabDiscounts()
-    {
-        if (Model.AvailableDiscounts != null && Model.AvailableDiscounts.Count > 0)
-        {
-            foreach (var discount in Model.AvailableDiscounts)
-            {
-            <input type="checkbox" name="SelectedDiscountIds" value="@discount.Id"
-            @if (Model.SelectedDiscountIds != null && Model.SelectedDiscountIds.Contains(discount.Id))
-            {
-                <text>checked="checked"</text>
-            }
-            />@discount.Name
-            <br />
-            }
-        }
-        else
-        {
-            @T("Admin.Catalog.Categories.Discounts.NoDiscounts")
-        }
 }
 @helper TabAcl()
 {

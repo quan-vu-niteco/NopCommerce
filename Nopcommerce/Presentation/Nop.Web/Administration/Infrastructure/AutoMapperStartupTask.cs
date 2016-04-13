@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Nop.Admin.Models.Catalog;
 using Nop.Admin.Models.Cms;
 using Nop.Admin.Models.Common;
 using Nop.Admin.Models.Customers;
@@ -13,6 +14,7 @@ using Nop.Admin.Models.Polls;
 using Nop.Admin.Models.Settings;
 using Nop.Admin.Models.Stores;
 using Nop.Admin.Models.Topics;
+using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Common;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Directory;
@@ -154,8 +156,78 @@ namespace Nop.Admin.Infrastructure
                 .ForMember(dest => dest.SelectedStoreIds, mo => mo.Ignore())
                 .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
             Mapper.CreateMap<TopicModel, Topic>();
+            //category
+            Mapper.CreateMap<Category, CategoryModel>()
+                .ForMember(dest => dest.AvailableCategoryTemplates, mo => mo.Ignore())
+                .ForMember(dest => dest.Locales, mo => mo.Ignore())
+                .ForMember(dest => dest.Breadcrumb, mo => mo.Ignore())
+                .ForMember(dest => dest.AvailableCategories, mo => mo.Ignore())
+                .ForMember(dest => dest.SeName, mo => mo.MapFrom(src => src.GetSeName(0, true, false)))
+                .ForMember(dest => dest.AvailableCustomerRoles, mo => mo.Ignore())
+                .ForMember(dest => dest.SelectedCustomerRoleIds, mo => mo.Ignore())
+                .ForMember(dest => dest.AvailableStores, mo => mo.Ignore())
+                .ForMember(dest => dest.SelectedStoreIds, mo => mo.Ignore())
+                .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
+            Mapper.CreateMap<CategoryModel, Category>()
+                .ForMember(dest => dest.HasDiscountsApplied, mo => mo.Ignore())
+                .ForMember(dest => dest.CreatedOnUtc, mo => mo.Ignore())
+                .ForMember(dest => dest.UpdatedOnUtc, mo => mo.Ignore())
+                .ForMember(dest => dest.Deleted, mo => mo.Ignore());
 
-           
+            //products
+            Mapper.CreateMap<Product, ProductModel>()
+                .ForMember(dest => dest.ProductTypeName, mo => mo.Ignore())
+                .ForMember(dest => dest.AssociatedToProductId, mo => mo.Ignore())
+                .ForMember(dest => dest.AssociatedToProductName, mo => mo.Ignore())
+                .ForMember(dest => dest.CreatedOn, mo => mo.Ignore())
+                .ForMember(dest => dest.UpdatedOn, mo => mo.Ignore())
+                .ForMember(dest => dest.ProductTags, mo => mo.Ignore())
+                .ForMember(dest => dest.PictureThumbnailUrl, mo => mo.Ignore())
+                .ForMember(dest => dest.AvailableVendors, mo => mo.Ignore())
+                .ForMember(dest => dest.AvailableProductTemplates, mo => mo.Ignore())
+                .ForMember(dest => dest.Locales, mo => mo.Ignore())
+                .ForMember(dest => dest.AvailableCategories, mo => mo.Ignore())
+                .ForMember(dest => dest.AvailableManufacturers, mo => mo.Ignore())
+                .ForMember(dest => dest.AvailableProductAttributes, mo => mo.Ignore())
+                .ForMember(dest => dest.AddPictureModel, mo => mo.Ignore())
+                .ForMember(dest => dest.ProductPictureModels, mo => mo.Ignore())
+                .ForMember(dest => dest.AddSpecificationAttributeModel, mo => mo.Ignore())
+                .ForMember(dest => dest.CopyProductModel, mo => mo.Ignore())
+                .ForMember(dest => dest.ProductWarehouseInventoryModels, mo => mo.Ignore())
+                .ForMember(dest => dest.IsLoggedInAsVendor, mo => mo.Ignore())
+                .ForMember(dest => dest.SeName, mo => mo.MapFrom(src => src.GetSeName(0, true, false)))
+                .ForMember(dest => dest.AvailableCustomerRoles, mo => mo.Ignore())
+                .ForMember(dest => dest.SelectedCustomerRoleIds, mo => mo.Ignore())
+                .ForMember(dest => dest.AvailableStores, mo => mo.Ignore())
+                .ForMember(dest => dest.SelectedStoreIds, mo => mo.Ignore())
+                .ForMember(dest => dest.AvailableTaxCategories, mo => mo.Ignore())
+                .ForMember(dest => dest.PrimaryStoreCurrencyCode, mo => mo.Ignore())
+                .ForMember(dest => dest.BaseDimensionIn, mo => mo.Ignore())
+                .ForMember(dest => dest.BaseWeightIn, mo => mo.Ignore())
+                .ForMember(dest => dest.Locales, mo => mo.Ignore())
+                .ForMember(dest => dest.AvailableDeliveryDates, mo => mo.Ignore())
+                .ForMember(dest => dest.AvailableWarehouses, mo => mo.Ignore())
+                .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
+            Mapper.CreateMap<ProductModel, Product>()
+                .ForMember(dest => dest.ProductTags, mo => mo.Ignore())
+                .ForMember(dest => dest.CreatedOnUtc, mo => mo.Ignore())
+                .ForMember(dest => dest.UpdatedOnUtc, mo => mo.Ignore())
+                .ForMember(dest => dest.ParentGroupedProductId, mo => mo.Ignore())
+                .ForMember(dest => dest.ProductType, mo => mo.Ignore())
+                .ForMember(dest => dest.Deleted, mo => mo.Ignore())
+                .ForMember(dest => dest.ApprovedRatingSum, mo => mo.Ignore())
+                .ForMember(dest => dest.NotApprovedRatingSum, mo => mo.Ignore())
+                .ForMember(dest => dest.ApprovedTotalReviews, mo => mo.Ignore())
+                .ForMember(dest => dest.NotApprovedTotalReviews, mo => mo.Ignore())
+                .ForMember(dest => dest.ProductCategories, mo => mo.Ignore())
+                .ForMember(dest => dest.ProductPictures, mo => mo.Ignore())
+                .ForMember(dest => dest.ProductReviews, mo => mo.Ignore())
+                .ForMember(dest => dest.ProductSpecificationAttributes, mo => mo.Ignore())
+                .ForMember(dest => dest.HasTierPrices, mo => mo.Ignore())
+                .ForMember(dest => dest.HasDiscountsApplied, mo => mo.Ignore())
+                .ForMember(dest => dest.ProductAttributeMappings, mo => mo.Ignore())
+                .ForMember(dest => dest.ProductAttributeCombinations, mo => mo.Ignore());
+
             //logs
             Mapper.CreateMap<Log, LogModel>()
                 .ForMember(dest => dest.CustomerEmail, mo => mo.Ignore())

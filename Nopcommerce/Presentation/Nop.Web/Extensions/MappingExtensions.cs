@@ -86,8 +86,8 @@ namespace Nop.Web.Extensions
                 model.ZipPostalCode = customer.GetAttribute<string>(SystemCustomerAttributeNames.ZipPostalCode);
                 model.City = customer.GetAttribute<string>(SystemCustomerAttributeNames.City);
                 //ignore country and state for prepopulation. it can cause some issues when posting pack with errors, etc
-                //model.CountryId = customer.GetAttribute<int>(SystemCustomerAttributeNames.CountryId);
-                //model.StateProvinceId = customer.GetAttribute<int>(SystemCustomerAttributeNames.StateProvinceId);
+                model.CountryId = customer.GetAttribute<int>(SystemCustomerAttributeNames.CountryId);
+                model.StateProvinceId = customer.GetAttribute<int>(SystemCustomerAttributeNames.StateProvinceId);
                 model.PhoneNumber = customer.GetAttribute<string>(SystemCustomerAttributeNames.Phone);
                 model.FaxNumber = customer.GetAttribute<string>(SystemCustomerAttributeNames.Fax);
             }
