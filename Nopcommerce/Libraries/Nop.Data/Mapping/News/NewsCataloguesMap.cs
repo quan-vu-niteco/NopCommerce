@@ -1,19 +1,19 @@
 using Nop.Core.Domain.News;
 namespace Nop.Data.Mapping.News
 {
-    public partial class NewsCataloguesMap : NopEntityTypeConfiguration<NewsCatalogues>
+    public partial class NewsCatalogueMap : NopEntityTypeConfiguration<NewsCatalogue>
     {
-        public NewsCataloguesMap()
+        public NewsCatalogueMap()
         {
-            this.ToTable("News_Catalogues_Mapping");
+            this.ToTable("News_Catalogue_Mapping");
             this.HasKey(pc => pc.Id);
 
-            this.HasRequired(pc => pc.Catalogues)
+            this.HasRequired(pc => pc.Catalogue)
                 .WithMany()
                 .HasForeignKey(pc => pc.CatalogueId);
 
             this.HasRequired(pc => pc.News)
-                .WithMany(p => p.NewsCatalogues)
+                .WithMany(p => p.NewsCatalogue)
                 .HasForeignKey(pc => pc.NewsId);
         }
     }

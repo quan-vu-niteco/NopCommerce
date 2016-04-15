@@ -141,12 +141,14 @@
     <Compile Include="Domain\Forums\ForumTopicType.cs" />
     <Compile Include="Domain\Forums\PrivateMessage.cs" />
     <Compile Include="Domain\Media\Picture.cs" />
-    <Compile Include="Domain\News\CataloguesSettings.cs" />
-    <Compile Include="Domain\News\Catalogues.cs" />
+    <Compile Include="Domain\News\CatalogueSettings.cs" />
+    <Compile Include="Domain\News\Catalogue.cs" />
     <Compile Include="Domain\News\NewsPicture.cs" />
     <Compile Include="Domain\News\NewsCatalogues.cs" />
     <Compile Include="Domain\News\NewsType.cs" />
     <Compile Include="Domain\News\NewsSortingEnum.cs" />
+    <Compile Include="Domain\Orders\CheckoutAttribute.cs" />
+    <Compile Include="Domain\Orders\CheckoutAttributeValue.cs" />
     <Compile Include="Domain\Orders\Order.cs" />
     <Compile Include="Domain\Orders\OrderAverageReportLine.cs" />
     <Compile Include="Domain\Orders\OrderAverageReportLineSummary.cs" />

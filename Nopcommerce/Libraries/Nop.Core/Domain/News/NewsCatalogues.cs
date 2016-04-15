@@ -3,7 +3,7 @@ namespace Nop.Core.Domain.News
     /// <summary>
     /// Represents a news category mapping
     /// </summary>
-    public partial class NewsCatalogues : BaseEntity
+    public partial class NewsCatalogue : BaseEntity
     {
         /// <summary>
         /// Gets or sets the news identifier
@@ -28,7 +28,7 @@ namespace Nop.Core.Domain.News
         /// <summary>
         /// Gets the category
         /// </summary>
-        public virtual Catalogues Catalogues { get; set; }
+        public virtual Catalogue Catalogue { get; set; }
 
         /// <summary>
         /// Gets the news

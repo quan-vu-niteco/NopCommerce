@@ -2,7 +2,7 @@
 
 namespace Nop.Core.Domain.News
 {
-    public class CataloguesSettings : ISettings
+    public class Catalogueettings : ISettings
     {
 
      
@@ -37,17 +37,17 @@ namespace Nop.Core.Domain.News
         /// <summary>
         /// Gets or sets a value indicating whether number of products should be displayed beside each category
         /// </summary>
-        public bool ShowCataloguesNewsNumber { get; set; }
+        public bool ShowCatalogueNewsNumber { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether we include subcategories (when 'ShowCataloguesNewsNumber' is 'true')
+        /// Gets or sets a value indicating whether we include subcategories (when 'ShowCatalogueNewsNumber' is 'true')
         /// </summary>
-        public bool ShowCataloguesNewsNumberIncludingSubcategories { get; set; }
+        public bool ShowCatalogueNewsNumberIncludingSubcategories { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether category breadcrumb is enabled
         /// </summary>
-        public bool CataloguesBreadcrumbEnabled { get; set; }
+        public bool CatalogueBreadcrumbEnabled { get; set; }
         
         /// <summary>
         /// Gets or sets a value indicating whether a 'Share button' is enabled
@@ -146,21 +146,21 @@ namespace Nop.Core.Domain.News
         public bool CacheNewsPrices { get; set; }
 
         /// <summary>
-        /// Gets or sets the default value to use for Catalogues page size options (for new Categories)
+        /// Gets or sets the default value to use for Catalogue page size options (for new Categories)
         /// </summary>
-        public string DefaultCataloguesPageSizeOptions { get; set; }
+        public string DefaultCataloguePageSizeOptions { get; set; }
 
 
         /// <summary>
         /// Gets or sets the value indicating how many subcategory levels to display in the top menu with categories
         /// </summary>
-        public int TopCataloguesMenuSubcategoryLevelsToDisplay { get; set; }
+        public int TopCatalogueMenuSubcategoryLevelsToDisplay { get; set; }
 
         /// <summary>
         /// Gets or sets the value indicating whether we should load all subcategories in the left menu with categories.
         /// It can be used by third-party theme developers.
         /// </summary>
-        public bool LoadAllSideCataloguesMenuSubcategories { get; set; }
+        public bool LoadAllSideCatalogueMenuSubcategories { get; set; }
        
 
       

@@ -289,14 +289,14 @@ namespace Nop.Admin.Infrastructure
                 .ForMember(dest => dest.NewsLetterSubscriptionGuid, mo => mo.Ignore());
 
             //category
-            Mapper.CreateMap<Catalogues, CataloguesModel>()             
+            Mapper.CreateMap<Catalogue, CatalogueModel>()             
                 .ForMember(dest => dest.Locales, mo => mo.Ignore())
                 .ForMember(dest => dest.Breadcrumb, mo => mo.Ignore())            
                 .ForMember(dest => dest.SeName, mo => mo.MapFrom(src => src.GetSeName(0, true, false)))
                 .ForMember(dest => dest.AvailableCustomerRoles, mo => mo.Ignore())
                 .ForMember(dest => dest.SelectedCustomerRoleIds, mo => mo.Ignore())   
                 .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
-            Mapper.CreateMap<CataloguesModel, Catalogues>()
+            Mapper.CreateMap<CatalogueModel, Catalogue>()
                 .ForMember(dest => dest.CreatedOnUtc, mo => mo.Ignore())
                 .ForMember(dest => dest.UpdatedOnUtc, mo => mo.Ignore())
                 .ForMember(dest => dest.Deleted, mo => mo.Ignore());              
@@ -313,7 +313,7 @@ namespace Nop.Admin.Infrastructure
                 .ForMember(dest => dest.CustomProperties, mo => mo.Ignore())
                 .ForMember(dest => dest.AddPictureModel, mo => mo.Ignore())
                 .ForMember(dest => dest.NewsPictureModels, mo => mo.Ignore())
-                .ForMember(dest => dest.AvailableCatalogues, mo => mo.Ignore());
+                .ForMember(dest => dest.AvailableCatalogue, mo => mo.Ignore());
             Mapper.CreateMap<NewsItemModel, NewsItem>()
                 .ForMember(dest => dest.NewsComments, mo => mo.Ignore())
                 .ForMember(dest => dest.Language, mo => mo.Ignore())
@@ -336,7 +336,13 @@ namespace Nop.Admin.Infrastructure
                 .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
             Mapper.CreateMap<CustomerRoleModel, CustomerRole>()
                 .ForMember(dest => dest.PermissionRecords, mo => mo.Ignore());
-         
+
+            //product attributes
+            Mapper.CreateMap<ProductAttribute, ProductAttributeModel>()
+                .ForMember(dest => dest.Locales, mo => mo.Ignore())
+                .ForMember(dest => dest.CustomProperties, mo => mo.Ignore());
+            Mapper.CreateMap<ProductAttributeModel, ProductAttribute>();
+
             //stores
             Mapper.CreateMap<Store, StoreModel>()
                 .ForMember(dest => dest.Locales, mo => mo.Ignore())

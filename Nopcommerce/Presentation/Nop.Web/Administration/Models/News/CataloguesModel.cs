@@ -11,17 +11,17 @@ using Nop.Web.Framework.Mvc;
 
 namespace Nop.Admin.Models.News
 {
-    [Validator(typeof(CataloguesValidator))]
-    public partial class CataloguesModel : BaseNopEntityModel, ILocalizedModel<CataloguesLocalizedModel>
+    [Validator(typeof(CatalogueValidator))]
+    public partial class CatalogueModel : BaseNopEntityModel, ILocalizedModel<CatalogueLocalizedModel>
     {
-        public CataloguesModel()
+        public CatalogueModel()
         {
             if (PageSize < 1)
             {
                 PageSize = 5;
             }
-            Locales = new List<CataloguesLocalizedModel>();      
-            AvailableCatalogues = new List<SelectListItem>();
+            Locales = new List<CatalogueLocalizedModel>();      
+            AvailableCatalogue = new List<SelectListItem>();
         }
 
         [NopResourceDisplayName("Admin.ContentManagement.News.Fields.Name")]
@@ -86,7 +86,7 @@ namespace Nop.Admin.Models.News
         [NopResourceDisplayName("Admin.ContentManagement.News.Fields.DisplayOrder")]
         public int DisplayOrder { get; set; }
         
-        public IList<CataloguesLocalizedModel> Locales { get; set; }
+        public IList<CatalogueLocalizedModel> Locales { get; set; }
 
         public string Breadcrumb { get; set; }
 
@@ -98,12 +98,12 @@ namespace Nop.Admin.Models.News
         public int[] SelectedCustomerRoleIds { get; set; }
        
 
-        public IList<SelectListItem> AvailableCatalogues { get; set; }      
+        public IList<SelectListItem> AvailableCatalogue { get; set; }      
 
 
         #region Nested classes
 
-        public partial class CataloguesNewsModel : BaseNopEntityModel
+        public partial class CatalogueNewsModel : BaseNopEntityModel
         {
             public int CatalogueId { get; set; }
 
@@ -119,18 +119,18 @@ namespace Nop.Admin.Models.News
             public int DisplayOrder { get; set; }
         }
 
-        public partial class AddCataloguesNewsModel : BaseNopModel
+        public partial class AddCatalogueNewsModel : BaseNopModel
         {
-            public AddCataloguesNewsModel()
+            public AddCatalogueNewsModel()
             {
-                AvailableCatalogues = new List<SelectListItem>();
+                AvailableCatalogue = new List<SelectListItem>();
                 AvailableNewsTypes = new List<SelectListItem>();
             }
 
             [NopResourceDisplayName("Admin.ContentManagement.News.List.SearchNewsTitle")]
             [AllowHtml]
             public string SearchNewsTitle { get; set; }
-            [NopResourceDisplayName("Admin.ContentManagement.News.List.SearchCatalogues")]
+            [NopResourceDisplayName("Admin.ContentManagement.News.List.SearchCatalogue")]
             public int SearchCatalogueId { get; set; }
             [NopResourceDisplayName("Admin.ContentManagement.News.List.SearchManufacturer")]
             public int SearchManufacturerId { get; set; }
@@ -141,7 +141,7 @@ namespace Nop.Admin.Models.News
             [NopResourceDisplayName("Admin.ContentManagement.News.List.SearchNewsType")]
             public int SearchNewsTypeId { get; set; }
 
-            public IList<SelectListItem> AvailableCatalogues { get; set; }
+            public IList<SelectListItem> AvailableCatalogue { get; set; }
             public IList<SelectListItem> AvailableNewsTypes { get; set; }
 
             public int CatalogueId { get; set; }
@@ -152,7 +152,7 @@ namespace Nop.Admin.Models.News
         #endregion
     }
 
-    public partial class CataloguesLocalizedModel : ILocalizedModelLocal
+    public partial class CatalogueLocalizedModel : ILocalizedModelLocal
     {
         public int LanguageId { get; set; }
 

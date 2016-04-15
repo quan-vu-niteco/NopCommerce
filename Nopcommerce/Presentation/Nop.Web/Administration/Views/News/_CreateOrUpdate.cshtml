@@ -14,7 +14,7 @@
             @T("Admin.ContentManagement.News.NewsItems.Pictures")
         </li>
         <li @Html.RenderSelectedTabIndex(3, GetSelectedTabIndex())>
-            @T("Admin.ContentManagement.News.Catalogues")
+            @T("Admin.ContentManagement.News.Catalogue")
         </li>
         <li @Html.RenderSelectedTabIndex(3, GetSelectedTabIndex())>
             @T("Admin.ContentManagement.News.NewsItems.Stores")
@@ -30,7 +30,7 @@
         @TabPictures()
     </div>
     <div>
-        @TabCatalogues()
+        @TabCatalogue()
     </div>
     <div>
         @TabStores()
@@ -184,9 +184,9 @@
 {
     @Html.Partial("_CreateOrUpdate.Pictures", Model)
 }
-@helper TabCatalogues()
+@helper TabCatalogue()
 {
-    @Html.Partial("_CreateOrUpdate.Catalogues", Model)
+    @Html.Partial("_CreateOrUpdate.Catalogue", Model)
 }
 
 @helper TabStores()

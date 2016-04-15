@@ -10,7 +10,7 @@ namespace Nop.Core.Domain.News
     /// <summary>
     /// Represents a category
     /// </summary>
-    public partial class Catalogues : BaseEntity, ILocalizedEntity, ISlugSupported, IAclSupported
+    public partial class Catalogue : BaseEntity, ILocalizedEntity, ISlugSupported, IAclSupported
     {
        
 

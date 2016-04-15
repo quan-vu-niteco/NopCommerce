@@ -231,7 +231,7 @@ namespace Nop.Services.News
         /// </summary>
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
-        /// <param name="categoryIds">Catalogues identifiers</param>
+        /// <param name="categoryIds">Catalogue identifiers</param>
         /// <param name="featuredNews">A value indicating whether loaded news are marked as featured (relates only to categories and manufacturers). 0 to load featured news only, 1 to load not featured news only, null to load all news</param>
        /// <param name="keywords">Keywords</param>
         /// <param name="searchDescriptions">A value indicating whether to search by a specified "keyword" in news descriptions</param>
@@ -268,7 +268,7 @@ namespace Nop.Services.News
         /// <param name="loadFilterableSpecificationAttributeOptionIds">A value indicating whether we should load the specification attribute option identifiers applied to loaded news (all pages)</param>
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
-        /// <param name="categoryIds">Catalogues identifiers</param>        /// <param name="parentGroupedNewsId">Parent news identifier (used with grouped news); 0 to load all records</param>
+        /// <param name="categoryIds">Catalogue identifiers</param>        /// <param name="parentGroupedNewsId">Parent news identifier (used with grouped news); 0 to load all records</param>
         /// <param name="newsType">News type; 0 to load all records</param>
         /// <param name="visibleIndividuallyOnly">A values indicating whether to load only news marked as "visible individually"; "false" to load all records; "true" to load "visible individually" only</param>     
         /// <param name="keywords">Keywords</param>
@@ -535,7 +535,7 @@ namespace Nop.Services.News
                 if (categoryIds != null && categoryIds.Count > 0)
                 {
                     query = from p in query
-                            from pc in p.NewsCatalogues.Where(pc => categoryIds.Contains(pc.CatalogueId))
+                            from pc in p.NewsCatalogue.Where(pc => categoryIds.Contains(pc.CatalogueId))
                             where (!featuredNews.HasValue || featuredNews.Value == pc.IsFeaturedNews)
                             select p;
                 }
@@ -565,7 +565,7 @@ namespace Nop.Services.News
                 {
                     //category position
                     var firstCatalogueId = categoryIds[0];
-                    query = query.OrderBy(p => p.NewsCatalogues.FirstOrDefault(pc => pc.CatalogueId == firstCatalogueId).DisplayOrder);
+                    query = query.OrderBy(p => p.NewsCatalogue.FirstOrDefault(pc => pc.CatalogueId == firstCatalogueId).DisplayOrder);
                 }              
                 else if (orderBy == NewsSortingEnum.Position)
                 {

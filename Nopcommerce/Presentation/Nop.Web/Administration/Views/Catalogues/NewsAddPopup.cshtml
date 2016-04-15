@@ -2,7 +2,7 @@
     Layout = "~/Administration/Views/Shared/_AdminPopupLayout.cshtml";
 }
 
-@model CataloguesModel.AddCataloguesNewsModel
+@model CatalogueModel.AddCatalogueNewsModel
 
 @{
     var defaultGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
@@ -44,7 +44,7 @@
                 @Html.NopLabelFor(model => model.SearchCatalogueId):
             </td>
             <td class="adminData">
-                @Html.DropDownList("SearchCatalogueId", Model.AvailableCatalogues)
+                @Html.DropDownList("SearchCatalogueId", Model.AvailableCatalogue)
             </td>
         </tr>
         <tr>
@@ -65,7 +65,7 @@
                             type: "json",
                             transport: {
                                 read: {
-                                    url: "@Html.Raw(Url.Action("NewsAddPopupList", "Catalogues"))",
+                                    url: "@Html.Raw(Url.Action("NewsAddPopupList", "Catalogue"))",
                                     type: "POST",
                                     dataType: "json",
                                     data: additionalData

@@ -5,9 +5,9 @@ using Nop.Web.Framework.Validators;
 
 namespace Nop.Admin.Validators.News
 {
-    public class CataloguesValidator : BaseNopValidator<CataloguesModel>
+    public class CatalogueValidator : BaseNopValidator<CatalogueModel>
     {
-        public CataloguesValidator(ILocalizationService localizationService)
+        public CatalogueValidator(ILocalizationService localizationService)
         {
             RuleFor(x => x.Name).NotEmpty().WithMessage(localizationService.GetResource("Admin.ContentManagement.Categories.Fields.Name.Required"));
         }

@@ -20,7 +20,7 @@
                 categories = new kendo.data.HierarchicalDataSource({
                     transport: {
                         read: {
-                            url: "@Html.Raw(Url.Action("TreeLoadChildren", "Catalogues"))",
+                            url: "@Html.Raw(Url.Action("TreeLoadChildren", "Catalogue"))",
                             type: "POST",
                             dataType: "json"
                         }

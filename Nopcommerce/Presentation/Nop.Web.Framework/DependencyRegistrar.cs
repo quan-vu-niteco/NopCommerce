@@ -229,7 +229,7 @@ namespace Nop.Web.Framework
             builder.RegisterType<WidgetService>().As<IWidgetService>().InstancePerLifetimeScope();
             builder.RegisterType<TopicService>().As<ITopicService>().InstancePerLifetimeScope();
 
-            builder.RegisterType<CataloguesService>().As<ICataloguesService>().InstancePerLifetimeScope();
+            builder.RegisterType<Catalogueervice>().As<ICatalogueervice>().InstancePerLifetimeScope();
             builder.RegisterType<NewsService>().As<INewsService>().InstancePerLifetimeScope();
 
             builder.RegisterType<DateTimeHelper>().As<IDateTimeHelper>().InstancePerLifetimeScope();

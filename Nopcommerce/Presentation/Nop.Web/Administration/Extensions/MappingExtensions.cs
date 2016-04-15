@@ -367,19 +367,19 @@ namespace Nop.Admin.Extensions
 
 
 
-        #region Catalogues
+        #region Catalogue
 
-        public static CataloguesModel ToModel(this Catalogues entity)
+        public static CatalogueModel ToModel(this Catalogue entity)
         {
-            return entity.MapTo<Catalogues, CataloguesModel>();
+            return entity.MapTo<Catalogue, CatalogueModel>();
         }
 
-        public static Catalogues ToEntity(this CataloguesModel model)
+        public static Catalogue ToEntity(this CatalogueModel model)
         {
-            return model.MapTo<CataloguesModel, Catalogues>();
+            return model.MapTo<CatalogueModel, Catalogue>();
         }
 
-        public static Catalogues ToEntity(this CataloguesModel model, Catalogues destination)
+        public static Catalogue ToEntity(this CatalogueModel model, Catalogue destination)
         {
             return model.MapTo(destination);
         }

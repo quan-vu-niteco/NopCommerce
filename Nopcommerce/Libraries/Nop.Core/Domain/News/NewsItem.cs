@@ -13,7 +13,7 @@ namespace Nop.Core.Domain.News
     {
         private ICollection<NewsComment> _newsComments;
         private ICollection<NewsPicture> _newsPictures;
-        private ICollection<NewsCatalogues> _newsCategories;
+        private ICollection<NewsCatalogue> _newsCategories;
 
         /// <summary>
         /// Gets or sets the language identifier
@@ -138,11 +138,11 @@ namespace Nop.Core.Domain.News
         }
 
         /// <summary>
-        /// Gets or sets the collection of NewsCatalogues
+        /// Gets or sets the collection of NewsCatalogue
         /// </summary>
-        public virtual ICollection<NewsCatalogues> NewsCatalogues
+        public virtual ICollection<NewsCatalogue> NewsCatalogue
         {
-            get { return _newsCategories ?? (_newsCategories = new List<NewsCatalogues>()); }
+            get { return _newsCategories ?? (_newsCategories = new List<NewsCatalogue>()); }
             protected set { _newsCategories = value; }
         }
     }

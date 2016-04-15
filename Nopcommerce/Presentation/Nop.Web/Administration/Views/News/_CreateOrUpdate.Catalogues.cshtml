@@ -3,7 +3,7 @@
 
 @if (Model.Id > 0)
 {
-    if (Model.AvailableCatalogues.Count > 0)
+    if (Model.AvailableCatalogue.Count > 0)
     {
         <div id="newscategories-grid"></div>
 
@@ -77,8 +77,8 @@
                             //pre-select the first value of kendoui dropdownlist datasource
                             //for some reasons (maybe, bug) it always sends 0
                             //if no value has been selected (changed) in the dropdownlist
-                            if (allCatalogues.length > 0) {
-                                e.model.CatalogueId = allCatalogues[0].Id;
+                            if (allCatalogue.length > 0) {
+                                e.model.CatalogueId = allCatalogue[0].Id;
                             }
                         }
                     },
@@ -89,7 +89,7 @@
                     scrollable: false,
                     columns: [{
                             field: "catalogueId",
-                            title: "@T("Admin.Catalog.news.Catalogues.Fields.Catalogue")",
+                            title: "@T("Admin.Catalog.news.Catalogue.Fields.Catalogue")",
                             width: 200,
                             editor: categoryDropDownEditor, 
                             template: "#:Catalogue#"
@@ -99,7 +99,7 @@
                             //vendor cannot edit this field
                             <text>{
                             field: "IsFeaturedNews",
-                            title: "@T("Admin.Catalog.news.Catalogues.Fields.IsFeaturedNews")",
+                            title: "@T("Admin.Catalog.news.Catalogue.Fields.IsFeaturedNews")",
                             width: 200,
                             headerAttributes: { style: "text-align:center" },
                             attributes: { style: "text-align:center" },
@@ -109,7 +109,7 @@
                         
                     {
                         field: "DisplayOrder",
-                        title: "@T("Admin.Catalog.news.Catalogues.Fields.DisplayOrder")",
+                        title: "@T("Admin.Catalog.news.Catalogue.Fields.DisplayOrder")",
                         width: 200,
                         //integer format
                         format: "{0:0}"
@@ -127,17 +127,17 @@
             });
                 
             //local datasource
-            var allCatalogues = [
-                @for (int i = 0; i < Model.AvailableCatalogues.Count; i++)
+            var allCatalogue = [
+                @for (int i = 0; i < Model.AvailableCatalogue.Count; i++)
                 {
-                    var categoryItem = Model.AvailableCatalogues[i];
+                    var categoryItem = Model.AvailableCatalogue[i];
                     <text>
                         {
                             Id: @(categoryItem.Value),
                             Name: "@(Html.Raw(HttpUtility.JavaScriptStringEncode(categoryItem.Text)))"
                         }
                         </text>
-                    if (i != Model.AvailableCatalogues.Count - 1)
+                    if (i != Model.AvailableCatalogue.Count - 1)
                     {
                         <text>,</text>
                     }
@@ -149,18 +149,18 @@
                     .appendTo(container)
                     .kendoDropDownList({
                         autoBind: false,
-                        dataSource: allCatalogues
+                        dataSource: allCatalogue
                     });
             }
         </script>
     }
     else
     {
-    @T("Admin.Catalog.News.Catalogues.NoCataloguesAvailable")
+    @T("Admin.Catalog.News.Catalogue.NoCatalogueAvailable")
     }
 }
 else
 {
-    @T("Admin.Catalog.News.Catalogues.SaveBeforeEdit")
+    @T("Admin.Catalog.News.Catalogue.SaveBeforeEdit")
 }
 

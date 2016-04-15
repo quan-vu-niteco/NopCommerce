@@ -4,10 +4,10 @@ using Nop.Web.Framework.Mvc;
 
 namespace Nop.Admin.Models.News
 {
-    public partial class CataloguesListModel : BaseNopModel
+    public partial class CatalogueListModel : BaseNopModel
     {
         [NopResourceDisplayName("Admin.ContentManagement.Categories.List.SearchCategoryName")]
         [AllowHtml]
-        public string SearchCataloguesName { get; set; }
+        public string SearchCatalogueName { get; set; }
     }
 }

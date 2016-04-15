@@ -22,11 +22,11 @@ using Nop.Web.Framework.Mvc;
 
 namespace Nop.Admin.Controllers
 {
-    public partial class CataloguesController : BaseAdminController
+    public partial class CatalogueController : BaseAdminController
     {
         #region Fields
 
-        private readonly ICataloguesService _cataloguesService;      
+        private readonly ICatalogueervice _CatalogueService;      
         private readonly INewsService _newsService;
         private readonly ICustomerService _customerService;
         private readonly IUrlRecordService _urlRecordService;
@@ -40,13 +40,13 @@ namespace Nop.Admin.Controllers
         private readonly IStoreMappingService _storeMappingService;
         private readonly IExportManager _exportManager;
         private readonly ICustomerActivityService _customerActivityService;
-        private readonly CataloguesSettings _cataloguesSettings;
+        private readonly Catalogueettings _Catalogueettings;
 
         #endregion
         
         #region Constructors
 
-        public CataloguesController(ICataloguesService cataloguesService,
+        public CatalogueController(ICatalogueervice CatalogueService,
           INewsService newsService, 
             ICustomerService customerService,
             IUrlRecordService urlRecordService, 
@@ -60,9 +60,9 @@ namespace Nop.Admin.Controllers
             IStoreMappingService storeMappingService,
             IExportManager exportManager,
             ICustomerActivityService customerActivityService,
-            CataloguesSettings cataloguesSettings)
+            Catalogueettings Catalogueettings)
         {
-            this._cataloguesService = cataloguesService; 
+            this._CatalogueService = CatalogueService; 
             this._newsService = newsService;
             this._customerService = customerService;
             this._urlRecordService = urlRecordService;
@@ -76,7 +76,7 @@ namespace Nop.Admin.Controllers
             this._storeMappingService = storeMappingService;
             this._exportManager = exportManager;
             this._customerActivityService = customerActivityService;
-            this._cataloguesSettings = cataloguesSettings;
+            this._Catalogueettings = Catalogueettings;
         }
 
         #endregion
@@ -84,66 +84,66 @@ namespace Nop.Admin.Controllers
         #region Utilities
 
         [NonAction]
-        protected virtual void UpdateLocales(Catalogues catalogues, CataloguesModel model)
+        protected virtual void UpdateLocales(Catalogue catalogue, CatalogueModel model)
         {
             foreach (var localized in model.Locales)
             {
-                _localizedEntityService.SaveLocalizedValue(catalogues,
+                _localizedEntityService.SaveLocalizedValue(catalogue,
                                                                x => x.Name,
                                                                localized.Name,
                                                                localized.LanguageId);
 
-                _localizedEntityService.SaveLocalizedValue(catalogues,
+                _localizedEntityService.SaveLocalizedValue(catalogue,
                                                            x => x.Description,
                                                            localized.Description,
                                                            localized.LanguageId);
 
-                _localizedEntityService.SaveLocalizedValue(catalogues,
+                _localizedEntityService.SaveLocalizedValue(catalogue,
                                                            x => x.MetaKeywords,
                                                            localized.MetaKeywords,
                                                            localized.LanguageId);
 
-                _localizedEntityService.SaveLocalizedValue(catalogues,
+                _localizedEntityService.SaveLocalizedValue(catalogue,
                                                            x => x.MetaDescription,
                                                            localized.MetaDescription,
                                                            localized.LanguageId);
 
-                _localizedEntityService.SaveLocalizedValue(catalogues,
+                _localizedEntityService.SaveLocalizedValue(catalogue,
                                                            x => x.MetaTitle,
                                                            localized.MetaTitle,
                                                            localized.LanguageId);
 
                 //search engine name
-                var seName = catalogues.ValidateSeName(localized.SeName, localized.Name, false);
-                _urlRecordService.SaveSlug(catalogues, seName, localized.LanguageId);
+                var seName = catalogue.ValidateSeName(localized.SeName, localized.Name, false);
+                _urlRecordService.SaveSlug(catalogue, seName, localized.LanguageId);
             }
         }
 
         [NonAction]
-        protected virtual void UpdatePictureSeoNames(Catalogues catalogues)
+        protected virtual void UpdatePictureSeoNames(Catalogue catalogue)
         {
-            var picture = _pictureService.GetPictureById(catalogues.PictureId);
+            var picture = _pictureService.GetPictureById(catalogue.PictureId);
             if (picture != null)
-                _pictureService.SetSeoFilename(picture.Id, _pictureService.GetPictureSeName(catalogues.Name));
+                _pictureService.SetSeoFilename(picture.Id, _pictureService.GetPictureSeName(catalogue.Name));
         }
 
         [NonAction]
-        protected virtual void PrepareAllCataloguesModel(CataloguesModel model)
+        protected virtual void PrepareAllCatalogueModel(CatalogueModel model)
         {
             if (model == null)
                 throw new ArgumentNullException("model");
 
-            model.AvailableCatalogues.Add(new SelectListItem
+            model.AvailableCatalogue.Add(new SelectListItem
             {
                 Text = "[None]",
                 Value = "0"
             });
-            var catalogues = _cataloguesService.GetAllCatalogues(showHidden: true);
-            foreach (var c in catalogues)
+            var Catalogue = _CatalogueService.GetAllCatalogue(showHidden: true);
+            foreach (var c in Catalogue)
             {
-                model.AvailableCatalogues.Add(new SelectListItem
+                model.AvailableCatalogue.Add(new SelectListItem
                 {
-                    Text = c.GetFormattedBreadCrumb(catalogues),
+                    Text = c.GetFormattedBreadCrumb(Catalogue),
                     Value = c.Id.ToString()
                 });
             }
@@ -151,7 +151,7 @@ namespace Nop.Admin.Controllers
       
 
         [NonAction]
-        protected virtual void PrepareAclModel(CataloguesModel model, Catalogues catalogues, bool excludeProperties)
+        protected virtual void PrepareAclModel(CatalogueModel model, Catalogue catalogue, bool excludeProperties)
         {
             if (model == null)
                 throw new ArgumentNullException("model");
@@ -162,17 +162,17 @@ namespace Nop.Admin.Controllers
                 .ToList();
             if (!excludeProperties)
             {
-                if (catalogues != null)
+                if (catalogue != null)
                 {
-                    model.SelectedCustomerRoleIds = _aclService.GetCustomerRoleIdsWithAccess(catalogues);
+                    model.SelectedCustomerRoleIds = _aclService.GetCustomerRoleIdsWithAccess(catalogue);
                 }
             }
         }
 
         [NonAction]
-        protected virtual void SaveCataloguesAcl(Catalogues catalogues, CataloguesModel model)
+        protected virtual void SaveCatalogueAcl(Catalogue catalogue, CatalogueModel model)
         {
-            var existingAclRecords = _aclService.GetAclRecords(catalogues);
+            var existingAclRecords = _aclService.GetAclRecords(catalogue);
             var allCustomerRoles = _customerService.GetAllCustomerRoles(true);
             foreach (var customerRole in allCustomerRoles)
             {
@@ -180,7 +180,7 @@ namespace Nop.Admin.Controllers
                 {
                     //new role
                     if (existingAclRecords.Count(acl => acl.CustomerRoleId == customerRole.Id) == 0)
-                        _aclService.InsertAclRecord(catalogues, customerRole.Id);
+                        _aclService.InsertAclRecord(catalogue, customerRole.Id);
                 }
                 else
                 {
@@ -204,43 +204,43 @@ namespace Nop.Admin.Controllers
 
         public ActionResult List()
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogues))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogue))
                 return AccessDeniedView();
 
-            var model = new CataloguesListModel();
+            var model = new CatalogueListModel();
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult List(DataSourceRequest command, CataloguesListModel model)
+        public ActionResult List(DataSourceRequest command, CatalogueListModel model)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogues))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogue))
                 return AccessDeniedView();
 
-            var catalogues = _cataloguesService.GetAllCatalogues(model.SearchCataloguesName, 
+            var Catalogue = _CatalogueService.GetAllCatalogue(model.SearchCatalogueName, 
                 command.Page - 1, command.PageSize, true);
 
-            var catalogues1 = _cataloguesService.GetAllCatalogues("", command.Page - 1, command.PageSize, true);
+            var Catalogue1 = _CatalogueService.GetAllCatalogue("", command.Page - 1, command.PageSize, true);
 
 
 
 
             var gridModel = new DataSourceResult
             {
-                Data = catalogues.Select(x =>
+                Data = Catalogue.Select(x =>
                 {
-                    var cataloguesModel = x.ToModel();
-                    cataloguesModel.Breadcrumb = x.GetFormattedBreadCrumb(_cataloguesService);
-                    return cataloguesModel;
+                    var CatalogueModel = x.ToModel();
+                    CatalogueModel.Breadcrumb = x.GetFormattedBreadCrumb(_CatalogueService);
+                    return CatalogueModel;
                 }),
-                Total = catalogues.TotalCount
+                Total = Catalogue.TotalCount
             };
             return Json(gridModel);
         }
         
         public ActionResult Tree()
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogues))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogue))
                 return AccessDeniedView();
 
             return View();
@@ -249,16 +249,16 @@ namespace Nop.Admin.Controllers
         [HttpPost,]
         public ActionResult TreeLoadChildren(int id = 0)
         {
-            var catalogues = _cataloguesService.GetAllCataloguesByParentCatalogueId(id, true)
+            var Catalogue = _CatalogueService.GetAllCatalogueByParentCatalogueId(id, true)
                 .Select(x => new
                              {
                                  id = x.Id,
                                  Name = x.Name,
-                                 hasChildren = _cataloguesService.GetAllCataloguesByParentCatalogueId(x.Id, true).Count > 0,
+                                 hasChildren = _CatalogueService.GetAllCatalogueByParentCatalogueId(x.Id, true).Count > 0,
                                  imageUrl = Url.Content("~/Administration/Content/images/ico-content.png")
                              });
 
-            return Json(catalogues);
+            return Json(Catalogue);
         }
 
         #endregion
@@ -267,15 +267,15 @@ namespace Nop.Admin.Controllers
 
         public ActionResult Create()
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogues))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogue))
                 return AccessDeniedView();
 
-            var model = new CataloguesModel();
+            var model = new CatalogueModel();
             //locales
             AddLocales(_languageService, model.Locales);
           
-            //catalogues
-            PrepareAllCataloguesModel(model);
+            //Catalogue
+            PrepareAllCatalogueModel(model);
          
             //ACL
             PrepareAclModel(model, null, false);
@@ -285,46 +285,46 @@ namespace Nop.Admin.Controllers
             model.Published = true;
             model.IncludeInTopMenu = true;
             model.AllowCustomersToSelectPageSize = true;            
-            model.PageSizeOptions = _cataloguesSettings.DefaultCataloguesPageSizeOptions;
+            model.PageSizeOptions = _Catalogueettings.DefaultCataloguePageSizeOptions;
 
             return View(model);
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public ActionResult Create(CataloguesModel model, bool continueEditing)
+        public ActionResult Create(CatalogueModel model, bool continueEditing)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogues))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogue))
                 return AccessDeniedView();
 
             if (ModelState.IsValid)
             {
-                var catalogues = model.ToEntity();
-                catalogues.CreatedOnUtc = DateTime.UtcNow;
-                catalogues.UpdatedOnUtc = DateTime.UtcNow;
-                _cataloguesService.InsertCatalogues(catalogues);
+                var Catalogue = model.ToEntity();
+                Catalogue.CreatedOnUtc = DateTime.UtcNow;
+                Catalogue.UpdatedOnUtc = DateTime.UtcNow;
+                _CatalogueService.InsertCatalogue(Catalogue);
                 //search engine name
-                model.SeName = catalogues.ValidateSeName(model.SeName, catalogues.Name, true);
-                _urlRecordService.SaveSlug(catalogues, model.SeName, 0);
+                model.SeName = Catalogue.ValidateSeName(model.SeName, Catalogue.Name, true);
+                _urlRecordService.SaveSlug(Catalogue, model.SeName, 0);
                 //locales
-                UpdateLocales(catalogues, model);
+                UpdateLocales(Catalogue, model);
               
                 //update picture seo file name
-                UpdatePictureSeoNames(catalogues);
+                UpdatePictureSeoNames(Catalogue);
                 //ACL (customer roles)
-                SaveCataloguesAcl(catalogues, model);
+                SaveCatalogueAcl(Catalogue, model);
             
 
                 //activity log
-                _customerActivityService.InsertActivity("AddNewCatalogues", _localizationService.GetResource("ActivityLog.AddNewCatalogues"), catalogues.Name);
+                _customerActivityService.InsertActivity("AddNewCatalogue", _localizationService.GetResource("ActivityLog.AddNewCatalogue"), Catalogue.Name);
 
-                SuccessNotification(_localizationService.GetResource("Admin.News.Catalogues.Added"));
-                return continueEditing ? RedirectToAction("Edit", new { id = catalogues.Id }) : RedirectToAction("List");
+                SuccessNotification(_localizationService.GetResource("Admin.News.Catalogue.Added"));
+                return continueEditing ? RedirectToAction("Edit", new { id = Catalogue.Id }) : RedirectToAction("List");
             }
 
             //If we got this far, something failed, redisplay form
       
-            //catalogues
-            PrepareAllCataloguesModel(model);
+            //Catalogue
+            PrepareAllCatalogueModel(model);
      
             //ACL
             PrepareAclModel(model, null, true);
@@ -334,80 +334,80 @@ namespace Nop.Admin.Controllers
 
         public ActionResult Edit(int id)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogues))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogue))
                 return AccessDeniedView();
 
-            var catalogues = _cataloguesService.GetCatalogueById(id);
-            if (catalogues == null || catalogues.Deleted) 
-                //No catalogues found with the specified id
+            var Catalogue = _CatalogueService.GetCatalogueById(id);
+            if (Catalogue == null || Catalogue.Deleted) 
+                //No Catalogue found with the specified id
                 return RedirectToAction("List");
 
-            var model = catalogues.ToModel();
+            var model = Catalogue.ToModel();
             //locales
             AddLocales(_languageService, model.Locales, (locale, languageId) =>
             {
-                locale.Name = catalogues.GetLocalized(x => x.Name, languageId, false, false);
-                locale.Description = catalogues.GetLocalized(x => x.Description, languageId, false, false);
-                locale.MetaKeywords = catalogues.GetLocalized(x => x.MetaKeywords, languageId, false, false);
-                locale.MetaDescription = catalogues.GetLocalized(x => x.MetaDescription, languageId, false, false);
-                locale.MetaTitle = catalogues.GetLocalized(x => x.MetaTitle, languageId, false, false);
-                locale.SeName = catalogues.GetSeName(languageId, false, false);
+                locale.Name = Catalogue.GetLocalized(x => x.Name, languageId, false, false);
+                locale.Description = Catalogue.GetLocalized(x => x.Description, languageId, false, false);
+                locale.MetaKeywords = Catalogue.GetLocalized(x => x.MetaKeywords, languageId, false, false);
+                locale.MetaDescription = Catalogue.GetLocalized(x => x.MetaDescription, languageId, false, false);
+                locale.MetaTitle = Catalogue.GetLocalized(x => x.MetaTitle, languageId, false, false);
+                locale.SeName = Catalogue.GetSeName(languageId, false, false);
             });
          
-            //catalogues
-            PrepareAllCataloguesModel(model);        
+            //Catalogue
+            PrepareAllCatalogueModel(model);        
             //ACL
-            PrepareAclModel(model, catalogues, false);   
+            PrepareAclModel(model, Catalogue, false);   
             return View(model);
         }
 
         [HttpPost, ParameterBasedOnFormName("save-continue", "continueEditing")]
-        public ActionResult Edit(CataloguesModel model, bool continueEditing)
+        public ActionResult Edit(CatalogueModel model, bool continueEditing)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogues))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogue))
                 return AccessDeniedView();
 
-            var catalogues = _cataloguesService.GetCatalogueById(model.Id);
-            if (catalogues == null || catalogues.Deleted)
-                //No catalogues found with the specified id
+            var Catalogue = _CatalogueService.GetCatalogueById(model.Id);
+            if (Catalogue == null || Catalogue.Deleted)
+                //No Catalogue found with the specified id
                 return RedirectToAction("List");
 
             if (ModelState.IsValid)
             {
-                int prevPictureId = catalogues.PictureId;
-                catalogues = model.ToEntity(catalogues);
-                catalogues.UpdatedOnUtc = DateTime.UtcNow;
-                _cataloguesService.UpdateCatalogues(catalogues);
+                int prevPictureId = Catalogue.PictureId;
+                Catalogue = model.ToEntity(Catalogue);
+                Catalogue.UpdatedOnUtc = DateTime.UtcNow;
+                _CatalogueService.UpdateCatalogue(Catalogue);
                 //search engine name
-                model.SeName = catalogues.ValidateSeName(model.SeName, catalogues.Name, true);
-                _urlRecordService.SaveSlug(catalogues, model.SeName, 0);
+                model.SeName = Catalogue.ValidateSeName(model.SeName, Catalogue.Name, true);
+                _urlRecordService.SaveSlug(Catalogue, model.SeName, 0);
                 //locales
-                UpdateLocales(catalogues, model);
+                UpdateLocales(Catalogue, model);
                
-                _cataloguesService.UpdateCatalogues(catalogues);
+                _CatalogueService.UpdateCatalogue(Catalogue);
               
                 //delete an old picture (if deleted or updated)
-                if (prevPictureId > 0 && prevPictureId != catalogues.PictureId)
+                if (prevPictureId > 0 && prevPictureId != Catalogue.PictureId)
                 {
                     var prevPicture = _pictureService.GetPictureById(prevPictureId);
                     if (prevPicture != null)
                         _pictureService.DeletePicture(prevPicture);
                 }
                 //update picture seo file name
-                UpdatePictureSeoNames(catalogues);
+                UpdatePictureSeoNames(Catalogue);
                 //ACL
-                SaveCataloguesAcl(catalogues, model);  
+                SaveCatalogueAcl(Catalogue, model);  
 
                 //activity log
-                _customerActivityService.InsertActivity("EditCatalogues", _localizationService.GetResource("ActivityLog.EditCatalogues"), catalogues.Name);
+                _customerActivityService.InsertActivity("EditCatalogue", _localizationService.GetResource("ActivityLog.EditCatalogue"), Catalogue.Name);
 
-                SuccessNotification(_localizationService.GetResource("Admin.News.Catalogues.Updated"));
+                SuccessNotification(_localizationService.GetResource("Admin.News.Catalogue.Updated"));
                 if (continueEditing)
                 {
                     //selected tab
                     SaveSelectedTabIndex();
 
-                    return RedirectToAction("Edit", catalogues.Id);
+                    return RedirectToAction("Edit", Catalogue.Id);
                 }
                 return RedirectToAction("List");
             }
@@ -415,10 +415,10 @@ namespace Nop.Admin.Controllers
 
             //If we got this far, something failed, redisplay form
           
-            //catalogues
-            PrepareAllCataloguesModel(model);        
+            //Catalogue
+            PrepareAllCatalogueModel(model);        
             //ACL
-            PrepareAclModel(model, catalogues, true);         
+            PrepareAclModel(model, Catalogue, true);         
 
             return View(model);
         }
@@ -426,20 +426,20 @@ namespace Nop.Admin.Controllers
         [HttpPost]
         public ActionResult Delete(int id)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogues))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogue))
                 return AccessDeniedView();
 
-            var catalogues = _cataloguesService.GetCatalogueById(id);
-            if (catalogues == null)
-                //No catalogues found with the specified id
+            var Catalogue = _CatalogueService.GetCatalogueById(id);
+            if (Catalogue == null)
+                //No Catalogue found with the specified id
                 return RedirectToAction("List");
 
-            _cataloguesService.DeleteCatalogues(catalogues);
+            _CatalogueService.DeleteCatalogue(Catalogue);
 
             //activity log
-            _customerActivityService.InsertActivity("DeleteCatalogues", _localizationService.GetResource("ActivityLog.DeleteCatalogues"), catalogues.Name);
+            _customerActivityService.InsertActivity("DeleteCatalogue", _localizationService.GetResource("ActivityLog.DeleteCatalogue"), Catalogue.Name);
 
-            SuccessNotification(_localizationService.GetResource("Admin.News.Catalogues.Deleted"));
+            SuccessNotification(_localizationService.GetResource("Admin.News.Catalogue.Deleted"));
             return RedirectToAction("List");
         }
         
@@ -452,14 +452,14 @@ namespace Nop.Admin.Controllers
         public ActionResult NewsList(DataSourceRequest command, int catalogueId)
         {
             
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogues))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogue))
                 return AccessDeniedView();
 
-            var newsCatalogues = _cataloguesService.GetNewsCataloguesByCatalogueId(catalogueId,
+            var newsCatalogue = _CatalogueService.GetNewsCatalogueByCatalogueId(catalogueId,
                 command.Page - 1, command.PageSize, true);
             var gridModel = new DataSourceResult
             {
-                Data = newsCatalogues.Select(x => new CataloguesModel.CataloguesNewsModel
+                Data = newsCatalogue.Select(x => new CatalogueModel.CatalogueNewsModel
                 {
                     Id = x.Id,
                     CatalogueId = x.CatalogueId,
@@ -468,54 +468,54 @@ namespace Nop.Admin.Controllers
                     IsFeaturedNews = x.IsFeaturedNews,
                     DisplayOrder = x.DisplayOrder
                 }),
-                Total = newsCatalogues.TotalCount
+                Total = newsCatalogue.TotalCount
             };
 
             return Json(gridModel);
         }
 
-        public ActionResult NewsUpdate(CataloguesModel.CataloguesNewsModel model)
+        public ActionResult NewsUpdate(CatalogueModel.CatalogueNewsModel model)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogues))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogue))
                 return AccessDeniedView();
 
-            var newsCatalogues = _cataloguesService.GetNewsCataloguesById(model.Id);
-            if (newsCatalogues == null)
-                throw new ArgumentException("No news catalogues mapping found with the specified id");
+            var newsCatalogue = _CatalogueService.GetNewsCatalogueById(model.Id);
+            if (newsCatalogue == null)
+                throw new ArgumentException("No news Catalogue mapping found with the specified id");
 
-            newsCatalogues.IsFeaturedNews = model.IsFeaturedNews;
-            newsCatalogues.DisplayOrder = model.DisplayOrder;
-            _cataloguesService.UpdateNewsCatalogues(newsCatalogues);
+            newsCatalogue.IsFeaturedNews = model.IsFeaturedNews;
+            newsCatalogue.DisplayOrder = model.DisplayOrder;
+            _CatalogueService.UpdateNewsCatalogue(newsCatalogue);
 
             return new NullJsonResult();
         }
 
         public ActionResult NewsDelete(int id)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogues))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogue))
                 return AccessDeniedView();
 
-            var newsCatalogues = _cataloguesService.GetNewsCataloguesById(id);
-            if (newsCatalogues == null)
-                throw new ArgumentException("No news catalogues mapping found with the specified id");
+            var newsCatalogue = _CatalogueService.GetNewsCatalogueById(id);
+            if (newsCatalogue == null)
+                throw new ArgumentException("No news Catalogue mapping found with the specified id");
 
-            //var CatalogueId = newsCatalogues.CatalogueId;
-            _cataloguesService.DeleteNewsCatalogues(newsCatalogues);
+            //var CatalogueId = newsCatalogue.CatalogueId;
+            _CatalogueService.DeleteNewsCatalogue(newsCatalogue);
 
             return new NullJsonResult();
         }
 
         public ActionResult NewsAddPopup(int catalogueId)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogues))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogue))
                 return AccessDeniedView();
             
-            var model = new CataloguesModel.AddCataloguesNewsModel();
-            //catalogues
-            model.AvailableCatalogues.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
-            var catalogues = _cataloguesService.GetAllCatalogues(showHidden: true);
-            foreach (var c in catalogues)
-                model.AvailableCatalogues.Add(new SelectListItem { Text = c.GetFormattedBreadCrumb(catalogues), Value = c.Id.ToString() });
+            var model = new CatalogueModel.AddCatalogueNewsModel();
+            //Catalogue
+            model.AvailableCatalogue.Add(new SelectListItem { Text = _localizationService.GetResource("Admin.Common.All"), Value = "0" });
+            var Catalogue = _CatalogueService.GetAllCatalogue(showHidden: true);
+            foreach (var c in Catalogue)
+                model.AvailableCatalogue.Add(new SelectListItem { Text = c.GetFormattedBreadCrumb(Catalogue), Value = c.Id.ToString() });
 
             //news types
             model.AvailableNewsTypes = NewsType.SimpleNews.ToSelectList(false).ToList();
@@ -525,9 +525,9 @@ namespace Nop.Admin.Controllers
         }
 
         [HttpPost]
-        public ActionResult NewsAddPopupList(DataSourceRequest command, CataloguesModel.AddCataloguesNewsModel model)
+        public ActionResult NewsAddPopupList(DataSourceRequest command, CatalogueModel.AddCatalogueNewsModel model)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogues))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogue))
                 return AccessDeniedView();
 
             var gridModel = new DataSourceResult();
@@ -545,9 +545,9 @@ namespace Nop.Admin.Controllers
         
         [HttpPost]
         [FormValueRequired("save")]
-        public ActionResult NewsAddPopup(string btnId, string formId, CataloguesModel.AddCataloguesNewsModel model)
+        public ActionResult NewsAddPopup(string btnId, string formId, CatalogueModel.AddCatalogueNewsModel model)
         {
-            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogues))
+            if (!_permissionService.Authorize(StandardPermissionProvider.ManageCatalogue))
                 return AccessDeniedView();
 
             if (model.SelectedNewsIds != null)
@@ -557,11 +557,11 @@ namespace Nop.Admin.Controllers
                     var news = _newsService.GetNewsById(id);
                     if (news != null)
                     {
-                        var existingNewsCatalogues = _cataloguesService.GetNewsCataloguesByCatalogueId(model.CatalogueId, 0, int.MaxValue, true);
-                        if (existingNewsCatalogues.FindNewsCatalogues(id, model.CatalogueId) == null)
+                        var existingNewsCatalogue = _CatalogueService.GetNewsCatalogueByCatalogueId(model.CatalogueId, 0, int.MaxValue, true);
+                        if (existingNewsCatalogue.FindNewsCatalogue(id, model.CatalogueId) == null)
                         {
-                            _cataloguesService.InsertNewsCatalogues(
-                                new NewsCatalogues
+                            _CatalogueService.InsertNewsCatalogue(
+                                new NewsCatalogue
                                 {
                                     CatalogueId = model.CatalogueId,
                                     NewsId = id,

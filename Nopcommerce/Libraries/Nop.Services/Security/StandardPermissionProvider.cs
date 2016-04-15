@@ -21,7 +21,7 @@ namespace Nop.Services.Security
         public static readonly PermissionRecord ManageReturnRequests = new PermissionRecord { Name = "Admin area. Manage Return Requests", SystemName = "ManageReturnRequests", Category = "Orders" };
         public static readonly PermissionRecord ManageNewsletterSubscribers = new PermissionRecord { Name = "Admin area. Manage Newsletter Subscribers", SystemName = "ManageNewsletterSubscribers", Category = "Promo" };      
         public static readonly PermissionRecord ManagePolls = new PermissionRecord { Name = "Admin area. Manage Polls", SystemName = "ManagePolls", Category = "Content Management" };
-        public static readonly PermissionRecord ManageCatalogues = new PermissionRecord { Name = "Admin area. Manage Catalogues", SystemName = "ManageCatalogues", Category = "Content Management" };
+        public static readonly PermissionRecord ManageCatalogue = new PermissionRecord { Name = "Admin area. Manage Catalogue", SystemName = "ManageCatalogue", Category = "Content Management" };
         public static readonly PermissionRecord ManageNews = new PermissionRecord { Name = "Admin area. Manage News", SystemName = "ManageNews", Category = "Content Management" };
         public static readonly PermissionRecord ManageWidgets = new PermissionRecord { Name = "Admin area. Manage Widgets", SystemName = "ManageWidgets", Category = "Content Management" };
         public static readonly PermissionRecord ManageTopics = new PermissionRecord { Name = "Admin area. Manage Topics", SystemName = "ManageTopics", Category = "Content Management" };
@@ -62,7 +62,7 @@ namespace Nop.Services.Security
                 ManageReturnRequests,
                 ManageNewsletterSubscribers,
                 ManagePolls,
-                ManageCatalogues,
+                ManageCatalogue,
                 ManageNews,
                 ManageWidgets,
                 ManageTopics,
@@ -106,7 +106,7 @@ namespace Nop.Services.Security
                         ManageReturnRequests,
                         ManageNewsletterSubscribers,
                         ManagePolls,
-                        ManageCatalogues,
+                        ManageCatalogue,
                         ManageNews,
                         ManageWidgets,
                         ManageTopics,

@@ -37,9 +37,9 @@ namespace Nop.Web.Infrastructure
                             new[] { "Nop.Web.Controllers" });
 
 
-            routes.MapLocalizedRoute("Catalogues",
+            routes.MapLocalizedRoute("Catalogue",
                         "{SeName}",
-                        new { controller = "Catalogues", action = "Catalogues" },
+                        new { controller = "Catalogue", action = "Catalogue" },
                         new[] { "Nop.Web.Controllers" });
             
             routes.MapLocalizedRoute("NewsItem",

@@ -18,7 +18,7 @@ namespace Nop.Admin.Models.News
             this.AvailableStores = new List<StoreModel>();
             NewsPictureModels = new List<NewsPictureModel>();
             AddPictureModel = new NewsPictureModel();
-            AvailableCatalogues = new List<SelectListItem>();
+            AvailableCatalogue = new List<SelectListItem>();
         }
 
         [NopResourceDisplayName("Admin.ContentManagement.News.NewsItems.Fields.Language")]
@@ -104,7 +104,7 @@ namespace Nop.Admin.Models.News
         public bool IsLoggedInAsVendor { get; set; }
 
         //categories
-        public IList<SelectListItem> AvailableCatalogues { get; set; }
+        public IList<SelectListItem> AvailableCatalogue { get; set; }
 
 
         public partial class NewsPictureModel : BaseNopEntityModel
@@ -124,17 +124,17 @@ namespace Nop.Admin.Models.News
 
         public partial class NewsCatalogueModel : BaseNopEntityModel
         {
-            [NopResourceDisplayName("Admin.ContentManagement.News.Catalogues.Fields.Catalogue")]
+            [NopResourceDisplayName("Admin.ContentManagement.News.Catalogue.Fields.Catalogue")]
             public string Catalogue { get; set; }
 
             public int NewsId { get; set; }
 
             public int CatalogueId { get; set; }
 
-            [NopResourceDisplayName("Admin.ContentManagement.News.Catalogues.Fields.IsFeaturedNews")]
+            [NopResourceDisplayName("Admin.ContentManagement.News.Catalogue.Fields.IsFeaturedNews")]
             public bool IsFeaturedNews { get; set; }
 
-            [NopResourceDisplayName("Admin.ContentManagement.News.Catalogues.Fields.DisplayOrder")]
+            [NopResourceDisplayName("Admin.ContentManagement.News.Catalogue.Fields.DisplayOrder")]
             public int DisplayOrder { get; set; }
         }
     }

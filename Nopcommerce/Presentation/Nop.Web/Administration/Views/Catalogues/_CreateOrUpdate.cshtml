@@ -1,9 +1,9 @@
-﻿@model CataloguesModel
+﻿@model CatalogueModel
 
 @Html.ValidationSummary(false)
 @Html.HiddenFor(model => model.Id)
 
-<div id="catalogues-edit">
+<div id="Catalogue-edit">
     <ul>
         <li @Html.RenderSelectedTabIndex(0, GetSelectedTabIndex())>
             @T("Admin.ContentManagement.News.Info")
@@ -33,7 +33,7 @@
 </div>
 <script>
     $(document).ready(function() {
-        $("#catalogues-edit").kendoTabStrip({
+        $("#Catalogue-edit").kendoTabStrip({
             animation:  {
                 open: {
                     effects: "fadeIn"
@@ -46,7 +46,7 @@
 
 @{
     //custom tabs
-    var eventMessage = new AdminTabStripCreated(this.Html, "catalogues-edit");
+    var eventMessage = new AdminTabStripCreated(this.Html, "Catalogue-edit");
     EngineContext.Current.Resolve<IEventPublisher>().Publish(eventMessage);
     foreach (var eventBlock in eventMessage.BlocksToRender)
     {
@@ -78,7 +78,7 @@
         }
     </script>
         
-    @(Html.LocalizedEditor<CataloguesModel, CataloguesLocalizedModel>("catalogues-info-localized",
+    @(Html.LocalizedEditor<CatalogueModel, CatalogueLocalizedModel>("Catalogue-info-localized",
                 @<table class="adminContent">
                     <tr>
                         <td class="adminTitle">
@@ -152,7 +152,7 @@
                 @Html.NopLabelFor(model => model.ParentCatalogueId):
             </td>
             <td class="adminData">
-                @Html.DropDownListFor(model => model.ParentCatalogueId, Model.AvailableCatalogues)
+                @Html.DropDownListFor(model => model.ParentCatalogueId, Model.AvailableCatalogue)
                 @Html.ValidationMessageFor(model => model.ParentCatalogueId)
             </td>
         </tr>        
@@ -223,7 +223,7 @@
 }
 @helper TabSeo()
     {
-    @(Html.LocalizedEditor<CataloguesModel, CataloguesLocalizedModel>("catalogues-seo-localized",
+    @(Html.LocalizedEditor<CatalogueModel, CatalogueLocalizedModel>("Catalogue-seo-localized",
                @<table class="adminContent">
                    <tr>
                        <td class="adminTitle">
@@ -325,17 +325,17 @@
                                         type: "json",
                                         transport: {
                                             read: {
-                                                url: "@Html.Raw(Url.Action("NewsList", "Catalogues", new { catalogueId = Model.Id }))",
+                                                url: "@Html.Raw(Url.Action("NewsList", "Catalogue", new { catalogueId = Model.Id }))",
                                                 type: "POST",
                                                 dataType: "json"
                                             },
                                             update: {
-                                                url:"@Html.Raw(Url.Action("NewsUpdate", "Catalogues"))",
+                                                url:"@Html.Raw(Url.Action("NewsUpdate", "Catalogue"))",
                                                 type: "POST",
                                                 dataType: "json"
                                             },
                                             destroy: {
-                                                url: "@Html.Raw(Url.Action("NewsDelete", "Catalogues"))",
+                                                url: "@Html.Raw(Url.Action("NewsDelete", "Catalogue"))",
                                                 type: "POST",
                                                 dataType: "json"
                                             }
@@ -416,7 +416,7 @@
                 </tr>
                 <tr>
                     <td width="100%">
-                        <input type="submit" id="btnAddNewNews" value="@T("Admin.ContentManagement.News.News.AddNew")" onclick="javascript:OpenWindow('@(Url.Action("NewsAddPopup", "Catalogues", new { catalogueId = Model.Id, btnId = "btnRefreshNews", formId = "catalogues-form" }))', 800, 800, true); return false;" class="k-button" />
+                        <input type="submit" id="btnAddNewNews" value="@T("Admin.ContentManagement.News.News.AddNew")" onclick="javascript:OpenWindow('@(Url.Action("NewsAddPopup", "Catalogue", new { catalogueId = Model.Id, btnId = "btnRefreshNews", formId = "Catalogue-form" }))', 800, 800, true); return false;" class="k-button" />
                         <input type="submit" id="btnRefreshNews" style="display: none" />
                         <script type="text/javascript">
                             $(document).ready(function () {

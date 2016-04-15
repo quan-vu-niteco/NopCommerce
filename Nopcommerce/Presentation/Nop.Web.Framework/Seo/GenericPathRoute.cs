@@ -152,11 +152,11 @@ namespace Nop.Web.Framework.Seo
                 //process URL
                 switch (urlRecord.EntityName.ToLowerInvariant())
                 {
-                    case "catalogues":
+                    case "Catalogue":
                         {
                             data.Values["controller"] = "News";
-                            data.Values["action"] = "Catalogues";
-                            data.Values["catalogues"] = urlRecord.EntityId;
+                            data.Values["action"] = "Catalogue";
+                            data.Values["Catalogue"] = urlRecord.EntityId;
                             data.Values["SeName"] = urlRecord.Slug;
                         }
                         break;

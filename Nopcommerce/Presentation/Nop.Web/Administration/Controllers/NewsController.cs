@@ -34,7 +34,7 @@ namespace Nop.Admin.Controllers
         private readonly IStoreService _storeService;
         private readonly IStoreMappingService _storeMappingService;
         private readonly IPictureService _pictureService;
-        private readonly ICataloguesService _catalogueService;
+        private readonly ICatalogueervice _Catalogueervice;
         
 		#endregion
 
@@ -47,7 +47,7 @@ namespace Nop.Admin.Controllers
             IPermissionService permissionService,
             IUrlRecordService urlRecordService,
             IStoreService storeService,
-            IStoreMappingService storeMappingService, IPictureService pictureService, ICataloguesService cataloguesService,IWorkContext workContext )
+            IStoreMappingService storeMappingService, IPictureService pictureService, ICatalogueervice CatalogueService,IWorkContext workContext )
         {
             this._newsService = newsService;
             this._languageService = languageService;
@@ -58,7 +58,7 @@ namespace Nop.Admin.Controllers
             this._storeService = storeService;
             this._storeMappingService = storeMappingService;
             this._pictureService = pictureService;
-            this._catalogueService = cataloguesService;
+            this._Catalogueervice = CatalogueService;
             this._workContext = workContext;
 		}
 
@@ -118,10 +118,10 @@ namespace Nop.Admin.Controllers
 
             if (newsItem != null)
             {
-                var allCategories = _catalogueService.GetAllCatalogues(showHidden: true);
+                var allCategories = _Catalogueervice.GetAllCatalogue(showHidden: true);
                 foreach (var category in allCategories)
                 {
-                    model.AvailableCatalogues.Add(new SelectListItem
+                    model.AvailableCatalogue.Add(new SelectListItem
                     {
                         Text = category.Name,
                         Value = category.Id.ToString()
@@ -319,12 +319,12 @@ namespace Nop.Admin.Controllers
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
 
-            var newsCatalogues = _catalogueService.GetNewsCataloguesByNewsId(newsId, true);
-            var newsCataloguesModel = newsCatalogues
+            var newsCatalogue = _Catalogueervice.GetNewsCatalogueByNewsId(newsId, true);
+            var newsCatalogueModel = newsCatalogue
                 .Select(x => new NewsItemModel.NewsCatalogueModel
                 {
                     Id = x.Id,
-                    Catalogue = _catalogueService.GetCatalogueById(x.CatalogueId).GetFormattedBreadCrumb(_catalogueService),
+                    Catalogue = _Catalogueervice.GetCatalogueById(x.CatalogueId).GetFormattedBreadCrumb(_Catalogueervice),
                     NewsId = x.NewsId,
                     CatalogueId = x.CatalogueId,
                     DisplayOrder = x.DisplayOrder
@@ -333,8 +333,8 @@ namespace Nop.Admin.Controllers
 
             var gridModel = new DataSourceResult
             {
-                Data = newsCataloguesModel,
-                Total = newsCataloguesModel.Count
+                Data = newsCatalogueModel,
+                Total = newsCatalogueModel.Count
             };
 
             return Json(gridModel);
@@ -349,17 +349,17 @@ namespace Nop.Admin.Controllers
             var newsId = model.NewsId;
             var catalogueId = model.CatalogueId;
 
-            var existingNewsCatalogues = _catalogueService.GetNewsCataloguesByCatalogueId(catalogueId, 0, int.MaxValue, true);
-            if (existingNewsCatalogues.FindNewsCatalogues(newsId, catalogueId) == null)
+            var existingNewsCatalogue = _Catalogueervice.GetNewsCatalogueByCatalogueId(catalogueId, 0, int.MaxValue, true);
+            if (existingNewsCatalogue.FindNewsCatalogue(newsId, catalogueId) == null)
             {
-                var newsCatalogue = new NewsCatalogues
+                var newsCatalogue = new NewsCatalogue
                 {
                     NewsId = newsId,
                     CatalogueId = catalogueId,
                     DisplayOrder = model.DisplayOrder
                 };
 
-                _catalogueService.InsertNewsCatalogues(newsCatalogue);
+                _Catalogueervice.InsertNewsCatalogue(newsCatalogue);
             }
 
             return new NullJsonResult();
@@ -371,7 +371,7 @@ namespace Nop.Admin.Controllers
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
 
-            var newsCatalogue = _catalogueService.GetNewsCataloguesById(model.Id);
+            var newsCatalogue = _Catalogueervice.GetNewsCatalogueById(model.Id);
             if (newsCatalogue == null)
                 throw new ArgumentException("No news catalogue mapping found with the specified id");
 
@@ -379,7 +379,7 @@ namespace Nop.Admin.Controllers
             newsCatalogue.CatalogueId = model.CatalogueId;
             newsCatalogue.DisplayOrder = model.DisplayOrder;
            
-            _catalogueService.UpdateNewsCatalogues(newsCatalogue);
+            _Catalogueervice.UpdateNewsCatalogue(newsCatalogue);
             
             return new NullJsonResult();
         }
@@ -390,11 +390,11 @@ namespace Nop.Admin.Controllers
             if (!_permissionService.Authorize(StandardPermissionProvider.ManageNews))
                 return AccessDeniedView();
 
-            var newsCatalogue = _catalogueService.GetNewsCataloguesById(id);
+            var newsCatalogue = _Catalogueervice.GetNewsCatalogueById(id);
             if (newsCatalogue == null)
                 throw new ArgumentException("No news catalogue mapping found with the specified id");
 
-            _catalogueService.DeleteNewsCatalogues(newsCatalogue);
+            _Catalogueervice.DeleteNewsCatalogue(newsCatalogue);
 
             return new NullJsonResult();
         }

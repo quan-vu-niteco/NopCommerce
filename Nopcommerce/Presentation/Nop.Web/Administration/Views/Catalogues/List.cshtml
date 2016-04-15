@@ -1,4 +1,4 @@
-﻿@model CataloguesListModel
+﻿@model CatalogueListModel
 @{
     var defaultGridPageSize = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().DefaultGridPageSize;
     var gridPageSizes = EngineContext.Current.Resolve<Nop.Core.Domain.Common.AdminAreaSettings>().GridPageSizes;
@@ -18,10 +18,10 @@
 <table width="100%">
     <tr>
         <td class="adminTitle">
-            @Html.NopLabelFor(model => model.SearchCataloguesName):
+            @Html.NopLabelFor(model => model.SearchCatalogueName):
         </td>
         <td class="adminData">
-            @Html.EditorFor(model => model.SearchCataloguesName)
+            @Html.EditorFor(model => model.SearchCatalogueName)
         </td>
     </tr>
     <tr>
@@ -42,7 +42,7 @@
                             type: "json",
                             transport: {
                                 read: {
-                                    url: "@Html.Raw(Url.Action("List", "Catalogues"))",
+                                    url: "@Html.Raw(Url.Action("List", "Catalogue"))",
                                     type: "POST",
                                     dataType: "json",
                                     data: additionalData
@@ -107,7 +107,7 @@
                         return false;
                     });
 
-                    $("#@Html.FieldIdFor(model => model.SearchCataloguesName)").keydown(function (event) {
+                    $("#@Html.FieldIdFor(model => model.SearchCatalogueName)").keydown(function (event) {
                         if (event.keyCode == 13) {
                             $("#btnSearch").click();
                             return false;
@@ -117,7 +117,7 @@
 
                 function additionalData() {
                     return {
-                        SearchCataloguesName: $('#@Html.FieldIdFor(model => model.SearchCataloguesName)').val()
+                        SearchCatalogueName: $('#@Html.FieldIdFor(model => model.SearchCatalogueName)').val()
                     };
                 }
             </script>

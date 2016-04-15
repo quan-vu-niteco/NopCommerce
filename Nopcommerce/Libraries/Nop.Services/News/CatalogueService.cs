@@ -14,40 +14,40 @@ using Nop.Services.Stores;
 namespace Nop.Services.News
 {
     /// <summary>
-    /// Catalogues service
+    /// Catalogue service
     /// </summary>
-    public partial class CataloguesService : ICataloguesService
+    public partial class Catalogueervice : ICatalogueervice
     {
         #region Constants
         /// <summary>
         /// Key for caching
         /// </summary>
         /// <remarks>
-        /// {0} : catalogues ID
+        /// {0} : Catalogue ID
         /// </remarks>
-        private const string CATALOGUES_BY_ID_KEY = "Nop.catalogues.id-{0}";
+        private const string Catalogue_BY_ID_KEY = "Nop.Catalogue.id-{0}";
         /// <summary>
         /// Key for caching
         /// </summary>
         /// <remarks>
-        /// {0} : parent catalogues ID
+        /// {0} : parent Catalogue ID
         /// {1} : show hidden records?
         /// {2} : current customer ID
         /// {3} : store ID
         /// </remarks>
-        private const string CATALOGUES_BY_PARENT_CATEGORY_ID_KEY = "Nop.catalogues.byparent-{0}-{1}-{2}-{3}";
+        private const string Catalogue_BY_PARENT_CATEGORY_ID_KEY = "Nop.Catalogue.byparent-{0}-{1}-{2}-{3}";
         /// <summary>
         /// Key for caching
         /// </summary>
         /// <remarks>
         /// {0} : show hidden records?
-        /// {1} : catalogues ID
+        /// {1} : Catalogue ID
         /// {2} : page index
         /// {3} : page size
         /// {4} : current customer ID
         /// {5} : store ID
         /// </remarks>
-        private const string NEWSCATALOGUES_ALLBYCATEGORYID_KEY = "Nop.newscatalogues.allbyCatalogueId-{0}-{1}-{2}-{3}-{4}-{5}";
+        private const string NEWSCatalogue_ALLBYCATEGORYID_KEY = "Nop.newsCatalogue.allbyCatalogueId-{0}-{1}-{2}-{3}-{4}-{5}";
         /// <summary>
         /// Key for caching
         /// </summary>
@@ -57,22 +57,22 @@ namespace Nop.Services.News
         /// {2} : current customer ID
         /// {3} : store ID
         /// </remarks>
-        private const string NEWSCATALOGUES_ALLBYNEWSID_KEY = "Nop.newscatalogues.allbynewsid-{0}-{1}-{2}-{3}";
+        private const string NEWSCatalogue_ALLBYNEWSID_KEY = "Nop.newsCatalogue.allbynewsid-{0}-{1}-{2}-{3}";
         /// <summary>
         /// Key pattern to clear cache
         /// </summary>
-        private const string CATALOGUES_PATTERN_KEY = "Nop.catalogues.";
+        private const string Catalogue_PATTERN_KEY = "Nop.Catalogue.";
         /// <summary>
         /// Key pattern to clear cache
         /// </summary>
-        private const string NEWSCATALOGUES_PATTERN_KEY = "Nop.newscatalogues.";
+        private const string NEWSCatalogue_PATTERN_KEY = "Nop.newsCatalogue.";
 
         #endregion
 
         #region Fields
 
-        private readonly IRepository<Catalogues> _cataloguesRepository;
-        private readonly IRepository<NewsCatalogues> _newsCataloguesRepository;
+        private readonly IRepository<Catalogue> _CatalogueRepository;
+        private readonly IRepository<NewsCatalogue> _newsCatalogueRepository;
         private readonly IRepository<NewsItem> _newsRepository;
         private readonly IRepository<AclRecord> _aclRepository;
         private readonly IRepository<StoreMapping> _storeMappingRepository;
@@ -91,8 +91,8 @@ namespace Nop.Services.News
         /// Ctor
         /// </summary>
         /// <param name="cacheManager">Cache manager</param>
-        /// <param name="cataloguesRepository">Catalogues repository</param>
-        /// <param name="newsCataloguesRepository">NewsCatalogues repository</param>
+        /// <param name="CatalogueRepository">Catalogue repository</param>
+        /// <param name="newsCatalogueRepository">NewsCatalogue repository</param>
         /// <param name="newsRepository">News repository</param>
         /// <param name="aclRepository">ACL record repository</param>
         /// <param name="storeMappingRepository">Store mapping repository</param>
@@ -102,9 +102,9 @@ namespace Nop.Services.News
         /// <param name="storeMappingService">Store mapping service</param>
         /// <param name="aclService">ACL service</param>
         /// <param name="catalogSettings">Catalog settings</param>
-        public CataloguesService(ICacheManager cacheManager,
-            IRepository<Catalogues> cataloguesRepository,
-            IRepository<NewsCatalogues> newsCataloguesRepository,
+        public Catalogueervice(ICacheManager cacheManager,
+            IRepository<Catalogue> CatalogueRepository,
+            IRepository<NewsCatalogue> newsCatalogueRepository,
             IRepository<NewsItem> newsRepository,
             IRepository<AclRecord> aclRepository,
             IRepository<StoreMapping> storeMappingRepository,
@@ -116,8 +116,8 @@ namespace Nop.Services.News
           )
         {
             this._cacheManager = cacheManager;
-            this._cataloguesRepository = cataloguesRepository;
-            this._newsCataloguesRepository = newsCataloguesRepository;
+            this._CatalogueRepository = CatalogueRepository;
+            this._newsCatalogueRepository = newsCatalogueRepository;
             this._newsRepository = newsRepository;
             this._aclRepository = aclRepository;
             this._storeMappingRepository = storeMappingRepository;
@@ -133,42 +133,42 @@ namespace Nop.Services.News
         #region Methods
 
         /// <summary>
-        /// Delete catalogues
+        /// Delete Catalogue
         /// </summary>
-        /// <param name="catalogues">Catalogues</param>
-        public virtual void DeleteCatalogues(Catalogues catalogues)
+        /// <param name="catalogue">Catalogue</param>
+        public virtual void DeleteCatalogue(Catalogue catalogue)
         {
-            if (catalogues == null)
-                throw new ArgumentNullException("catalogues");
+            if (catalogue == null)
+                throw new ArgumentNullException("catalogue");
 
-            catalogues.Deleted = true;
-            UpdateCatalogues(catalogues);
+            catalogue.Deleted = true;
+            UpdateCatalogue(catalogue);
 
-            //reset a "Parent catalogues" property of all child subcategories
-            var subcategories = GetAllCataloguesByParentCatalogueId(catalogues.Id, true);
-            foreach (var subcatalogues in subcategories)
+            //reset a "Parent Catalogue" property of all child subcategories
+            var subcategories = GetAllCatalogueByParentCatalogueId(catalogue.Id, true);
+            foreach (var subCatalogue in subcategories)
             {
-                subcatalogues.ParentCatalogueId = 0;
-                UpdateCatalogues(subcatalogues);
+                subCatalogue.ParentCatalogueId = 0;
+                UpdateCatalogue(subCatalogue);
             }
         }
         
         /// <summary>
         /// Gets all categories
         /// </summary>
-        /// <param name="cataloguesName">Catalogues name</param>
+        /// <param name="CatalogueName">Catalogue name</param>
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
-        /// <returns>Catalogues</returns>
-        public virtual IPagedList<Catalogues> GetAllCatalogues(string cataloguesName = "", 
+        /// <returns>Catalogue</returns>
+        public virtual IPagedList<Catalogue> GetAllCatalogue(string CatalogueName = "", 
             int pageIndex = 0, int pageSize = int.MaxValue, bool showHidden = false)
         {
-            var query = _cataloguesRepository.Table;
+            var query = _CatalogueRepository.Table;
             if (!showHidden)
                 query = query.Where(c => c.Published);
-            if (!String.IsNullOrWhiteSpace(cataloguesName))
-                query = query.Where(c => c.Name.Contains(cataloguesName));
+            if (!String.IsNullOrWhiteSpace(CatalogueName))
+                query = query.Where(c => c.Name.Contains(CatalogueName));
             query = query.Where(c => !c.Deleted);
             query = query.OrderBy(c => c.ParentCatalogueId).ThenBy(c => c.DisplayOrder);
             
@@ -184,28 +184,28 @@ namespace Nop.Services.News
                 query = query.OrderBy(c => c.ParentCatalogueId).ThenBy(c => c.DisplayOrder);
             }
             
-            var unsortedCatalogues = query.ToList();
+            var unsortedCatalogue = query.ToList();
 
             //sort categories
-            var sortedCatalogues = unsortedCatalogues.SortCataloguesForTree();
+            var sortedCatalogue = unsortedCatalogue.SortCatalogueForTree();
 
             //paging
-            return new PagedList<Catalogues>(sortedCatalogues, pageIndex, pageSize);
+            return new PagedList<Catalogue>(sortedCatalogue, pageIndex, pageSize);
         }
 
         /// <summary>
-        /// Gets all categories filtered by parent catalogues identifier
+        /// Gets all categories filtered by parent Catalogue identifier
         /// </summary>
-        /// <param name="ParentCatalogueId">Parent catalogues identifier</param>
+        /// <param name="ParentCatalogueId">Parent Catalogue identifier</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
-        /// <returns>Catalogues collection</returns>
-        public virtual IList<Catalogues> GetAllCataloguesByParentCatalogueId(int ParentCatalogueId,
+        /// <returns>Catalogue collection</returns>
+        public virtual IList<Catalogue> GetAllCatalogueByParentCatalogueId(int ParentCatalogueId,
             bool showHidden = false)
         {
-            string key = string.Format(CATALOGUES_BY_PARENT_CATEGORY_ID_KEY, ParentCatalogueId, showHidden, _workContext.CurrentCustomer.Id, _storeContext.CurrentStore.Id);
+            string key = string.Format(Catalogue_BY_PARENT_CATEGORY_ID_KEY, ParentCatalogueId, showHidden, _workContext.CurrentCustomer.Id, _storeContext.CurrentStore.Id);
             return _cacheManager.Get(key, () =>
             {
-                var query = _cataloguesRepository.Table;
+                var query = _CatalogueRepository.Table;
                 if (!showHidden)
                     query = query.Where(c => c.Published);
                 query = query.Where(c => c.ParentCatalogueId == ParentCatalogueId);
@@ -233,10 +233,10 @@ namespace Nop.Services.News
         /// Gets all categories displayed on the home page
         /// </summary>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
-        /// <returns>Catalogues</returns>
-        public virtual IList<Catalogues> GetAllCataloguesDisplayedOnHomePage(bool showHidden = false)
+        /// <returns>Catalogue</returns>
+        public virtual IList<Catalogue> GetAllCatalogueDisplayedOnHomePage(bool showHidden = false)
         {
-            var query = from c in _cataloguesRepository.Table
+            var query = from c in _CatalogueRepository.Table
                         orderby c.DisplayOrder
                         where c.Published &&
                         !c.Deleted && 
@@ -255,106 +255,106 @@ namespace Nop.Services.News
         }
                 
         /// <summary>
-        /// Gets a catalogues
+        /// Gets a Catalogue
         /// </summary>
-        /// <param name="catalogueId">Catalogues identifier</param>
-        /// <returns>Catalogues</returns>
-        public virtual Catalogues GetCatalogueById(int catalogueId)
+        /// <param name="catalogueId">Catalogue identifier</param>
+        /// <returns>Catalogue</returns>
+        public virtual Catalogue GetCatalogueById(int catalogueId)
         {
             if (catalogueId == 0)
                 return null;
             
-            string key = string.Format(CATALOGUES_BY_ID_KEY, catalogueId);
-            return _cacheManager.Get(key, () => _cataloguesRepository.GetById(catalogueId));
+            string key = string.Format(Catalogue_BY_ID_KEY, catalogueId);
+            return _cacheManager.Get(key, () => _CatalogueRepository.GetById(catalogueId));
         }
 
         /// <summary>
-        /// Inserts catalogues
+        /// Inserts Catalogue
         /// </summary>
-        /// <param name="catalogues">Catalogues</param>
-        public virtual void InsertCatalogues(Catalogues catalogues)
+        /// <param name="catalogue">Catalogue</param>
+        public virtual void InsertCatalogue(Catalogue catalogue)
         {
-            if (catalogues == null)
-                throw new ArgumentNullException("catalogues");
+            if (catalogue == null)
+                throw new ArgumentNullException("catalogue");
 
-            _cataloguesRepository.Insert(catalogues);
+            _CatalogueRepository.Insert(catalogue);
 
             //cache
-            _cacheManager.RemoveByPattern(CATALOGUES_PATTERN_KEY);
-            _cacheManager.RemoveByPattern(NEWSCATALOGUES_PATTERN_KEY);
+            _cacheManager.RemoveByPattern(Catalogue_PATTERN_KEY);
+            _cacheManager.RemoveByPattern(NEWSCatalogue_PATTERN_KEY);
 
             //event notification
-            _eventPublisher.EntityInserted(catalogues);
+            _eventPublisher.EntityInserted(catalogue);
         }
 
         /// <summary>
-        /// Updates the catalogues
+        /// Updates the Catalogue
         /// </summary>
-        /// <param name="catalogues">Catalogues</param>
-        public virtual void UpdateCatalogues(Catalogues catalogues)
+        /// <param name="catalogue">Catalogue</param>
+        public virtual void UpdateCatalogue(Catalogue catalogue)
         {
-            if (catalogues == null)
-                throw new ArgumentNullException("catalogues");
+            if (catalogue == null)
+                throw new ArgumentNullException("catalogue");
 
-            //validate catalogues hierarchy
-            var parentCatalogues = GetCatalogueById(catalogues.ParentCatalogueId);
-            while (parentCatalogues != null)
+            //validate Catalogue hierarchy
+            var parentCatalogue = GetCatalogueById(catalogue.ParentCatalogueId);
+            while (parentCatalogue != null)
             {
-                if (catalogues.Id == parentCatalogues.Id)
+                if (catalogue.Id == parentCatalogue.Id)
                 {
-                    catalogues.ParentCatalogueId = 0;
+                    catalogue.ParentCatalogueId = 0;
                     break;
                 }
-                parentCatalogues = GetCatalogueById(parentCatalogues.ParentCatalogueId);
+                parentCatalogue = GetCatalogueById(parentCatalogue.ParentCatalogueId);
             }
 
-            _cataloguesRepository.Update(catalogues);
+            _CatalogueRepository.Update(catalogue);
 
             //cache
-            _cacheManager.RemoveByPattern(CATALOGUES_PATTERN_KEY);
-            _cacheManager.RemoveByPattern(NEWSCATALOGUES_PATTERN_KEY);
+            _cacheManager.RemoveByPattern(Catalogue_PATTERN_KEY);
+            _cacheManager.RemoveByPattern(NEWSCatalogue_PATTERN_KEY);
 
             //event notification
-            _eventPublisher.EntityUpdated(catalogues);
+            _eventPublisher.EntityUpdated(catalogue);
         }
         
       
         /// <summary>
-        /// Deletes a news catalogues mapping
+        /// Deletes a news Catalogue mapping
         /// </summary>
-        /// <param name="newsCatalogues">News catalogues</param>
-        public virtual void DeleteNewsCatalogues(NewsCatalogues newsCatalogues)
+        /// <param name="newsCatalogue">News Catalogue</param>
+        public virtual void DeleteNewsCatalogue(NewsCatalogue newsCatalogue)
         {
-            if (newsCatalogues == null)
-                throw new ArgumentNullException("newsCatalogues");
+            if (newsCatalogue == null)
+                throw new ArgumentNullException("newsCatalogue");
 
-            _newsCataloguesRepository.Delete(newsCatalogues);
+            _newsCatalogueRepository.Delete(newsCatalogue);
 
             //cache
-            _cacheManager.RemoveByPattern(CATALOGUES_PATTERN_KEY);
-            _cacheManager.RemoveByPattern(NEWSCATALOGUES_PATTERN_KEY);
+            _cacheManager.RemoveByPattern(Catalogue_PATTERN_KEY);
+            _cacheManager.RemoveByPattern(NEWSCatalogue_PATTERN_KEY);
 
             //event notification
-            _eventPublisher.EntityDeleted(newsCatalogues);
+            _eventPublisher.EntityDeleted(newsCatalogue);
         }
 
         /// <summary>
-        /// Gets news catalogues mapping collection
+        /// Gets news Catalogue mapping collection
         /// </summary>
-        /// <param name="catalogueId">Catalogues identifier</param>
+        /// <param name="catalogueId">Catalogue identifier</param>
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
         /// <param name="showHidden">A value indicating whether to show hidden records</param>
-        /// <returns>News a catalogues mapping collection</returns>
-        public virtual IPagedList<NewsCatalogues> GetNewsCataloguesByCatalogueId(int catalogueId, int pageIndex, int pageSize, bool showHidden = false)
+        /// <returns>News a Catalogue mapping collection</returns>
+        public virtual IPagedList<NewsCatalogue> GetNewsCatalogueByCatalogueId(int catalogueId, int pageIndex, int pageSize, bool showHidden = false)
         {
             if (catalogueId == 0)
-                return new PagedList<NewsCatalogues>(new List<NewsCatalogues>(), pageIndex, pageSize);
+                return new PagedList<NewsCatalogue>(new List<NewsCatalogue>(), pageIndex, pageSize);
 
-            string key = string.Format(NEWSCATALOGUES_ALLBYCATEGORYID_KEY, showHidden, catalogueId, pageIndex, pageSize, _workContext.CurrentCustomer.Id, _storeContext.CurrentStore.Id);
+            string key = string.Format(NEWSCatalogue_ALLBYCATEGORYID_KEY, showHidden, catalogueId, pageIndex, pageSize, _workContext.CurrentCustomer.Id, _storeContext.CurrentStore.Id);
             return _cacheManager.Get(key, () =>
             {
-                var query = from pc in _newsCataloguesRepository.Table
+                var query = from pc in _newsCatalogueRepository.Table
                             join p in _newsRepository.Table on pc.NewsId equals p.Id
                             where pc.CatalogueId == catalogueId &&
                                   !p.Deleted &&
@@ -373,114 +373,114 @@ namespace Nop.Services.News
                     query = query.OrderBy(pc => pc.DisplayOrder);
                 }
 
-                var newsCatalogues = new PagedList<NewsCatalogues>(query, pageIndex, pageSize);
-                return newsCatalogues;
+                var newsCatalogue = new PagedList<NewsCatalogue>(query, pageIndex, pageSize);
+                return newsCatalogue;
             });
         }
 
         /// <summary>
-        /// Gets a news catalogues mapping collection
+        /// Gets a news Catalogue mapping collection
         /// </summary>
         /// <param name="newsId">News identifier</param>
         /// <param name="showHidden"> A value indicating whether to show hidden records</param>
-        /// <returns> News catalogues mapping collection</returns>
-        public virtual IList<NewsCatalogues> GetNewsCataloguesByNewsId(int newsId, bool showHidden = false)
+        /// <returns> News Catalogue mapping collection</returns>
+        public virtual IList<NewsCatalogue> GetNewsCatalogueByNewsId(int newsId, bool showHidden = false)
         {
-            return GetNewsCataloguesByNewsId(newsId, _storeContext.CurrentStore.Id, showHidden);
+            return GetNewsCatalogueByNewsId(newsId, _storeContext.CurrentStore.Id, showHidden);
         }
         /// <summary>
-        /// Gets a news catalogues mapping collection
+        /// Gets a news Catalogue mapping collection
         /// </summary>
         /// <param name="newsId">News identifier</param>
         /// <param name="storeId">Store identifier (used in multi-store environment). "showHidden" parameter should also be "true"</param>
         /// <param name="showHidden"> A value indicating whether to show hidden records</param>
-        /// <returns> News catalogues mapping collection</returns>
-        public virtual IList<NewsCatalogues> GetNewsCataloguesByNewsId(int newsId, int storeId, bool showHidden = false)
+        /// <returns> News Catalogue mapping collection</returns>
+        public virtual IList<NewsCatalogue> GetNewsCatalogueByNewsId(int newsId, int storeId, bool showHidden = false)
         {
             if (newsId == 0)
-                return new List<NewsCatalogues>();
+                return new List<NewsCatalogue>();
 
-            string key = string.Format(NEWSCATALOGUES_ALLBYNEWSID_KEY, showHidden, newsId, _workContext.CurrentCustomer.Id, storeId);
+            string key = string.Format(NEWSCatalogue_ALLBYNEWSID_KEY, showHidden, newsId, _workContext.CurrentCustomer.Id, storeId);
             return _cacheManager.Get(key, () =>
             {
-                var query = from pc in _newsCataloguesRepository.Table
-                            join c in _cataloguesRepository.Table on pc.CatalogueId equals c.Id
+                var query = from pc in _newsCatalogueRepository.Table
+                            join c in _CatalogueRepository.Table on pc.CatalogueId equals c.Id
                             where pc.NewsId == newsId &&
                                   !c.Deleted &&
                                   (showHidden || c.Published)
                             orderby pc.DisplayOrder
                             select pc;
 
-                var allNewsCatalogues = query.ToList();
-                var result = new List<NewsCatalogues>();
+                var allNewsCatalogue = query.ToList();
+                var result = new List<NewsCatalogue>();
                 if (!showHidden)
                 {
-                    foreach (var pc in allNewsCatalogues)
+                    foreach (var pc in allNewsCatalogue)
                     {
                         //ACL (access control list) and store mapping
-                        var catalogues = pc.Catalogues;
-                        if (_aclService.Authorize(catalogues) )
+                        var Catalogue = pc.Catalogue;
+                        if (_aclService.Authorize(Catalogue) )
                             result.Add(pc);
                     }
                 }
                 else
                 {
                     //no filtering
-                    result.AddRange(allNewsCatalogues);
+                    result.AddRange(allNewsCatalogue);
                 }
                 return result;
             });
         }
 
         /// <summary>
-        /// Gets a news catalogues mapping 
+        /// Gets a news Catalogue mapping 
         /// </summary>
-        /// <param name="newsCatalogueId">News catalogues mapping identifier</param>
-        /// <returns>News catalogues mapping</returns>
-        public virtual NewsCatalogues GetNewsCataloguesById(int newsCatalogueId)
+        /// <param name="newsCatalogueId">News Catalogue mapping identifier</param>
+        /// <returns>News Catalogue mapping</returns>
+        public virtual NewsCatalogue GetNewsCatalogueById(int newsCatalogueId)
         {
             if (newsCatalogueId == 0)
                 return null;
 
-            return _newsCataloguesRepository.GetById(newsCatalogueId);
+            return _newsCatalogueRepository.GetById(newsCatalogueId);
         }
 
         /// <summary>
-        /// Inserts a news catalogues mapping
+        /// Inserts a news Catalogue mapping
         /// </summary>
-        /// <param name="newsCatalogues">>News catalogues mapping</param>
-        public virtual void InsertNewsCatalogues(NewsCatalogues newsCatalogues)
+        /// <param name="newsCatalogue">>News Catalogue mapping</param>
+        public virtual void InsertNewsCatalogue(NewsCatalogue newsCatalogue)
         {
-            if (newsCatalogues == null)
-                throw new ArgumentNullException("newsCatalogues");
+            if (newsCatalogue == null)
+                throw new ArgumentNullException("newsCatalogue");
             
-            _newsCataloguesRepository.Insert(newsCatalogues);
+            _newsCatalogueRepository.Insert(newsCatalogue);
 
             //cache
-            _cacheManager.RemoveByPattern(CATALOGUES_PATTERN_KEY);
-            _cacheManager.RemoveByPattern(NEWSCATALOGUES_PATTERN_KEY);
+            _cacheManager.RemoveByPattern(Catalogue_PATTERN_KEY);
+            _cacheManager.RemoveByPattern(NEWSCatalogue_PATTERN_KEY);
 
             //event notification
-            _eventPublisher.EntityInserted(newsCatalogues);
+            _eventPublisher.EntityInserted(newsCatalogue);
         }
 
         /// <summary>
-        /// Updates the news catalogues mapping 
+        /// Updates the news Catalogue mapping 
         /// </summary>
-        /// <param name="newsCatalogues">>News catalogues mapping</param>
-        public virtual void UpdateNewsCatalogues(NewsCatalogues newsCatalogues)
+        /// <param name="newsCatalogue">>News Catalogue mapping</param>
+        public virtual void UpdateNewsCatalogue(NewsCatalogue newsCatalogue)
         {
-            if (newsCatalogues == null)
-                throw new ArgumentNullException("newsCatalogues");
+            if (newsCatalogue == null)
+                throw new ArgumentNullException("newsCatalogue");
 
-            _newsCataloguesRepository.Update(newsCatalogues);
+            _newsCatalogueRepository.Update(newsCatalogue);
 
             //cache
-            _cacheManager.RemoveByPattern(CATALOGUES_PATTERN_KEY);
-            _cacheManager.RemoveByPattern(NEWSCATALOGUES_PATTERN_KEY);
+            _cacheManager.RemoveByPattern(Catalogue_PATTERN_KEY);
+            _cacheManager.RemoveByPattern(NEWSCatalogue_PATTERN_KEY);
 
             //event notification
-            _eventPublisher.EntityUpdated(newsCatalogues);
+            _eventPublisher.EntityUpdated(newsCatalogue);
         }
 
         #endregion
